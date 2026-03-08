@@ -65,8 +65,8 @@ def logout():
 @app.route('/dashboard')
 @login_required
 def dashboard():
-    """Main dashboard - intelligence report"""
-    return send_file('integrations/intelligence_report.html')
+    """Main dashboard - Q1 2026 quarterly performance"""
+    return send_file('integrations/q1_2026_dashboard.html')
 
 @app.route('/detailed')
 @login_required

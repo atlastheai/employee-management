@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Q1 2026 Performance Dashboard</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            background: white;
+            padding: 40px 20px;
+        }
+        .container { max-width: 1400px; margin: 0 auto; }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 3px solid #2563eb;
+        }
+        .header h1 {
+            font-size: 36px;
+            color: #1e40af;
+            margin-bottom: 10px;
+        }
+        .header .period {
+            font-size: 18px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .header .note {
+            font-size: 14px;
+            color: #f59e0b;
+            background: #fef3c7;
+            padding: 10px 20px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 12px;
+            max-width: 800px;
+        }
+        .section {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 24px;
+            color: #1e293b;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: white;
+        }
+        th {
+            background: #f8fafc;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            border-bottom: 2px solid #e2e8f0;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        td {
+            padding: 16px 12px;
+            border-bottom: 1px solid #f1f5f9;
+            color: #334155;
+        }
+        tr:hover { background: #f8fafc; }
+        tr:nth-child(-n+3) { background: #fef3c7; }
+        tr:nth-last-child(-n+3) { background: #fee2e2; }
+        .badge {
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            text-transform: uppercase;
+            display: inline-block;
+        }
+        .badge.top { background: #d1fae5; color: #065f46; }
+        .badge.efficient { background: #dbeafe; color: #1e40af; }
+        .badge.average { background: #fef3c7; color: #92400e; }
+        .badge.poor { background: #fee2e2; color: #991b1b; }
+        .metric { font-weight: 600; }
+        .currency { color: #059669; font-weight: 600; }
+        .percentage { color: #6366f1; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📊 Q1 2026 Performance Dashboard</h1>
+            <div class="period">January - March 2026</div>
+            <div class="note">
+                ℹ️ Call metrics are Q1 2026 only. Revenue figures are annual (March 2025-March 2026).<br>
+                Revenue-per-call calculated as: Annual Revenue ÷ Q1 2026 Calls
+            </div>
+        </div>
+        
+        <div class="section">
+            <div class="section-title">📈 Complete Performance Ranking</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>REP</th>
+                        <th>KIXIE CALLS</th>
+                        <th>GHOST %</th>
+                        <th>MEANINGFUL %</th>
+                        <th>REVENUE PER CALL</th>
+                        <th>TOTAL REVENUE</th>
+                        <th>RATING</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>1</td>
+                        <td><strong>Adam F</strong></td>
+                        <td class="metric">984</td>
+                        <td class="percentage">33.7%</td>
+                        <td class="percentage">22.0%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>2</td>
+                        <td><strong>Brady D</strong></td>
+                        <td class="metric">1,751</td>
+                        <td class="percentage">23.5%</td>
+                        <td class="percentage">37.4%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>3</td>
+                        <td><strong>philip.k</strong></td>
+                        <td class="metric">254</td>
+                        <td class="percentage">9.4%</td>
+                        <td class="percentage">53.5%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>4</td>
+                        <td><strong>Aaron Pleasants</strong></td>
+                        <td class="metric">601</td>
+                        <td class="percentage">4.0%</td>
+                        <td class="percentage">53.2%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>5</td>
+                        <td><strong>james.k</strong></td>
+                        <td class="metric">3,139</td>
+                        <td class="percentage">6.4%</td>
+                        <td class="percentage">34.9%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>6</td>
+                        <td><strong>Andrew W</strong></td>
+                        <td class="metric">177</td>
+                        <td class="percentage">7.3%</td>
+                        <td class="percentage">65.0%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>7</td>
+                        <td><strong>daniel.l</strong></td>
+                        <td class="metric">176</td>
+                        <td class="percentage">6.8%</td>
+                        <td class="percentage">35.8%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>8</td>
+                        <td><strong>Tracy</strong></td>
+                        <td class="metric">9</td>
+                        <td class="percentage">11.1%</td>
+                        <td class="percentage">88.9%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>9</td>
+                        <td><strong>Morgan.Q</strong></td>
+                        <td class="metric">107</td>
+                        <td class="percentage">1.9%</td>
+                        <td class="percentage">56.1%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>10</td>
+                        <td><strong>russell.w</strong></td>
+                        <td class="metric">726</td>
+                        <td class="percentage">5.9%</td>
+                        <td class="percentage">57.3%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>11</td>
+                        <td><strong>george.f</strong></td>
+                        <td class="metric">791</td>
+                        <td class="percentage">6.6%</td>
+                        <td class="percentage">49.3%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>12</td>
+                        <td><strong>john.t</strong></td>
+                        <td class="metric">4,258</td>
+                        <td class="percentage">6.8%</td>
+                        <td class="percentage">33.9%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>13</td>
+                        <td><strong>dominic.w</strong></td>
+                        <td class="metric">592</td>
+                        <td class="percentage">22.6%</td>
+                        <td class="percentage">45.9%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>14</td>
+                        <td><strong>robert.ca</strong></td>
+                        <td class="metric">4,200</td>
+                        <td class="percentage">19.5%</td>
+                        <td class="percentage">30.7%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>15</td>
+                        <td><strong>Alex Cruz</strong></td>
+                        <td class="metric">346</td>
+                        <td class="percentage">5.5%</td>
+                        <td class="percentage">36.4%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>16</td>
+                        <td><strong>jonah.go</strong></td>
+                        <td class="metric">3,007</td>
+                        <td class="percentage">29.5%</td>
+                        <td class="percentage">26.1%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                    <tr>
+                        <td>17</td>
+                        <td><strong>gabriella</strong></td>
+                        <td class="metric">3</td>
+                        <td class="percentage">0.0%</td>
+                        <td class="percentage">33.3%</td>
+                        <td class="currency">$0</td>
+                        <td class="currency">$0</td>
+                        <td><span class="badge poor">POOR</span></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</body>
+</html>

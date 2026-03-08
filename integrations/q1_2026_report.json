@@ -1,0 +1,162 @@
+{
+  "quarter": "Q1 2026",
+  "period": "January - March 2026",
+  "call_data_source": "Kixie (Q1 2026 only)",
+  "revenue_data_source": "Annual (March 2025 - March 2026)",
+  "note": "Revenue figures are annual totals. Revenue-per-call uses Q1 2026 call volume.",
+  "reps": [
+    {
+      "name": "Adam F",
+      "kixie_calls": 984,
+      "ghost_pct": 33.7,
+      "meaningful_pct": 22.0,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Brady D",
+      "kixie_calls": 1751,
+      "ghost_pct": 23.5,
+      "meaningful_pct": 37.4,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "philip.k",
+      "kixie_calls": 254,
+      "ghost_pct": 9.4,
+      "meaningful_pct": 53.5,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Aaron Pleasants",
+      "kixie_calls": 601,
+      "ghost_pct": 4.0,
+      "meaningful_pct": 53.2,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "james.k",
+      "kixie_calls": 3139,
+      "ghost_pct": 6.4,
+      "meaningful_pct": 34.9,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Andrew W",
+      "kixie_calls": 177,
+      "ghost_pct": 7.3,
+      "meaningful_pct": 65.0,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "daniel.l",
+      "kixie_calls": 176,
+      "ghost_pct": 6.8,
+      "meaningful_pct": 35.8,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Tracy",
+      "kixie_calls": 9,
+      "ghost_pct": 11.1,
+      "meaningful_pct": 88.9,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Morgan.Q",
+      "kixie_calls": 107,
+      "ghost_pct": 1.9,
+      "meaningful_pct": 56.1,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "russell.w",
+      "kixie_calls": 726,
+      "ghost_pct": 5.9,
+      "meaningful_pct": 57.3,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "george.f",
+      "kixie_calls": 791,
+      "ghost_pct": 6.6,
+      "meaningful_pct": 49.3,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "john.t",
+      "kixie_calls": 4258,
+      "ghost_pct": 6.8,
+      "meaningful_pct": 33.9,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "dominic.w",
+      "kixie_calls": 592,
+      "ghost_pct": 22.6,
+      "meaningful_pct": 45.9,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "robert.ca",
+      "kixie_calls": 4200,
+      "ghost_pct": 19.5,
+      "meaningful_pct": 30.7,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "Alex Cruz",
+      "kixie_calls": 346,
+      "ghost_pct": 5.5,
+      "meaningful_pct": 36.4,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "jonah.go",
+      "kixie_calls": 3007,
+      "ghost_pct": 29.5,
+      "meaningful_pct": 26.1,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    },
+    {
+      "name": "gabriella",
+      "kixie_calls": 3,
+      "ghost_pct": 0.0,
+      "meaningful_pct": 33.3,
+      "revenue_per_call": 0,
+      "total_revenue": 0,
+      "rating": "POOR"
+    }
+  ]
+}

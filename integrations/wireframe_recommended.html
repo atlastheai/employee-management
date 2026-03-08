@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - Recommended: Executive Briefing + Leaderboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 32px; max-width: 1200px; margin: 0 auto; }
+
+  .wireframe-note { background: #f0f4ff; border: 1px dashed #93b4ff; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #3b5998; line-height: 1.6; }
+  .wireframe-note strong { font-weight: 600; }
+
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 28px; padding-bottom: 20px; border-bottom: 2px solid #e5e5e5; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { color: #888; font-weight: 400; }
+  .header .meta { font-size: 13px; color: #888; text-align: right; line-height: 1.6; }
+
+  /* ============ SECTION 1: EXECUTIVE SNAPSHOT ============ */
+  .section-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: #999; margin-bottom: 12px; font-weight: 600; }
+
+  .snapshot { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 24px; }
+  .snap-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 18px 16px; text-align: center; }
+  .snap-card .num { font-size: 36px; font-weight: 700; line-height: 1.1; }
+  .snap-card .lbl { font-size: 11px; color: #888; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .snap-card .ctx { font-size: 11px; color: #aaa; margin-top: 6px; }
+  .snap-card.bad { border-color: #fecaca; background: #fffafa; }
+  .snap-card.bad .num { color: #dc2626; }
+  .snap-card.warn .num { color: #d97706; }
+
+  /* Insight banner */
+  .insight { background: #111; color: #e5e5e5; border-radius: 8px; padding: 18px 22px; margin-bottom: 24px; display: flex; align-items: flex-start; gap: 14px; }
+  .insight .icon { font-size: 20px; flex-shrink: 0; margin-top: 2px; }
+  .insight .body { font-size: 14px; line-height: 1.55; }
+  .insight .body strong { color: #f87171; }
+  .insight .body em { color: #fbbf24; font-style: normal; font-weight: 600; }
+
+  /* Gaming pattern summary */
+  .patterns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 28px; }
+  .pattern-box { border: 1px solid #e5e5e5; border-radius: 6px; padding: 14px; }
+  .pattern-box .p-count { font-size: 28px; font-weight: 700; color: #dc2626; }
+  .pattern-box .p-name { font-size: 12px; font-weight: 600; margin-top: 2px; }
+  .pattern-box .p-desc { font-size: 11px; color: #888; margin-top: 4px; line-height: 1.4; }
+
+  /* ============ SECTION 2: WORST OFFENDERS ============ */
+  .offenders { margin-bottom: 28px; }
+  .offenders h3 { font-size: 14px; font-weight: 700; color: #991b1b; margin-bottom: 12px; display: flex; align-items: center; gap: 6px; }
+  .offender-table { width: 100%; border-collapse: collapse; }
+  .offender-table th { font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #999; text-align: left; padding: 6px 10px; border-bottom: 1px solid #e5e5e5; }
+  .offender-table td { padding: 10px; border-bottom: 1px solid #f5f5f5; font-size: 13px; }
+  .offender-table tr:hover { background: #fafafa; }
+
+  .or-pill { display: inline-block; font-weight: 700; font-size: 14px; padding: 4px 10px; border-radius: 4px; min-width: 44px; text-align: center; }
+  .or-pill.red { background: #fee2e2; color: #991b1b; }
+  .or-pill.yellow { background: #fef9c3; color: #854d0e; }
+  .or-pill.green { background: #dcfce7; color: #166534; }
+
+  .flag-badge { display: inline-block; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; margin: 1px; }
+  .flag-badge.high { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .flag-badge.medium { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .flag-badge.low { background: #f4f4f5; color: #71717a; border: 1px solid #e4e4e7; }
+
+  .detail-text { font-size: 11px; color: #888; display: block; margin-top: 2px; }
+
+  /* ============ SECTION 3: FULL LEADERBOARD ============ */
+  .divider { border: none; border-top: 2px solid #e5e5e5; margin: 32px 0; }
+
+  .leaderboard { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .leaderboard thead th { background: #f9fafb; padding: 8px 10px; text-align: left; font-size: 10px; text-transform: uppercase; letter-spacing: 0.5px; color: #888; border-bottom: 2px solid #e5e5e5; white-space: nowrap; }
+  .leaderboard tbody td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+  .leaderboard tbody tr:hover { background: #fafafa; }
+  .leaderboard tbody tr.flagged-row { border-left: 3px solid #dc2626; }
+
+  .score-bar { display: inline-block; height: 6px; border-radius: 3px; vertical-align: middle; margin-right: 4px; }
+  .score-bar.low { background: #fca5a5; }
+  .score-bar.mid { background: #fcd34d; }
+  .score-bar.high { background: #86efac; }
+  .score-num { font-size: 12px; color: #555; font-weight: 500; }
+
+  .ghost-pct { color: #dc2626; font-weight: 600; }
+  .meaningful-pct { color: #16a34a; font-weight: 600; }
+  .muted { color: #ccc; }
+
+  .section-row td { background: #f5f5f5; padding: 6px 10px !important; font-size: 10px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .ellipsis-row td { text-align: center; color: #bbb; font-style: italic; padding: 8px !important; }
+
+  /* ============ SECTION 4: GAMING CROSS-VALIDATION ============ */
+  .cross-val { margin-top: 32px; }
+  .cross-val h2 { font-size: 16px; margin-bottom: 4px; }
+  .cross-val .subtitle { font-size: 13px; color: #888; margin-bottom: 16px; }
+  .matrix { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .matrix-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; }
+  .matrix-card .m-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+  .matrix-card .m-title { font-size: 13px; font-weight: 600; }
+  .matrix-card .m-result { font-size: 12px; font-weight: 600; }
+  .matrix-card .m-result.fail { color: #dc2626; }
+  .matrix-card .m-result.pass { color: #16a34a; }
+  .matrix-card .m-body { font-size: 12px; color: #666; line-height: 1.5; }
+  .matrix-card .m-formula { font-size: 11px; color: #aaa; font-family: monospace; margin-top: 6px; }
+</style>
+</head>
+<body>
+
+<div class="wireframe-note">
+  <strong>WIREFRAME: Recommended Hybrid - Executive Briefing + Leaderboard Table</strong><br>
+  Combines the narrative executive summary from Option C with the dense sortable table from Option B.
+  Four sections: (1) Snapshot + Insight, (2) Worst Offenders, (3) Full Leaderboard, (4) Gaming Cross-Validation Matrix.
+</div>
+
+<div class="header">
+  <h1>ORGCOMMAND <span>Sales Performance Report</span></h1>
+  <div class="meta">
+    Period: Last 90 Days<br>
+    Generated: Mar 7, 2026<br>
+    Source: Zoho CRM (Trade Alliance)
+  </div>
+</div>
+
+<!-- ==================== SECTION 1: EXECUTIVE SNAPSHOT ==================== -->
+<div class="section-label">Executive Snapshot</div>
+
+<div class="snapshot">
+  <div class="snap-card bad">
+    <div class="num">3.3</div>
+    <div class="lbl">Team Avg OR</div>
+    <div class="ctx">Target: 8.0+</div>
+  </div>
+  <div class="snap-card bad">
+    <div class="num">1</div>
+    <div class="lbl">Total Deals</div>
+    <div class="ctx">90 days, 43 reps</div>
+  </div>
+  <div class="snap-card bad">
+    <div class="num">36</div>
+    <div class="lbl">Reps in RED</div>
+    <div class="ctx">84% of team</div>
+  </div>
+  <div class="snap-card warn">
+    <div class="num">45</div>
+    <div class="lbl">Gaming Flags</div>
+    <div class="ctx">Across 26 reps</div>
+  </div>
+  <div class="snap-card">
+    <div class="num">6K+</div>
+    <div class="lbl">Activities Logged</div>
+    <div class="ctx">Calls + Tasks + Events</div>
+  </div>
+</div>
+
+<div class="insight">
+  <div class="icon">!</div>
+  <div class="body">
+    Your team logged <strong>6,000+ activities</strong> in 90 days and produced <strong>1 closed deal</strong>.
+    <em>25 reps</em> are flagged <strong>FAKE BUSY</strong> -- high activity, zero pipeline.
+    <em>2 reps</em> are confirmed <strong>ghost dialers</strong> (>50% of calls under 5 seconds).
+    No rep has reached GREEN status. The sales engine is running hot and producing nothing.
+  </div>
+</div>
+
+<div class="patterns">
+  <div class="pattern-box">
+    <div class="p-count">25</div>
+    <div class="p-name">FAKE BUSY</div>
+    <div class="p-desc">High activity volume, zero pipeline movement</div>
+  </div>
+  <div class="pattern-box">
+    <div class="p-count">14</div>
+    <div class="p-name">VOLUME NO OUTCOME</div>
+    <div class="p-desc">Many calls made, no deals closed</div>
+  </div>
+  <div class="pattern-box">
+    <div class="p-count">3</div>
+    <div class="p-name">VM RAMBLER</div>
+    <div class="p-desc">High talk time, low meaningful call %</div>
+  </div>
+  <div class="pattern-box">
+    <div class="p-count">2</div>
+    <div class="p-name">GHOST DIALER</div>
+    <div class="p-desc">Majority of calls under 5 seconds</div>
+  </div>
+</div>
+
+<!-- ==================== SECTION 2: WORST OFFENDERS ==================== -->
+<div class="offenders">
+  <h3>! Immediate Action Required</h3>
+  <table class="offender-table">
+    <thead>
+      <tr>
+        <th style="width:30px;">#</th>
+        <th>Rep</th>
+        <th style="width:60px;">OR</th>
+        <th>Calls</th>
+        <th>Ghost%</th>
+        <th>Activities</th>
+        <th>Deals</th>
+        <th>Flags</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight:700; color:#ccc;">1</td>
+        <td><strong>dominic.w</strong><span class="detail-text">67% ghost calls, 9.8% meaningful</span></td>
+        <td><span class="or-pill red">3.3</span></td>
+        <td>164</td>
+        <td class="ghost-pct">67.1%</td>
+        <td>456</td>
+        <td>0</td>
+        <td>
+          <span class="flag-badge high">GHOST DIALER</span>
+          <span class="flag-badge medium">VOL NO OUT</span>
+          <span class="flag-badge medium">VM RAMBLER</span>
+          <span class="flag-badge high">FAKE BUSY</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700; color:#ccc;">2</td>
+        <td><strong>robert.ca</strong><span class="detail-text">57% ghost calls, 18.7% meaningful</span></td>
+        <td><span class="or-pill red">3.0</span></td>
+        <td>407</td>
+        <td class="ghost-pct">56.8%</td>
+        <td>757</td>
+        <td>0</td>
+        <td>
+          <span class="flag-badge high">GHOST DIALER</span>
+          <span class="flag-badge medium">VOL NO OUT</span>
+          <span class="flag-badge medium">VM RAMBLER</span>
+          <span class="flag-badge high">FAKE BUSY</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700; color:#ccc;">3</td>
+        <td><strong>john.t</strong><span class="detail-text">310 calls, only 27% meaningful</span></td>
+        <td><span class="or-pill red">3.3</span></td>
+        <td>310</td>
+        <td>--</td>
+        <td>378</td>
+        <td>0</td>
+        <td>
+          <span class="flag-badge medium">VOL NO OUT</span>
+          <span class="flag-badge medium">VM RAMBLER</span>
+          <span class="flag-badge high">FAKE BUSY</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700; color:#ccc;">4</td>
+        <td><strong>james.k</strong><span class="detail-text">236 calls, 0 deals</span></td>
+        <td><span class="or-pill red">3.3</span></td>
+        <td>236</td>
+        <td>--</td>
+        <td>369</td>
+        <td>0</td>
+        <td>
+          <span class="flag-badge medium">VOL NO OUT</span>
+          <span class="flag-badge high">FAKE BUSY</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="font-weight:700; color:#ccc;">5</td>
+        <td><strong>jonah.go</strong><span class="detail-text">178 calls, 0 deals</span></td>
+        <td><span class="or-pill red">3.6</span></td>
+        <td>178</td>
+        <td>--</td>
+        <td>779</td>
+        <td>0</td>
+        <td>
+          <span class="flag-badge medium">VOL NO OUT</span>
+          <span class="flag-badge high">FAKE BUSY</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==================== SECTION 3: FULL LEADERBOARD ==================== -->
+<hr class="divider">
+<div class="section-label">Full Team Leaderboard</div>
+
+<table class="leaderboard">
+  <thead>
+    <tr>
+      <th style="width:30px;">#</th>
+      <th>Rep</th>
+      <th style="width:55px; text-align:center;">OR</th>
+      <th>Velocity</th>
+      <th>Quality</th>
+      <th>Responsive</th>
+      <th>Calls</th>
+      <th>Ghost%</th>
+      <th>Mean%</th>
+      <th>Acts</th>
+      <th>Deals</th>
+      <th>Flags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr class="section-row"><td colspan="12">YELLOW (7 reps)</td></tr>
+
+    <tr>
+      <td style="color:#ccc; font-weight:600;">1</td>
+      <td><strong>Tracy</strong></td>
+      <td><span class="or-pill yellow">6.8</span></td>
+      <td><span class="score-bar mid" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar high" style="width:60px;"></span><span class="score-num">10.0</span></td>
+      <td><span class="score-bar high" style="width:60px;"></span><span class="score-num">10.0</span></td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td>24</td>
+      <td>0</td>
+      <td class="muted">--</td>
+    </tr>
+    <tr class="flagged-row">
+      <td style="color:#ccc; font-weight:600;">2</td>
+      <td><strong>Andrew Support</strong></td>
+      <td><span class="or-pill yellow">5.8</span></td>
+      <td><span class="score-bar mid" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar mid" style="width:42px;"></span><span class="score-num">7.0</span></td>
+      <td><span class="score-bar high" style="width:60px;"></span><span class="score-num">10.0</span></td>
+      <td>12</td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td>46</td>
+      <td>0</td>
+      <td><span class="flag-badge high">FAKE BUSY</span></td>
+    </tr>
+    <tr class="ellipsis-row"><td colspan="12">... 5 more YELLOW ...</td></tr>
+
+    <tr class="section-row"><td colspan="12">RED (36 reps) -- sorted by flag severity, then OR ascending</td></tr>
+
+    <tr class="flagged-row">
+      <td style="color:#ccc; font-weight:600;">8</td>
+      <td><strong>dominic.w</strong></td>
+      <td><span class="or-pill red">3.3</span></td>
+      <td><span class="score-bar low" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar low" style="width:6px;"></span><span class="score-num">1.0</span></td>
+      <td><span class="score-bar high" style="width:52px;"></span><span class="score-num">8.6</span></td>
+      <td>164</td>
+      <td><span class="ghost-pct">67.1%</span></td>
+      <td><span class="meaningful-pct">9.8%</span></td>
+      <td>456</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge high">GHOST</span>
+        <span class="flag-badge medium">VOL</span>
+        <span class="flag-badge medium">VM</span>
+        <span class="flag-badge high">BUSY</span>
+      </td>
+    </tr>
+    <tr class="flagged-row">
+      <td style="color:#ccc; font-weight:600;">9</td>
+      <td><strong>robert.ca</strong></td>
+      <td><span class="or-pill red">3.0</span></td>
+      <td><span class="score-bar low" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar low" style="width:6px;"></span><span class="score-num">1.0</span></td>
+      <td><span class="score-bar mid" style="width:44px;"></span><span class="score-num">7.4</span></td>
+      <td>407</td>
+      <td><span class="ghost-pct">56.8%</span></td>
+      <td><span class="meaningful-pct">18.7%</span></td>
+      <td>757</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge high">GHOST</span>
+        <span class="flag-badge medium">VOL</span>
+        <span class="flag-badge medium">VM</span>
+        <span class="flag-badge high">BUSY</span>
+      </td>
+    </tr>
+    <tr class="flagged-row">
+      <td style="color:#ccc; font-weight:600;">10</td>
+      <td><strong>russell.w</strong></td>
+      <td><span class="or-pill red">4.0</span></td>
+      <td><span class="score-bar low" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar low" style="width:12px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar high" style="width:60px;"></span><span class="score-num">10.0</span></td>
+      <td>62</td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td>507</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge medium">VOL</span>
+        <span class="flag-badge high">BUSY</span>
+      </td>
+    </tr>
+    <tr>
+      <td style="color:#ccc; font-weight:600;">11</td>
+      <td><strong>Enoch B.</strong></td>
+      <td><span class="or-pill red">5.0</span></td>
+      <td><span class="score-bar low" style="width:20px;"></span><span class="score-num">2.0</span></td>
+      <td><span class="score-bar mid" style="width:30px;"></span><span class="score-num">5.0</span></td>
+      <td><span class="score-bar high" style="width:60px;"></span><span class="score-num">10.0</span></td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td class="muted">--</td>
+      <td>0</td>
+      <td>0</td>
+      <td class="muted">--</td>
+    </tr>
+    <tr class="ellipsis-row"><td colspan="12">... 32 more RED reps ...</td></tr>
+  </tbody>
+</table>
+
+<!-- ==================== SECTION 4: CROSS-VALIDATION MATRIX ==================== -->
+<hr class="divider">
+<div class="cross-val">
+  <h2>Gaming Cross-Validation Matrix</h2>
+  <div class="subtitle">How we detect gaming: no single metric is trusted alone. Every signal is validated against outcomes.</div>
+
+  <div class="matrix">
+    <div class="matrix-card">
+      <div class="m-header">
+        <div class="m-title">High Calls + Zero Deals</div>
+        <div class="m-result fail">14 reps flagged</div>
+      </div>
+      <div class="m-body">
+        Reps making 20+ calls with no closed deals. High effort, zero conversion suggests dialing without strategy or qualification.
+      </div>
+      <div class="m-formula">IF calls >= 20 AND won == 0 THEN FLAG</div>
+    </div>
+
+    <div class="matrix-card">
+      <div class="m-header">
+        <div class="m-title">Ghost Calls (<=5 sec)</div>
+        <div class="m-result fail">2 reps flagged</div>
+      </div>
+      <div class="m-body">
+        Over 40% of calls lasting 5 seconds or less. Indicates call-and-hang-up behavior to inflate volume metrics.
+      </div>
+      <div class="m-formula">IF ghost_pct > 40% AND calls >= 10 THEN FLAG</div>
+    </div>
+
+    <div class="matrix-card">
+      <div class="m-header">
+        <div class="m-title">High Talk Time + Low Quality</div>
+        <div class="m-result fail">3 reps flagged</div>
+      </div>
+      <div class="m-body">
+        60+ minutes of talk time but less than 30% meaningful calls (30s+). Suggests leaving voicemails or talking to dead lines.
+      </div>
+      <div class="m-formula">IF talk_min > 60 AND meaningful_pct < 30% THEN FLAG</div>
+    </div>
+
+    <div class="matrix-card">
+      <div class="m-header">
+        <div class="m-title">Activity Theater</div>
+        <div class="m-result fail">25 reps flagged</div>
+      </div>
+      <div class="m-body">
+        30+ logged activities (calls + tasks + events) but zero deals in pipeline. Activity without pipeline movement is theater.
+      </div>
+      <div class="m-formula">IF total_activity >= 30 AND deals == 0 THEN FLAG</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Department Best Practices — ORGCOMMAND Foundation</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#fff;--bg2:#f7f8fa;--border:#e2e5ea;--border-lt:#eef0f3;
+  --text:#111827;--text2:#6b7280;--text3:#9ca3af;
+  --green:#10b981;--green-bg:#ecfdf5;--green-bdr:#a7f3d0;
+  --yellow:#f59e0b;--yellow-bg:#fffbeb;--yellow-bdr:#fde68a;
+  --red:#ef4444;--red-bg:#fef2f2;--red-bdr:#fecaca;
+  --blue:#3b82f6;--blue-bg:#eff6ff;--blue-bdr:#bfdbfe;
+  --purple:#8b5cf6;--purple-bg:#f5f3ff;
+  --orange:#f97316;--orange-bg:#fff7ed;
+  --indigo:#6366f1;
+  --r:8px;--rl:12px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:15px;line-height:1.7}
+.page{max-width:960px;margin:0 auto;padding:40px 50px}
+
+/* Cover */
+.cover{text-align:center;padding:50px 0 36px;border-bottom:3px solid var(--text);margin-bottom:40px}
+.cover h1{font-size:32px;font-weight:800;letter-spacing:2px;margin-bottom:4px}
+.cover .sub{font-size:17px;color:var(--text2);margin-bottom:16px}
+.cover .meta{font-size:13px;color:var(--text3)}
+.cover .meta strong{color:var(--text2)}
+
+/* TOC */
+.toc{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:28px 32px;margin-bottom:44px}
+.toc h2{font-size:12px;letter-spacing:2px;text-transform:uppercase;color:var(--text3);margin-bottom:14px}
+.toc ol{list-style:none;counter-reset:toc}
+.toc li{counter-increment:toc;padding:5px 0;border-bottom:1px solid var(--border-lt);font-size:14px}
+.toc li:last-child{border-bottom:none}
+.toc li::before{content:counter(toc,decimal-leading-zero)".";font-weight:700;margin-right:10px;font-size:13px}
+
+/* Section */
+.section{margin-bottom:48px}
+.section-num{font-size:12px;letter-spacing:3px;text-transform:uppercase;color:var(--text3);margin-bottom:4px}
+h2.stitle{font-size:22px;font-weight:700;padding-bottom:10px;border-bottom:2px solid var(--text);margin-bottom:20px}
+h3{font-size:17px;font-weight:600;margin:24px 0 10px}
+h4{font-size:15px;font-weight:600;color:#333;margin:18px 0 8px}
+p{margin-bottom:12px;color:#333}
+ul,ol{margin:8px 0 12px 20px}
+li{margin-bottom:5px;color:#333}
+
+/* Callout */
+.co{border-left:4px solid var(--text);background:var(--bg2);padding:16px 20px;margin:18px 0;border-radius:0 var(--r) var(--r) 0}
+.co.crit{border-left-color:var(--red);background:var(--red-bg)}
+.co.safe{border-left-color:var(--green);background:var(--green-bg)}
+.co.info{border-left-color:var(--blue);background:var(--blue-bg)}
+.co.warn{border-left-color:var(--yellow);background:var(--yellow-bg)}
+.co.purp{border-left-color:var(--purple);background:var(--purple-bg)}
+.co-label{font-size:11px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:4px}
+.co.crit .co-label{color:var(--red)}.co.safe .co-label{color:var(--green)}.co.info .co-label{color:var(--blue)}.co.warn .co-label{color:var(--yellow)}.co.purp .co-label{color:var(--purple)}
+
+/* Table */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:14px}
+thead th{background:var(--text);color:#fff;padding:9px 14px;text-align:left;font-weight:600;font-size:12px;letter-spacing:.5px;text-transform:uppercase}
+tbody td{padding:10px 14px;border-bottom:1px solid var(--border-lt);vertical-align:top}
+tbody tr:nth-child(even){background:var(--bg2)}
+code{background:#f0f2f5;padding:2px 6px;border-radius:3px;font-family:'SF Mono',Consolas,monospace;font-size:13px;color:#c0392b}
+
+/* Dept header */
+.dept-header{display:flex;align-items:center;gap:14px;margin-bottom:24px;padding:20px 24px;border-radius:var(--rl);border:1px solid var(--border)}
+.dept-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.dept-header h2{font-size:24px;font-weight:800;border:none;padding:0;margin:0}
+.dept-header .dept-sub{font-size:13px;color:var(--text2)}
+
+/* KPI card grid */
+.kpi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:16px 0}
+.kpi-card{border:1px solid var(--border);border-radius:var(--r);padding:14px 16px;background:var(--bg)}
+.kpi-card .kv{font-size:20px;font-weight:800;line-height:1.2}
+.kpi-card .kl{font-size:11px;color:var(--text3);text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.kpi-card .kb{font-size:11px;color:var(--text2);margin-top:4px}
+
+/* Comparison */
+.cmp{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;margin:16px 0}
+.cmp-side{padding:16px 20px}
+.cmp-side:first-child{border-right:1px solid var(--border)}
+.cmp-label{font-size:10px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px}
+
+/* Pill */
+.pill{display:inline-block;font-size:11px;font-weight:600;padding:2px 10px;border-radius:20px;margin-right:4px;margin-bottom:4px}
+.pill.g{background:var(--green-bg);color:#059669}
+.pill.y{background:var(--yellow-bg);color:#d97706}
+.pill.r{background:var(--red-bg);color:#dc2626}
+.pill.b{background:var(--blue-bg);color:var(--blue)}
+.pill.p{background:var(--purple-bg);color:var(--purple)}
+
+/* Footer */
+.footer{text-align:center;padding:28px 0;border-top:2px solid var(--text);margin-top:48px;font-size:12px;color:var(--text3);letter-spacing:1px}
+hr{border:none;border-top:1px solid var(--border);margin:40px 0}
+
+@media(max-width:768px){
+  .page{padding:24px 20px}
+  .kpi-grid{grid-template-columns:1fr}
+  .cmp{grid-template-columns:1fr}
+  .cmp-side:first-child{border-right:none;border-bottom:1px solid var(--border)}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <h1>DEPARTMENT BEST PRACTICES</h1>
+  <div class="sub">How the World's Best Companies Track Performance &amp; Distribute Work</div>
+  <p class="meta">
+    <strong>Purpose:</strong> Foundation for ORGCOMMAND Phase 1 Architecture &nbsp;&middot;&nbsp;
+    <strong>Date:</strong> March 4, 2026 &nbsp;&middot;&nbsp;
+    <strong>Prepared by:</strong> Atlas
+  </p>
+  <p class="meta" style="margin-top:8px">
+    <strong>Sources:</strong> Google, Amazon, Microsoft, Meta, Netflix, Spotify, Salesforce, HubSpot, Goldman Sachs, JPMorgan, Stripe, Airbnb, GitLab
+  </p>
+</div>
+
+<!-- EXEC SUMMARY -->
+<div class="co safe">
+  <div class="co-label">Executive Summary</div>
+  <p style="margin-bottom:8px">This report analyzes how elite companies manage <strong>6 departments</strong> across 5 dimensions: KPIs tracked, performance measurement, work distribution, tools used, and what makes it work at scale. Every finding maps directly to ORGCOMMAND features we can build.</p>
+  <p style="margin-bottom:0"><strong>Key insight:</strong> The best companies don't track the same KPIs across all departments. Each department has a fundamentally different measurement paradigm &mdash; ORGCOMMAND must support configurable, department-specific KPI frameworks rather than a one-size-fits-all model.</p>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li>Development / Engineering</li>
+    <li>Sales</li>
+    <li>Sales Operations</li>
+    <li>Marketing</li>
+    <li>Finance</li>
+    <li>Legal</li>
+    <li>Cross-Department Patterns</li>
+    <li>ORGCOMMAND Architecture Implications</li>
+  </ol>
+</div>
+
+<!-- ================================================================ -->
+<!-- 01. DEVELOPMENT / ENGINEERING -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,var(--blue-bg),#f0f4ff)">
+    <div class="dept-icon" style="background:var(--blue);color:#fff">&#128187;</div>
+    <div><h2 style="font-size:22px">Development / Engineering</h2><div class="dept-sub">Google, Amazon, Microsoft, Meta, Netflix, Spotify, GitLab</div></div>
+  </div>
+
+  <h3>KPIs That Matter</h3>
+  <p>The industry has converged on three measurement frameworks, each capturing different dimensions:</p>
+
+  <h4>DORA Metrics (The Foundation)</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>Elite</th><th>High</th><th>Medium</th><th>Low</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Deployment Frequency</td><td style="color:var(--green)">Multiple / day</td><td>Weekly-monthly</td><td>Monthly-6mo</td><td style="color:var(--red)">&lt; 1 per 6mo</td></tr>
+      <tr><td style="font-weight:600">Lead Time for Changes</td><td style="color:var(--green)">&lt; 1 hour</td><td>1 day - 1 week</td><td>1 week - 1 month</td><td style="color:var(--red)">&gt; 1 month</td></tr>
+      <tr><td style="font-weight:600">Change Failure Rate</td><td style="color:var(--green)">0-15%</td><td>16-30%</td><td>16-30%</td><td style="color:var(--red)">&gt; 30%</td></tr>
+      <tr><td style="font-weight:600">Recovery Time (MTTR)</td><td style="color:var(--green)">&lt; 1 hour</td><td>&lt; 1 day</td><td>1 day - 1 week</td><td style="color:var(--red)">&gt; 1 week</td></tr>
+    </tbody>
+  </table>
+
+  <h4>SPACE Framework (Microsoft Research + GitHub)</h4>
+  <p><strong>S</strong>atisfaction &middot; <strong>P</strong>erformance &middot; <strong>A</strong>ctivity &middot; <strong>C</strong>ommunication &middot; <strong>E</strong>fficiency &mdash; Teams measuring all five dimensions see 20-30% productivity improvement.</p>
+
+  <h4>Additional KPIs by Company</h4>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">PR Merge Rate</div><div class="kl">GitLab's primary KPI</div><div class="kb">Monthly avg MRs per author</div></div>
+    <div class="kpi-card"><div class="kv">Cycle Time</div><div class="kl">Time to merge</div><div class="kb">Elite: &lt; 2.5 days</div></div>
+    <div class="kpi-card"><div class="kv">Bug Escape Rate</div><div class="kl">Bugs reaching prod</div><div class="kb">Target: &lt; 5%</div></div>
+    <div class="kpi-card"><div class="kv">Tech Debt Ratio</div><div class="kl">Repair vs dev cost</div><div class="kb">Target: &lt; 5% (only 7.2% of orgs track this)</div></div>
+    <div class="kpi-card"><div class="kv">Code Review Time</div><div class="kl">PR pickup speed</div><div class="kb">Target: &lt; 4 hours</div></div>
+    <div class="kpi-card"><div class="kv">Sprint Velocity</div><div class="kl">Story points / sprint</div><div class="kb">Scrum teams, trend over time</div></div>
+  </div>
+
+  <h3>Performance Measurement</h3>
+  <table>
+    <thead><tr><th>Company</th><th>System</th><th>Cadence</th><th>Approach</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Google</td><td>GRAD</td><td>Annual (promo 2x/yr)</td><td>22% Outstanding/Transformative, 6% on Support Check-Ins. Calibration by eng level (L3-L7). Promotions decoupled from ratings.</td></tr>
+      <tr><td style="font-weight:600">Amazon</td><td>Forte + OLR</td><td>Biannual</td><td>60-word peer feedback on 3 Leadership Principles. OLR is de facto stack ranking: TT, HV3-1, LE. Dual axis: Performance + Potential.</td></tr>
+      <tr><td style="font-weight:600">Microsoft</td><td>Connects + Model-Coach-Care</td><td>Continuous</td><td>Abolished stack ranking in 2013. Growth mindset culture. Continuous check-ins. Discreet manager-only "impact descriptors."</td></tr>
+      <tr><td style="font-weight:600">Meta</td><td>PSC</td><td>Semi-annual</td><td>4 axes: Impact, Direction, Excellence, People. 7 ratings. 1 "Meets Some" or 2 "Meets Most" = auto-PIP. Up-or-out timelines: 24mo E3&rarr;E4, 33mo E4&rarr;E5.</td></tr>
+      <tr><td style="font-weight:600">Netflix</td><td>Keeper Test + 360</td><td>Continuous</td><td>No formal reviews. "Would I fight to keep them?" Signed (non-anonymous) 360 feedback. All-cash comp, no bonuses.</td></tr>
+      <tr><td style="font-weight:600">Spotify</td><td>Squad Health Checks</td><td>Quarterly</td><td>Team self-assessment: green/yellow/red across dimensions (support, autonomy, fun, mission clarity).</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Work Distribution &amp; Minimizing Downtime</h3>
+  <table>
+    <thead><tr><th>Pattern</th><th>Company</th><th>How It Works</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Two-Pizza Teams</td><td>Amazon</td><td>&lt;10 people, end-to-end ownership, autonomous execution. Outcome-oriented, not skill-oriented. Weekly operational reviews (OPR).</td></tr>
+      <tr><td style="font-weight:600">OKRs + TPMs</td><td>Google</td><td>Quarterly OKRs (70% achievement = success). TPMs unblock inter-team dependencies. Trunk-based dev in monorepo eliminates merge conflicts.</td></tr>
+      <tr><td style="font-weight:600">Stacked Diffs</td><td>Meta</td><td>Series of dependent small PRs, allowing code review on each while continuing work. Bootcamp team matching. High internal mobility.</td></tr>
+      <tr><td style="font-weight:600">Full Cycle Devs</td><td>Netflix</td><td>Every dev is SWE + SDET + SRE. No traditional PMs. "Paved roads" for common infrastructure. Chaos engineering for resilience.</td></tr>
+      <tr><td style="font-weight:600">Squads/Tribes/Chapters</td><td>Spotify</td><td>Squads (6-12, cross-functional) &rarr; Tribes (&le;150) &rarr; Chapters (horizontal specialties) &rarr; Guilds (communities of interest).</td></tr>
+      <tr><td style="font-weight:600">Async-First + Handbook</td><td>GitLab</td><td>2,700-page public handbook = single source of truth. Small MRs. If a conversation isn't documented, it never happened.</td></tr>
+    </tbody>
+  </table>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Engineering needs <strong>DORA metrics + cycle time tracking</strong> as the core KPI framework, with configurable thresholds (Elite/High/Medium/Low). Support both <strong>sprint-based</strong> (velocity/burndown) and <strong>flow-based</strong> (cycle time/throughput) team models. Integrate with GitHub for automated data collection.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 02. SALES -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,var(--green-bg),#f0fdf8)">
+    <div class="dept-icon" style="background:var(--green);color:#fff">&#128176;</div>
+    <div><h2 style="font-size:22px">Sales</h2><div class="dept-sub">Salesforce, HubSpot, Gong, Amazon AWS, Microsoft, Oracle</div></div>
+  </div>
+
+  <h3>KPIs That Matter</h3>
+
+  <h4>Revenue &amp; Quota Metrics</h4>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">58%</div><div class="kl">Median Quota Attainment</div><div class="kb">Enterprise AEs (Bridge Group 2024)</div></div>
+    <div class="kpi-card"><div class="kv">3.2x+</div><div class="kl">Pipeline Coverage</div><div class="kb">Weighted &rarr; 89% quota hit rate</div></div>
+    <div class="kpi-card"><div class="kv">19-21%</div><div class="kl">Avg Win Rate</div><div class="kb">Top teams: 30%+</div></div>
+    <div class="kpi-card"><div class="kv">$702</div><div class="kl">Avg B2B SaaS CAC</div><div class="kb">Rising 14% through 2025</div></div>
+    <div class="kpi-card"><div class="kv">3:1</div><div class="kl">Healthy LTV:CAC</div><div class="kb">&gt;5:1 = underinvesting in growth</div></div>
+    <div class="kpi-card"><div class="kv">106%</div><div class="kl">Median NRR</div><div class="kb">Enterprise: 118%</div></div>
+  </div>
+
+  <h4>Activity Benchmarks</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>SDR Target</th><th>AE Target</th></tr></thead>
+    <tbody>
+      <tr><td>Daily Calls</td><td>50-80</td><td>15-25</td></tr>
+      <tr><td>Daily Emails</td><td>30-50</td><td>15-20</td></tr>
+      <tr><td>LinkedIn Touches/Day</td><td>15-25</td><td>5-10</td></tr>
+      <tr><td>Meetings Booked/Month</td><td>15</td><td>&mdash;</td></tr>
+      <tr><td>Demos/Month</td><td>&mdash;</td><td>8-12</td></tr>
+      <tr><td>Lead Response Time</td><td colspan="2" style="color:var(--green);font-weight:600">5 min response = 21x more likely to qualify</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Performance &amp; Quota Management</h3>
+
+  <h4>Attainment Consequences Framework</h4>
+  <table>
+    <thead><tr><th>Band</th><th>Action</th><th>Comp Impact</th></tr></thead>
+    <tbody>
+      <tr style="background:var(--red-bg)"><td style="font-weight:700">&lt; 50%</td><td>PIP / Termination risk</td><td>No variable, 0x accelerator</td></tr>
+      <tr style="background:var(--yellow-bg)"><td style="font-weight:700">50-69%</td><td>Formal coaching plan</td><td>Reduced variable</td></tr>
+      <tr><td style="font-weight:700">70-89%</td><td>Enhanced coaching</td><td>1x standard payout</td></tr>
+      <tr><td style="font-weight:700">90-100%</td><td>On track</td><td>1x payout</td></tr>
+      <tr style="background:var(--green-bg)"><td style="font-weight:700">100-120%</td><td>Accelerators kick in</td><td>1.3-1.5x multiplier</td></tr>
+      <tr style="background:var(--green-bg)"><td style="font-weight:700">&gt; 120%</td><td>President's Club</td><td>1.5-2x multiplier</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Ramp time:</strong> Average 5.7 months (32% increase since 2020). SMB: 1-2mo, Mid-market: 3-4mo, Enterprise: 9-12mo.</p>
+  <p><strong>Quota-to-OTE ratio:</strong> Standard 4x-6x. Median OTE $190K with 53:47 base/variable split.</p>
+
+  <h3>Work Distribution</h3>
+
+  <h4>Territory Models</h4>
+  <table>
+    <thead><tr><th>Model</th><th>Used By</th><th>Best For</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Geographic</td><td>Oracle, Microsoft, AWS</td><td>Field sales, regional knowledge matters</td></tr>
+      <tr><td style="font-weight:600">Vertical / Industry</td><td>Salesforce</td><td>Domain expertise, longer cycles</td></tr>
+      <tr><td style="font-weight:600">Named Accounts</td><td>AWS, Salesforce</td><td>Enterprise, high-touch relationships</td></tr>
+      <tr><td style="font-weight:600">Segment-Based</td><td>HubSpot</td><td>SMB vs. Mid-Market vs. Enterprise</td></tr>
+      <tr><td style="font-weight:600">Round-Robin</td><td>SaaS PLG companies</td><td>High volume, equal distribution</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Lead scoring:</strong> 60% behavioral signals + 40% firmographic fit. MQL threshold: 50+, SQL: 80+. AI scoring delivers 40% accuracy gains. Average MQL-to-SQL conversion: 13%.</p>
+
+  <h4>Forecasting Methods</h4>
+  <ul>
+    <li><strong>Weighted Pipeline:</strong> Stage probability x deal value. Most common baseline.</li>
+    <li><strong>Rep Commit:</strong> Bottom-up forecast from AE confidence. Sanity-checked against pipeline.</li>
+    <li><strong>AI-Driven (Clari, Aviso):</strong> 15-20% error reduction vs. manual. Analyzes activity signals + historical patterns.</li>
+    <li><strong>MEDDPICC-Validated:</strong> 73% of enterprise SaaS use MEDDPICC. Deals scored on qualification completeness.</li>
+  </ul>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Sales needs <strong>quota attainment as the primary KPI</strong> with configurable bands (Carlos's termination-at-2-3-reds maps to &lt;50% band). Support <strong>pipeline coverage ratio</strong>, <strong>activity metrics</strong> (calls/SMS/demos per the GREG model), and <strong>ramp-adjusted quotas</strong> for new hires. Territory assignment and lead routing are secondary but valuable.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 03. SALES OPERATIONS -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,#ecfdf5,#f0fdf8)">
+    <div class="dept-icon" style="background:#059669;color:#fff">&#9881;</div>
+    <div><h2 style="font-size:22px">Sales Operations</h2><div class="dept-sub">Salesforce, HubSpot, Gong, Clari</div></div>
+  </div>
+
+  <h3>KPIs That Matter</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">90%+</div><div class="kl">Forecast Accuracy</div><div class="kb">World-class target</div></div>
+    <div class="kpi-card"><div class="kv">95%+</div><div class="kl">CRM Adoption Rate</div><div class="kb">Below 80% = CRM failure</div></div>
+    <div class="kpi-card"><div class="kv">$12.9M</div><div class="kl">Annual Cost of Bad Data</div><div class="kb">Per company (avg)</div></div>
+    <div class="kpi-card"><div class="kv">60%+</div><div class="kl">Rep Selling Time</div><div class="kb">Target (avg is 35%)</div></div>
+    <div class="kpi-card"><div class="kv">4h / 24h / 48h</div><div class="kl">Request SLAs</div><div class="kb">P1 / P2 / P3</div></div>
+    <div class="kpi-card"><div class="kv">60/40</div><div class="kl">Planned vs Ad-Hoc</div><div class="kb">Sprint allocation split</div></div>
+  </div>
+
+  <h3>RevOps vs. Traditional Sales Ops</h3>
+  <div class="cmp">
+    <div class="cmp-side">
+      <div class="cmp-label" style="color:var(--text3)">Traditional Sales Ops</div>
+      <ul style="font-size:13px;margin-left:16px">
+        <li>Reports to VP Sales</li>
+        <li>CRM admin + reporting</li>
+        <li>Quota setting + territory planning</li>
+        <li>Forecast compilation</li>
+        <li>Comp plan administration</li>
+      </ul>
+    </div>
+    <div class="cmp-side">
+      <div class="cmp-label" style="color:var(--green)">RevOps (Modern)</div>
+      <ul style="font-size:13px;margin-left:16px">
+        <li>Reports to CRO or CEO</li>
+        <li>Spans sales + marketing + CS</li>
+        <li>End-to-end revenue lifecycle</li>
+        <li>Tech stack ownership</li>
+        <li>Data governance + attribution</li>
+      </ul>
+    </div>
+  </div>
+  <p style="font-size:13px;color:var(--text2)"><strong>Staffing ratios:</strong> $50M ARR = 4-5 RevOps &middot; $100M ARR = 7-10 &middot; $200M ARR = 14-19</p>
+
+  <h3>Work Distribution</h3>
+  <p>Best-in-class sales ops teams use <strong>2-week sprints</strong> with a 60/40 split between planned work and ad-hoc requests. Internal ticketing with SLAs by priority (P1: 4-hour, P2: 24-hour, P3: 48-72 hour). Requests that don't fit the sprint are batched for next cycle or escalated through clear paths.</p>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Sales Ops personnel should be tracked on <strong>forecast accuracy, CRM adoption, and request SLA compliance</strong>. ORGCOMMAND should track their <strong>sprint completion rate</strong> and <strong>ad-hoc request turnaround</strong> as leading indicators.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 04. MARKETING -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,var(--purple-bg),#f3f0ff)">
+    <div class="dept-icon" style="background:var(--purple);color:#fff">&#128227;</div>
+    <div><h2 style="font-size:22px">Marketing</h2><div class="dept-sub">Google, HubSpot, Salesforce, Meta, Adobe, Spotify</div></div>
+  </div>
+
+  <h3>KPIs by Sub-Function</h3>
+
+  <h4>Demand Generation</h4>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">31%</div><div class="kl">Lead-to-MQL Rate</div><div class="kb">B2B SaaS: ~39%</div></div>
+    <div class="kpi-card"><div class="kv">13-15%</div><div class="kl">MQL-to-SQL Rate</div><div class="kb">Top performers: 40%</div></div>
+    <div class="kpi-card"><div class="kv">$198</div><div class="kl">Avg CPL</div><div class="kb">LinkedIn: $408, Referrals: $25</div></div>
+    <div class="kpi-card"><div class="kv">30-50%</div><div class="kl">Marketing-Sourced Pipeline</div><div class="kb">% of total pipeline</div></div>
+    <div class="kpi-card"><div class="kv">15-30%</div><div class="kl">ROI Improvement</div><div class="kb">From advanced attribution</div></div>
+    <div class="kpi-card"><div class="kv">W-Shaped</div><div class="kl">Best Attribution Model</div><div class="kb">30/30/30/10 for B2B</div></div>
+  </div>
+
+  <h4>Content &amp; Brand</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>What It Measures</th><th>Benchmark</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Content Velocity</td><td>Publication frequency vs. committed timeline</td><td>Team-specific, tracked weekly</td></tr>
+      <tr><td style="font-weight:600">Organic Traffic</td><td>Non-paid search traffic</td><td>30-40% from branded searches (SaaS)</td></tr>
+      <tr><td style="font-weight:600">Engagement Rate</td><td>Interactions per content piece</td><td>B2B SaaS: 2-4%, B2C: 4-6%</td></tr>
+      <tr><td style="font-weight:600">Share of Voice</td><td>Brand mentions vs. market total</td><td>+10% SOV = +8.7% demo requests</td></tr>
+      <tr><td style="font-weight:600">NPS</td><td>Customer loyalty &amp; brand health</td><td>Tracked longitudinally</td></tr>
+    </tbody>
+  </table>
+
+  <h4>Product Marketing</h4>
+  <ul>
+    <li><strong>Competitive win rate</strong> &mdash; most directly attributable PMM KPI (deals won when specific competitor present)</li>
+    <li><strong>Feature adoption rate</strong> &mdash; % of customers using new features</li>
+    <li><strong>Sales enablement usage</strong> &mdash; battlecard/playbook adoption by reps</li>
+    <li><strong>Launch success</strong> &mdash; trials, demos, signups in launch window</li>
+  </ul>
+
+  <h4>Marketing Ops</h4>
+  <ul>
+    <li><strong>Email deliverability:</strong> 83.1% avg inbox placement. Target: 95%+. DMARC enforcement = 2.7x more likely to reach inbox.</li>
+    <li><strong>Automation coverage:</strong> Triggered emails = 37% of email sales from only 2% of volume.</li>
+    <li><strong>Martech utilization:</strong> 1 in 3 martech deployments fail. Quarterly tool performance reviews are essential.</li>
+  </ul>
+
+  <h3>Performance Measurement</h3>
+  <p><strong>Google's OKR Model:</strong> 60% of goals set bottom-up. 0.6-0.7 achievement = outstanding. 100% = goals not ambitious enough. Separated from performance evaluation. Quarterly cycle.</p>
+  <p><strong>Meta's PSC for Marketing:</strong> Semi-annual review with 360 feedback. Evaluating AI usage capability starting 2026. Four ratings: Outstanding (top 20%), Excellent (70%), Needs Improvement, Not Meeting Expectations.</p>
+  <p><strong>Campaign Retrospectives:</strong> Conducted within days of campaign end. Cross-functional stakeholders (sales, product, CS, creative, analytics). Findings documented in institutional "campaign library" for future teams.</p>
+
+  <h3>Work Distribution</h3>
+  <p><strong>Agile Marketing Sprints:</strong> 51%+ of marketing teams use agile. 2-week sprints most common. Small cross-functional squads. Scrum ceremonies: planning, daily standups, sprint reviews, retros.</p>
+  <p><strong>Multi-channel coordination:</strong> Async-first with 24-48hr feedback windows. Single source of truth (Asana, Monday.com). Document comments over email threads. Executive summaries on all briefs.</p>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Marketing needs <strong>sub-function-specific KPI panels</strong>: demand gen (MQLs, SQLs, pipeline, CPL), content (velocity, traffic, engagement), product marketing (win rate, adoption), ops (deliverability, automation). Support <strong>campaign-level tracking</strong> and <strong>sprint velocity</strong> for agile teams.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 05. FINANCE -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,var(--yellow-bg),#fffef5)">
+    <div class="dept-icon" style="background:var(--yellow);color:#fff">&#128200;</div>
+    <div><h2 style="font-size:22px">Finance</h2><div class="dept-sub">Google/Alphabet, Amazon, Stripe, Goldman Sachs, JPMorgan, Airbnb</div></div>
+  </div>
+
+  <h3>KPIs That Matter</h3>
+
+  <h4>Revenue &amp; Profitability</h4>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">65-70%</div><div class="kl">Software Gross Margin</div><div class="kb">Google, Microsoft (AWS 60%+, Amazon retail 25%)</div></div>
+    <div class="kpi-card"><div class="kv">&le; 5%</div><div class="kl">Forecast MAPE</div><div class="kb">Quarterly revenue target</div></div>
+    <div class="kpi-card"><div class="kv">3-5 days</div><div class="kl">Best-in-Class Close Time</div><div class="kb">Down from 10+ days traditional</div></div>
+  </div>
+
+  <h4>Working Capital &amp; Cash Flow</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>Definition</th><th>Benchmark</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">DSO</td><td>Days Sales Outstanding</td><td>SaaS: 30-45 days, Retail: 5-20 days</td></tr>
+      <tr><td style="font-weight:600">DPO</td><td>Days Payable Outstanding</td><td>Amazon: 60-90 days (negative CCC)</td></tr>
+      <tr><td style="font-weight:600">CCC</td><td>Cash Conversion Cycle</td><td>Avg: 37 days (Hackett 2025)</td></tr>
+      <tr><td style="font-weight:600">Budget Variance</td><td>Actual vs. budgeted</td><td>Target: &le; 5% quarterly, &le; 8% annual</td></tr>
+      <tr><td style="font-weight:600">AR Aging (&gt;60 days)</td><td>Overdue receivables</td><td>Target: &lt; 10% over 60 days</td></tr>
+      <tr><td style="font-weight:600">Revenue/Employee</td><td>Efficiency metric</td><td>SaaS median: $130K. NVIDIA: $4.4M</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Performance Measurement</h3>
+  <p>Finance teams are evaluated on a <strong>speed + accuracy dual axis</strong>:</p>
+  <ul>
+    <li><strong>Close cycle time</strong> &mdash; days from period end to final sign-off</li>
+    <li><strong>Post-close adjustment rate</strong> &mdash; entries made after close declared final (target: &lt;1%)</li>
+    <li><strong>First-pass approval rate</strong> &mdash; deliverables approved without changes (target: 95%+)</li>
+    <li><strong>Reconciliation exception rate</strong> &mdash; unresolved variances at close deadline</li>
+    <li><strong>Forecast accuracy (MAPE)</strong> &mdash; FP&amp;A's core skill metric. Rolling forecasters achieve &le;5% vs. 35% for annual-only forecasters.</li>
+    <li><strong>Stakeholder satisfaction</strong> &mdash; internal NPS from business partners</li>
+  </ul>
+
+  <h3>Work Distribution</h3>
+  <p><strong>Monthly close process:</strong> Three phases &mdash; pre-close (days -5 to 0, front-load reconciliation), close execution (days 1-5, risk-based account review), post-close review (days 5-7, lessons learned).</p>
+  <p><strong>FP&amp;A cycles:</strong> Annual operating plan (3-4mo before FYE) &rarr; quarterly reforecasts &rarr; monthly variance analysis (&gt;5% deviation requires explanation) &rarr; long-range planning (3-5yr, annual update).</p>
+  <p><strong>Business partnering model:</strong> Hub-and-spoke structure. Centralized COE handles strategic analytics, embedded "spokes" sit in business units. Reduces FP&amp;A planning time by 80% and improves accuracy to 95% (Accenture). Stripe uses this with Anaplan across all P&amp;L planning.</p>
+  <p><strong>Continuous close methodology:</strong> Distribute reconciliation daily/weekly rather than concentrating at month-end. Firms with high MDM maturity spend 30% less time on data reconciliation.</p>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Finance personnel need <strong>cycle-based KPIs</strong> (close time, accuracy, variance) rather than continuous activity metrics. Track <strong>deliverable completion against close calendar</strong> with SLAs. FP&amp;A tracked on <strong>forecast accuracy trend</strong> over quarters.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 06. LEGAL -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="dept-header" style="background:linear-gradient(135deg,var(--orange-bg),#fff9f0)">
+    <div class="dept-icon" style="background:var(--orange);color:#fff">&#9878;</div>
+    <div><h2 style="font-size:22px">Legal</h2><div class="dept-sub">Google, Microsoft, Goldman Sachs, JPMorgan, Airbnb, Stripe</div></div>
+  </div>
+
+  <h3>KPIs That Matter</h3>
+  <div class="kpi-grid">
+    <div class="kpi-card"><div class="kv">0.5%</div><div class="kl">Legal Spend / Revenue</div><div class="kb">Median (ACC 2024). Range: 0.27%-1.43%</div></div>
+    <div class="kpi-card"><div class="kv">53% / 47%</div><div class="kl">Internal / External Spend</div><div class="kb">Litigation: 39% of outside spend</div></div>
+    <div class="kpi-card"><div class="kv">95%+</div><div class="kl">Compliance Training</div><div class="kb">Completion rate target</div></div>
+  </div>
+
+  <h4>Efficiency Metrics</h4>
+  <table>
+    <thead><tr><th>Metric</th><th>What It Tracks</th><th>Target SLA</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">NDA Turnaround</td><td>Request to execution</td><td>1-2 business days</td></tr>
+      <tr><td style="font-weight:600">Standard Vendor Agreement</td><td>Request to execution</td><td>3-5 business days</td></tr>
+      <tr><td style="font-weight:600">Complex Commercial</td><td>Request to execution</td><td>2-4 weeks</td></tr>
+      <tr><td style="font-weight:600">Matter Resolution Time</td><td>Open to close (non-litigation)</td><td>Type-dependent</td></tr>
+      <tr><td style="font-weight:600">Contract Volume</td><td>Contracts processed per period</td><td>Throughput metric</td></tr>
+      <tr><td style="font-weight:600">Cost Per Matter</td><td>Total legal spend / matter count</td><td>Efficiency metric</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Performance Measurement</h3>
+  <ul>
+    <li><strong>Internal client satisfaction (NPS)</strong> &mdash; 3-6 question survey every 3-6 months. Dimensions: responsiveness, communication quality, business understanding, pragmatism. 40-60% response rate target.</li>
+    <li><strong>Workload metrics</strong> &mdash; cases per attorney, time per matter type, complexity scoring</li>
+    <li><strong>Cost per matter</strong> combined with time-to-resolution &rarr; efficiency score for routing decisions</li>
+    <li>40% of CLOs rank operational efficiency as top strategic priority (ACC 2024)</li>
+  </ul>
+
+  <h3>Work Distribution</h3>
+  <p><strong>Legal intake &amp; triage:</strong> Structured intake forms with conditional logic routing based on matter type, urgency, confidentiality, business unit, and geography. Self-service deflection for routine matters (template NDAs, standard contracts).</p>
+
+  <h4>Prioritization Framework</h4>
+  <table>
+    <thead><tr><th>Priority</th><th>Examples</th><th>Handling</th></tr></thead>
+    <tbody>
+      <tr style="background:var(--red-bg)"><td style="font-weight:700">Critical / Urgent</td><td>Litigation, regulatory investigations, data breaches</td><td>Immediate senior attention, dedicated resources</td></tr>
+      <tr style="background:var(--yellow-bg)"><td style="font-weight:700">Important / Time-Sensitive</td><td>Deal contracts, M&amp;A due diligence, regulatory filings</td><td>Managed against SLA targets</td></tr>
+      <tr><td style="font-weight:700">Routine / Scheduled</td><td>Employment matters, vendor agreements, policy updates</td><td>Standard workflows, predictable timelines</td></tr>
+    </tbody>
+  </table>
+
+  <p><strong>Scaling mechanisms:</strong> Self-service contract templates + playbook-driven negotiation (approved language, fallback positions, escalation triggers, risk thresholds). Google's ~1,000-person legal team uses contract analytics + ML for clause extraction. Airbnb organizes into product-counseling teams aligned to product areas.</p>
+
+  <div class="co info">
+    <div class="co-label">ORGCOMMAND Implication</div>
+    <p style="margin-bottom:0">Legal personnel need <strong>matter-based tracking</strong> (turnaround time per matter type, cost per matter, resolution time) rather than activity metrics. Track <strong>internal client satisfaction</strong> scores and <strong>workload balance</strong> across the team. Contract volume as throughput metric.</p>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 07. CROSS-DEPARTMENT PATTERNS -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 07</div>
+  <h2 class="stitle">Cross-Department Patterns</h2>
+
+  <p>Across all six departments and 13+ companies studied, these universal patterns emerge:</p>
+
+  <h3>1. Every Department Has a "North Star" KPI</h3>
+  <table>
+    <thead><tr><th>Department</th><th>North Star KPI</th><th>Why This One</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Development</td><td>Deployment Frequency + Lead Time</td><td>Proxy for team health and delivery capability</td></tr>
+      <tr><td style="font-weight:600">Sales</td><td>Quota Attainment</td><td>Directly measures revenue contribution</td></tr>
+      <tr><td style="font-weight:600">Sales Ops</td><td>Forecast Accuracy</td><td>Determines planning reliability for the business</td></tr>
+      <tr><td style="font-weight:600">Marketing</td><td>Marketing-Sourced Pipeline</td><td>Connects marketing spend to revenue outcomes</td></tr>
+      <tr><td style="font-weight:600">Finance</td><td>Close Cycle Time + Forecast MAPE</td><td>Speed and accuracy = trustworthy numbers</td></tr>
+      <tr><td style="font-weight:600">Legal</td><td>Contract Turnaround Time</td><td>Directly unblocks revenue-generating activity</td></tr>
+    </tbody>
+  </table>
+
+  <h3>2. Traffic Light Systems Are Universal</h3>
+  <p>Every company uses some form of Red/Yellow/Green health signaling. The thresholds vary by department, but the pattern is consistent:</p>
+  <table>
+    <thead><tr><th>Status</th><th>Engineering</th><th>Sales</th><th>Finance</th><th>Legal</th></tr></thead>
+    <tbody>
+      <tr style="background:var(--green-bg)"><td><span class="pill g">Green</span></td><td>DORA Elite/High</td><td>&ge;100% quota</td><td>&le;5% variance</td><td>Within SLA</td></tr>
+      <tr style="background:var(--yellow-bg)"><td><span class="pill y">Yellow</span></td><td>DORA Medium</td><td>70-99% quota</td><td>5-10% variance</td><td>1-2 days over SLA</td></tr>
+      <tr style="background:var(--red-bg)"><td><span class="pill r">Red</span></td><td>DORA Low</td><td>&lt;70% quota</td><td>&gt;10% variance</td><td>&gt;2 days over SLA</td></tr>
+    </tbody>
+  </table>
+
+  <h3>3. Performance Review Cadences Cluster</h3>
+  <div class="kpi-grid" style="grid-template-columns:1fr 1fr">
+    <div class="kpi-card" style="border-left:3px solid var(--blue)"><div class="kl">Most Common</div><div class="kv" style="font-size:16px">Semi-Annual</div><div class="kb">Meta PSC, Amazon OLR, Google GRAD (annual but with 2x promo)</div></div>
+    <div class="kpi-card" style="border-left:3px solid var(--green)"><div class="kl">Emerging Trend</div><div class="kv" style="font-size:16px">Continuous</div><div class="kb">Microsoft Connects, Netflix Keeper Test. Check-ins replace reviews.</div></div>
+  </div>
+
+  <h3>4. Work Distribution Models</h3>
+  <table>
+    <thead><tr><th>Model</th><th>Departments</th><th>Key Mechanism</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Sprint-Based</td><td>Engineering, Marketing, Sales Ops</td><td>2-week sprints, backlog grooming, velocity tracking</td></tr>
+      <tr><td style="font-weight:600">Pipeline-Based</td><td>Sales</td><td>Deal stage progression, weighted pipeline, territory assignment</td></tr>
+      <tr><td style="font-weight:600">Calendar-Based</td><td>Finance</td><td>Close calendar, FP&amp;A cycles, regulatory deadlines</td></tr>
+      <tr><td style="font-weight:600">Intake/Triage</td><td>Legal</td><td>Request queue, priority routing, SLA enforcement</td></tr>
+    </tbody>
+  </table>
+
+  <h3>5. OKRs Are the Unifying Framework</h3>
+  <p>Google pioneered, but now <strong>every company in this cohort</strong> uses OKRs or a close variant. The key principles that work:</p>
+  <ul>
+    <li>60% bottom-up, 40% top-down goal setting</li>
+    <li>0.6-0.7 (60-70%) achievement = success (not 100%)</li>
+    <li>Full transparency &mdash; every employee sees every OKR</li>
+    <li>Decoupled from compensation (OKRs measure direction, not reward)</li>
+    <li>Max 5 objectives per quarter, 4 key results each</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 08. ORGCOMMAND ARCHITECTURE IMPLICATIONS -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 08</div>
+  <h2 class="stitle">ORGCOMMAND Architecture Implications</h2>
+
+  <div class="co safe">
+    <div class="co-label">Core Architecture Decision</div>
+    <p style="margin-bottom:0">ORGCOMMAND must support <strong>department-specific KPI schemas</strong> with a shared traffic-light evaluation layer on top. Each department gets its own KPI panel, thresholds, and work distribution model, but the CEO dashboard normalizes everything to Green/Yellow/Red health status.</p>
+  </div>
+
+  <h3>Data Model Requirements</h3>
+  <table>
+    <thead><tr><th>Requirement</th><th>Driven By</th><th>Implementation</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">Configurable KPI Templates</td><td>Every dept has different metrics</td><td>Department-level KPI schema with custom fields, thresholds, and weight</td></tr>
+      <tr><td style="font-weight:600">Traffic Light Engine</td><td>Universal Red/Yellow/Green pattern</td><td>Configurable threshold profiles per department (Carlos's Standard/Aggressive/Lenient)</td></tr>
+      <tr><td style="font-weight:600">Period-Based Evaluation</td><td>Finance (monthly close), Sales (quota period), Engineering (sprint)</td><td>Flexible period support: weekly, bi-weekly, monthly, quarterly</td></tr>
+      <tr><td style="font-weight:600">Activity Metrics Layer</td><td>Sales (calls, demos), Engineering (commits, PRs), Marketing (content velocity)</td><td>Integration-driven auto-collection from external tools</td></tr>
+      <tr><td style="font-weight:600">Qualitative Assessment</td><td>Legal (client satisfaction), Engineering (code quality), all (manager reviews)</td><td>Survey/review capture with numeric scoring</td></tr>
+      <tr><td style="font-weight:600">Work Queue / Pipeline</td><td>Sales (deal pipeline), Legal (matter queue), Engineering (sprint backlog)</td><td>Department-specific queue views with stage progression</td></tr>
+      <tr><td style="font-weight:600">Ramp / Onboarding Profiles</td><td>Sales ramp (5.7mo avg), Engineering bootcamp (Meta 6-8wk)</td><td>Time-adjusted targets for new hires</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Phase 1 Priority Matrix</h3>
+  <p>Based on Carlos's current companies (Vama, Vittori, TradeAlgo + others) and existing GREG data:</p>
+  <table>
+    <thead><tr><th>Priority</th><th>Feature</th><th>Departments Served</th><th>Rationale</th></tr></thead>
+    <tbody>
+      <tr style="background:var(--green-bg)"><td style="font-weight:700">P0</td><td>Traffic light health dashboard</td><td>All</td><td>Carlos's primary use case: "see everyone's status at a glance"</td></tr>
+      <tr style="background:var(--green-bg)"><td style="font-weight:700">P0</td><td>Sales KPI tracking (quota, calls, connections, demos)</td><td>Sales</td><td>Already proven in GREG &mdash; direct migration path</td></tr>
+      <tr style="background:var(--green-bg)"><td style="font-weight:700">P0</td><td>Configurable threshold profiles</td><td>All</td><td>Standard/Aggressive/Lenient per department</td></tr>
+      <tr style="background:var(--blue-bg)"><td style="font-weight:700">P1</td><td>Engineering DORA/GitHub integration</td><td>Development</td><td>GitHub data already available, high automation potential</td></tr>
+      <tr style="background:var(--blue-bg)"><td style="font-weight:700">P1</td><td>Department-specific KPI schemas</td><td>All</td><td>Foundation for multi-department tracking</td></tr>
+      <tr style="background:var(--blue-bg)"><td style="font-weight:700">P1</td><td>CSV import for all departments</td><td>All</td><td>Carlos's preferred initial data entry method</td></tr>
+      <tr><td style="font-weight:700">P2</td><td>Marketing funnel metrics</td><td>Marketing</td><td>Requires CRM integration (Zoho/Pipedrive)</td></tr>
+      <tr><td style="font-weight:700">P2</td><td>Finance close calendar tracking</td><td>Finance</td><td>Calendar-based workflow, lower urgency</td></tr>
+      <tr><td style="font-weight:700">P2</td><td>Legal matter management</td><td>Legal</td><td>Intake queue + SLA tracking</td></tr>
+      <tr><td style="font-weight:700">P3</td><td>OKR framework</td><td>All</td><td>Layer on top of KPIs once foundations are solid</td></tr>
+      <tr><td style="font-weight:700">P3</td><td>AI-powered analysis (per GREG model)</td><td>All</td><td>Port GREG's Claude analysis to ORGCOMMAND</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Integration Priority</h3>
+  <table>
+    <thead><tr><th>Integration</th><th>Department</th><th>Data Collected</th><th>Phase</th></tr></thead>
+    <tbody>
+      <tr><td style="font-weight:600">GitHub</td><td>Development</td><td>Commits, PRs, reviews, cycle time</td><td>P1</td></tr>
+      <tr><td style="font-weight:600">Zoho CRM</td><td>Sales, Marketing</td><td>Pipeline, deals, activities</td><td>P1</td></tr>
+      <tr><td style="font-weight:600">Pipedrive</td><td>Sales</td><td>Pipeline, deals, activities</td><td>P1</td></tr>
+      <tr><td style="font-weight:600">Jira</td><td>Development, Sales Ops</td><td>Tickets, sprint data, velocity</td><td>P1</td></tr>
+      <tr><td style="font-weight:600">Google Sheets</td><td>All (CSV bridge)</td><td>Manual KPI entry</td><td>P0</td></tr>
+      <tr><td style="font-weight:600">Calendly</td><td>Sales, Marketing</td><td>Meetings, show rates</td><td>P2</td></tr>
+      <tr><td style="font-weight:600">HubSpot/Marketo</td><td>Marketing</td><td>MQLs, SQLs, campaigns</td><td>P2</td></tr>
+    </tbody>
+  </table>
+
+  <div class="co purp">
+    <div class="co-label">The ORGCOMMAND Advantage</div>
+    <p style="margin-bottom:0">No existing tool gives a CEO a <strong>single-pane view across all 6 departments</strong> with traffic-light health status. Salesforce tracks sales. Jira tracks engineering. But nothing normalizes a developer's DORA metrics alongside a sales rep's quota attainment alongside a finance analyst's close accuracy into one unified health dashboard. <strong>That's what ORGCOMMAND builds.</strong></p>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  DEPARTMENT BEST PRACTICES &mdash; ORGCOMMAND Foundation &nbsp;&middot;&nbsp; Prepared by Atlas &nbsp;&middot;&nbsp; March 4, 2026
+</div>
+
+</div><!-- .page -->
+</body>
+</html>

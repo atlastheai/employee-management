@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND — Wireframe</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --g:#10b981;--gbg:#ecfdf5;--gbd:#a7f3d0;
+  --y:#f59e0b;--ybg:#fffbeb;--ybd:#fde68a;
+  --r:#ef4444;--rbg:#fef2f2;--rbd:#fecaca;
+  --bl:#3b82f6;--blbg:#eff6ff;
+  --text:#111827;--t2:#6b7280;--t3:#9ca3af;
+  --bg:#f9fafb;--card:#fff;--bdr:#e5e7eb;--bdr2:#f3f4f6;
+  --side:220px;--head:52px;
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans-serif;background:var(--bg);color:var(--text);font-size:14px;line-height:1.5}
+
+/* Sidebar */
+.side{position:fixed;top:0;left:0;width:var(--side);height:100vh;background:#fff;border-right:1px solid var(--bdr);display:flex;flex-direction:column;z-index:100}
+.side-brand{padding:14px 18px;font-size:16px;font-weight:800;letter-spacing:1px;border-bottom:1px solid var(--bdr)}
+.side-nav{flex:1;padding:8px 0;overflow-y:auto}
+.nav-label{font-size:10px;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--t3);padding:14px 18px 4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 18px;cursor:pointer;font-size:13px;font-weight:500;color:var(--t2);border-left:3px solid transparent;transition:all .12s}
+.nav-item:hover{background:var(--bg);color:var(--text)}
+.nav-item.active{background:var(--blbg);color:var(--bl);border-left-color:var(--bl);font-weight:600}
+.nav-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.nav-count{margin-left:auto;font-size:11px;font-weight:700;color:var(--t3)}
+.side-foot{padding:12px 18px;border-top:1px solid var(--bdr);font-size:11px;color:var(--t3)}
+
+/* Header */
+.head{position:fixed;top:0;left:var(--side);right:0;height:var(--head);background:#fff;border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;padding:0 20px;z-index:90}
+.head-left{display:flex;align-items:center;gap:12px}
+.head-left h1{font-size:15px;font-weight:700}
+.head-crumb{font-size:12px;color:var(--t3)}
+.head-right{display:flex;align-items:center;gap:10px}
+.head-btn{padding:5px 12px;border:1px solid var(--bdr);background:#fff;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;color:var(--t2)}
+.head-btn:hover{border-color:var(--bl);color:var(--bl)}
+.avatar{width:28px;height:28px;border-radius:50%;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:var(--t2)}
+
+/* Main */
+.main{margin-left:var(--side);padding-top:var(--head)}
+.view{display:none;padding:20px}
+.view.active{display:block}
+
+/* Cards */
+.card{background:var(--card);border:1px solid var(--bdr);border-radius:10px}
+.card-h{padding:14px 18px;border-bottom:1px solid var(--bdr2);display:flex;align-items:center;justify-content:space-between}
+.card-h h3{font-size:13px;font-weight:700}
+.card-b{padding:16px 18px}
+
+/* Stat cards */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:16px}
+.stat{background:#fff;border:1px solid var(--bdr);border-radius:10px;padding:14px 16px}
+.stat .l{font-size:11px;font-weight:600;color:var(--t3);text-transform:uppercase;letter-spacing:.3px}
+.stat .v{font-size:24px;font-weight:800;margin-top:2px}
+.stat .c{font-size:11px;font-weight:600;margin-top:4px}
+.stat .c.up{color:var(--g)}.stat .c.dn{color:var(--r)}.stat .c.fl{color:var(--t3)}
+
+/* Grid */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+
+/* Dept card */
+.dept-card{background:#fff;border:1px solid var(--bdr);border-radius:10px;cursor:pointer;transition:all .15s;overflow:hidden}
+.dept-card:hover{box-shadow:0 2px 8px rgba(0,0,0,.06);transform:translateY(-1px)}
+.dept-top{padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.dept-top h3{font-size:14px;font-weight:700}
+.dept-count{font-size:12px;color:var(--t3)}
+.dept-bar{display:flex;height:4px}
+.dept-bar span{flex:1}
+.dept-metrics{padding:10px 16px;display:flex;gap:16px;font-size:12px;color:var(--t2)}
+.dept-metrics strong{color:var(--text)}
+
+/* Traffic light pill */
+.tl{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:2px 8px;border-radius:12px}
+.tl.g{background:var(--gbg);color:#059669}
+.tl.y{background:var(--ybg);color:#d97706}
+.tl.r{background:var(--rbg);color:#dc2626}
+.dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.dot.g{background:var(--g)}.dot.y{background:var(--y)}.dot.r{background:var(--r)}
+
+/* Person row */
+.person-row{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--bdr2);cursor:pointer;transition:background .1s}
+.person-row:last-child{border-bottom:none}
+.person-row:hover{background:var(--blbg)}
+.p-avatar{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
+.p-info{flex:1;min-width:0}
+.p-name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.p-role{font-size:11px;color:var(--t3)}
+.p-metric{text-align:right;min-width:60px}
+.p-metric .val{font-size:13px;font-weight:700}
+.p-metric .lbl{font-size:10px;color:var(--t3)}
+
+/* Table */
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px;color:var(--t3);padding:8px 12px;text-align:left;border-bottom:2px solid var(--bdr)}
+.tbl td{padding:10px 12px;border-bottom:1px solid var(--bdr2);font-size:13px}
+.tbl tr{cursor:pointer;transition:background .1s}
+.tbl tr:hover{background:var(--blbg)}
+
+/* Progress bar */
+.pbar{display:flex;align-items:center;gap:6px}
+.pbar-track{flex:1;height:5px;background:#f3f4f6;border-radius:3px;overflow:hidden}
+.pbar-fill{height:100%;border-radius:3px}
+.pbar-pct{font-size:11px;font-weight:700;min-width:32px;text-align:right}
+
+/* Detail header */
+.detail-top{display:flex;align-items:center;gap:16px;margin-bottom:20px}
+.detail-avatar{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:800;color:#fff}
+.detail-info h2{font-size:20px;font-weight:800}
+.detail-meta{font-size:13px;color:var(--t2);display:flex;align-items:center;gap:8px;margin-top:2px}
+.back{font-size:13px;color:var(--bl);cursor:pointer;font-weight:600;margin-bottom:12px;display:flex;align-items:center;gap:4px}
+.back:hover{text-decoration:underline}
+
+/* Jira task */
+.task{display:flex;align-items:flex-start;gap:10px;padding:10px 0;border-bottom:1px solid var(--bdr2)}
+.task:last-child{border-bottom:none}
+.task-icon{width:20px;height:20px;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#fff;flex-shrink:0;margin-top:2px}
+.task-icon.story{background:var(--g)}.task-icon.bug{background:var(--r)}.task-icon.task{background:var(--bl)}
+.task-body{flex:1;min-width:0}
+.task-title{font-size:13px;font-weight:600}
+.task-meta{font-size:11px;color:var(--t3);display:flex;gap:8px;margin-top:2px}
+.task-status{font-size:11px;font-weight:600;padding:1px 6px;border-radius:4px;flex-shrink:0}
+.task-status.prog{background:var(--blbg);color:var(--bl)}
+.task-status.todo{background:#f3f4f6;color:var(--t2)}
+.task-status.review{background:var(--ybg);color:#d97706}
+
+/* Streak dots */
+.streak{display:flex;gap:3px;align-items:center}
+.streak .sd{width:10px;height:10px;border-radius:50%}
+
+/* Mobile */
+.menu-btn{display:none;background:none;border:none;font-size:20px;cursor:pointer;color:var(--text)}
+@media(max-width:768px){
+  .side{transform:translateX(-100%);z-index:200}
+  .side.open{transform:translateX(0)}
+  .head,.main{margin-left:0!important;left:0!important}
+  .menu-btn{display:block}
+  .stats{grid-template-columns:1fr 1fr}
+  .g2,.g3{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<div class="side" id="side">
+  <div class="side-brand">ORGCOMMAND</div>
+  <nav class="side-nav">
+    <div class="nav-label">Overview</div>
+    <div class="nav-item active" onclick="showView('ceo')"><span class="dot g"></span> CEO Dashboard</div>
+
+    <div class="nav-label">Departments</div>
+    <div class="nav-item" onclick="showDept('dev')"><span class="nav-dot" style="background:var(--bl)"></span> Development <span class="nav-count">12</span></div>
+    <div class="nav-item" onclick="showDept('sales')"><span class="nav-dot" style="background:var(--g)"></span> Sales <span class="nav-count">34</span></div>
+    <div class="nav-item" onclick="showDept('salesops')"><span class="nav-dot" style="background:#059669"></span> Sales Ops <span class="nav-count">6</span></div>
+    <div class="nav-item" onclick="showDept('marketing')"><span class="nav-dot" style="background:#8b5cf6"></span> Marketing <span class="nav-count">9</span></div>
+    <div class="nav-item" onclick="showDept('finance')"><span class="nav-dot" style="background:var(--y)"></span> Finance <span class="nav-count">5</span></div>
+    <div class="nav-item" onclick="showDept('legal')"><span class="nav-dot" style="background:var(--r)"></span> Legal <span class="nav-count">4</span></div>
+
+    <div class="nav-label">Tools</div>
+    <div class="nav-item" style="color:var(--t3);cursor:default"><span class="nav-dot" style="background:#ddd"></span> Jira Sync</div>
+    <div class="nav-item" style="color:var(--t3);cursor:default"><span class="nav-dot" style="background:#ddd"></span> GitHub Sync</div>
+  </nav>
+  <div class="side-foot">Last sync: 3 min ago<br>70 people &middot; 4 companies</div>
+</div>
+
+<!-- HEADER -->
+<div class="head">
+  <div class="head-left">
+    <button class="menu-btn" onclick="document.getElementById('side').classList.toggle('open')">&#9776;</button>
+    <h1 id="page-title">CEO Dashboard</h1>
+    <span class="head-crumb" id="crumb"></span>
+  </div>
+  <div class="head-right">
+    <span style="font-size:11px;color:var(--t3)">4 companies &middot; 70 people</span>
+    <div class="avatar">CE</div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+<!-- ============================================================ -->
+<!-- CEO DASHBOARD -->
+<!-- ============================================================ -->
+<div class="view active" id="v-ceo">
+
+  <div class="stats">
+    <div class="stat"><div class="l">Total People</div><div class="v">70</div><div class="c fl">Across 4 companies</div></div>
+    <div class="stat"><div class="l">Green</div><div class="v" style="color:var(--g)">48</div><div class="c up">69% on track</div></div>
+    <div class="stat"><div class="l">Yellow</div><div class="v" style="color:var(--y)">16</div><div class="c fl">23% needs attention</div></div>
+    <div class="stat"><div class="l">Red</div><div class="v" style="color:var(--r)">6</div><div class="c dn">3 with 2+ consecutive</div></div>
+  </div>
+
+  <!-- Department Cards -->
+  <div style="font-size:13px;font-weight:700;margin-bottom:8px">Departments</div>
+  <div class="g3" style="margin-bottom:16px">
+    <div class="dept-card" onclick="showDept('dev')">
+      <div class="dept-top"><h3>Development</h3><span class="dept-count">12 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:8"></span><span style="background:var(--y);flex:3"></span><span style="background:var(--r);flex:1"></span></div>
+      <div class="dept-metrics"><span>Avg <strong>3.8</strong> PRs/wk</span><span>Review <strong>3.2h</strong></span></div>
+    </div>
+    <div class="dept-card" onclick="showDept('sales')">
+      <div class="dept-top"><h3>Sales</h3><span class="dept-count">34 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:18"></span><span style="background:var(--y);flex:10"></span><span style="background:var(--r);flex:6"></span></div>
+      <div class="dept-metrics"><span>Avg <strong>87%</strong> quota</span><span>Pipeline <strong>2.8x</strong></span></div>
+    </div>
+    <div class="dept-card" onclick="showDept('salesops')">
+      <div class="dept-top"><h3>Sales Ops</h3><span class="dept-count">6 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:4"></span><span style="background:var(--y);flex:2"></span></div>
+      <div class="dept-metrics"><span>Forecast <strong>&plusmn;8%</strong></span><span>SLA <strong>94%</strong></span></div>
+    </div>
+    <div class="dept-card" onclick="showDept('marketing')">
+      <div class="dept-top"><h3>Marketing</h3><span class="dept-count">9 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:6"></span><span style="background:var(--y);flex:2"></span><span style="background:var(--r);flex:1"></span></div>
+      <div class="dept-metrics"><span>Pipeline <strong>$142K</strong></span><span>MQL&rarr;SQL <strong>14%</strong></span></div>
+    </div>
+    <div class="dept-card" onclick="showDept('finance')">
+      <div class="dept-top"><h3>Finance</h3><span class="dept-count">5 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:4"></span><span style="background:var(--y);flex:1"></span></div>
+      <div class="dept-metrics"><span>Close <strong>4 days</strong></span><span>Variance <strong>3.2%</strong></span></div>
+    </div>
+    <div class="dept-card" onclick="showDept('legal')">
+      <div class="dept-top"><h3>Legal</h3><span class="dept-count">4 people</span></div>
+      <div class="dept-bar"><span style="background:var(--g);flex:2"></span><span style="background:var(--y);flex:1"></span><span style="background:var(--r);flex:1"></span></div>
+      <div class="dept-metrics"><span>Avg turnaround <strong>2.1d</strong></span><span>NPS <strong>7.8</strong></span></div>
+    </div>
+  </div>
+
+  <!-- Red Alerts -->
+  <div class="g2">
+    <div class="card">
+      <div class="card-h"><h3>Red Alerts</h3><span class="tl r"><span class="dot r"></span> 6 people</span></div>
+      <div style="padding:0">
+        <div class="person-row" onclick="showPerson('d.cooper')">
+          <div class="p-avatar" style="background:var(--r)">DC</div>
+          <div class="p-info"><div class="p-name">D. Cooper</div><div class="p-role">Sales &middot; Vittori &middot; JR</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--r)"></div><div class="sd" style="background:var(--r)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">3 reds</div></div>
+        </div>
+        <div class="person-row" onclick="showPerson('z.rouissi')">
+          <div class="p-avatar" style="background:var(--r)">ZR</div>
+          <div class="p-info"><div class="p-name">Z. Rouissi</div><div class="p-role">Sales &middot; Vittori &middot; JR</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--y)"></div><div class="sd" style="background:var(--r)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">2 reds</div></div>
+        </div>
+        <div class="person-row" onclick="showPerson('mike.t')">
+          <div class="p-avatar" style="background:var(--r)">MT</div>
+          <div class="p-info"><div class="p-name">Mike Torres</div><div class="p-role">Development &middot; Vama</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--g)"></div><div class="sd" style="background:var(--y)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">1 red</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--r)">JT</div>
+          <div class="p-info"><div class="p-name">John T.</div><div class="p-role">Sales &middot; TradeAlgo &middot; JR</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--r)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">2 reds</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--r)">PN</div>
+          <div class="p-info"><div class="p-name">Priya Nair</div><div class="p-role">Marketing &middot; TradeAlgo</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--y)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">1 red</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--r)">RL</div>
+          <div class="p-info"><div class="p-name">Rachel Lin</div><div class="p-role">Legal &middot; Vittori</div></div>
+          <div><div class="streak"><div class="sd" style="background:var(--g)"></div><div class="sd" style="background:var(--r)"></div></div><div style="font-size:10px;color:var(--t3);text-align:right;margin-top:2px">1 red</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top Performers -->
+    <div class="card">
+      <div class="card-h"><h3>Top Performers</h3><span class="tl g"><span class="dot g"></span> Consistent green</span></div>
+      <div style="padding:0">
+        <div class="person-row" onclick="showPerson('cole')">
+          <div class="p-avatar" style="background:var(--g)">CO</div>
+          <div class="p-info"><div class="p-name">Cole</div><div class="p-role">Sales &middot; Vama &middot; SR</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">118%</div><div class="lbl">Quota</div></div>
+        </div>
+        <div class="person-row" onclick="showPerson('sarah.k')">
+          <div class="p-avatar" style="background:var(--g)">SK</div>
+          <div class="p-info"><div class="p-name">Sarah Kim</div><div class="p-role">Development &middot; TradeAlgo</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">5.2</div><div class="lbl">PRs/wk</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--g)">TM</div>
+          <div class="p-info"><div class="p-name">Tyler McCormick</div><div class="p-role">Sales &middot; TradeAlgo &middot; SR</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">112%</div><div class="lbl">Quota</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--g)">JW</div>
+          <div class="p-info"><div class="p-name">James Wu</div><div class="p-role">Finance &middot; Vama</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">3d</div><div class="lbl">Close time</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--g)">EG</div>
+          <div class="p-info"><div class="p-name">Enrico G</div><div class="p-role">Sales &middot; Vama &middot; SR</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">110%</div><div class="lbl">Quota</div></div>
+        </div>
+        <div class="person-row">
+          <div class="p-avatar" style="background:var(--g)">AL</div>
+          <div class="p-info"><div class="p-name">Ana Lopez</div><div class="p-role">Sales Ops &middot; Vama</div></div>
+          <div class="p-metric"><div class="val" style="color:var(--g)">96%</div><div class="lbl">SLA met</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- DEPARTMENT VIEW -->
+<!-- ============================================================ -->
+<div class="view" id="v-dept">
+  <div class="back" onclick="showView('ceo')">&#8592; Back to Dashboard</div>
+
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:16px">
+    <div>
+      <h2 id="dept-title" style="font-size:20px;font-weight:800">Development</h2>
+      <p id="dept-sub" style="font-size:13px;color:var(--t2);margin:0">12 people across 3 companies</p>
+    </div>
+    <div id="dept-health" style="display:flex;gap:8px">
+      <span class="tl g"><span class="dot g"></span> 8</span>
+      <span class="tl y"><span class="dot y"></span> 3</span>
+      <span class="tl r"><span class="dot r"></span> 1</span>
+    </div>
+  </div>
+
+  <!-- Dept KPIs -->
+  <div class="stats" id="dept-stats">
+    <div class="stat"><div class="l">Avg PRs / Week</div><div class="v">3.8</div><div class="c up">Target: 3+</div></div>
+    <div class="stat"><div class="l">Bugs Escaped</div><div class="v" style="color:var(--g)">1.2</div><div class="c up">Target: &lt;2</div></div>
+    <div class="stat"><div class="l">Review Turnaround</div><div class="v">3.2h</div><div class="c up">Target: &lt;4h</div></div>
+    <div class="stat"><div class="l">Jira: Open Tasks</div><div class="v">38</div><div class="c fl">14 in progress</div></div>
+  </div>
+
+  <!-- Person Table -->
+  <div class="card">
+    <div class="card-h">
+      <h3 id="dept-table-title">Team Members</h3>
+      <span style="font-size:12px;color:var(--t3)">Click a person for details</span>
+    </div>
+    <div style="padding:0;overflow-x:auto">
+      <table class="tbl" id="dept-table">
+        <thead><tr><th>Person</th><th>Company</th><th>North Star</th><th>Leading</th><th>Jira Tasks</th><th>Status</th><th>History</th></tr></thead>
+        <tbody id="dept-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- PERSON DETAIL -->
+<!-- ============================================================ -->
+<div class="view" id="v-person">
+  <div class="back" id="person-back" onclick="goBack()">&#8592; Back</div>
+
+  <div class="detail-top">
+    <div class="detail-avatar" id="person-avatar" style="background:var(--bl)">SK</div>
+    <div>
+      <div style="display:flex;align-items:center;gap:10px">
+        <h2 id="person-name" style="font-size:20px;font-weight:800">Sarah Kim</h2>
+        <span class="tl g" id="person-status"><span class="dot g"></span> Green</span>
+      </div>
+      <div class="detail-meta">
+        <span id="person-dept">Development</span>
+        <span>&middot;</span>
+        <span id="person-company">TradeAlgo</span>
+        <span>&middot;</span>
+        <span id="person-email">sarah.k@tradealgo.com</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Performance Metrics -->
+  <div style="font-size:13px;font-weight:700;margin-bottom:8px" id="perf-section-label">Performance (from GitHub)</div>
+  <div class="stats" id="person-stats" style="grid-template-columns:repeat(3,1fr)">
+    <div class="stat"><div class="l">PRs Merged / Week</div><div class="v" style="color:var(--g)" id="ps-1">5.2</div><div class="c up" id="ps-1t">Target: 3+</div></div>
+    <div class="stat"><div class="l">Bugs Escaped (30d)</div><div class="v" style="color:var(--g)" id="ps-2">0</div><div class="c up" id="ps-2t">Target: &lt;2</div></div>
+    <div class="stat"><div class="l">Review Turnaround</div><div class="v" id="ps-3">2.1h</div><div class="c up" id="ps-3t">Target: &lt;4h</div></div>
+  </div>
+
+  <!-- Traffic Light History -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-h"><h3>Status History (Last 8 Weeks)</h3></div>
+    <div class="card-b">
+      <div id="person-history" style="display:flex;gap:6px;align-items:center">
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W1</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W2</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W3</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--y)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W4</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W5</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W6</div></div>
+        <div style="text-align:center"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--t3);margin-top:2px">W7</div></div>
+        <div style="text-align:center;border:2px solid var(--bl);border-radius:8px;padding:1px"><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--g)"></div><div style="font-size:9px;color:var(--bl);font-weight:700;margin-top:2px">Now</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <!-- Current Jira Tasks -->
+    <div class="card">
+      <div class="card-h"><h3>Current Tasks (Jira)</h3><span style="font-size:11px;color:var(--t3)">Synced 3m ago</span></div>
+      <div class="card-b" style="padding:12px 16px" id="person-tasks">
+        <div class="task">
+          <div class="task-icon task">T</div>
+          <div class="task-body">
+            <div class="task-title">Implement user auth flow for mobile API</div>
+            <div class="task-meta"><span>TA-342</span><span>Sprint 14</span><span>Due Mar 7</span></div>
+          </div>
+          <div class="task-status prog">In Progress</div>
+        </div>
+        <div class="task">
+          <div class="task-icon bug">B</div>
+          <div class="task-body">
+            <div class="task-title">Fix token refresh race condition</div>
+            <div class="task-meta"><span>TA-338</span><span>Sprint 14</span><span>Due Mar 5</span></div>
+          </div>
+          <div class="task-status prog">In Progress</div>
+        </div>
+        <div class="task">
+          <div class="task-icon story">S</div>
+          <div class="task-body">
+            <div class="task-title">Add rate limiting to public endpoints</div>
+            <div class="task-meta"><span>TA-351</span><span>Sprint 14</span><span>Due Mar 8</span></div>
+          </div>
+          <div class="task-status todo">To Do</div>
+        </div>
+        <div class="task">
+          <div class="task-icon task">T</div>
+          <div class="task-body">
+            <div class="task-title">Review PR: database migration scripts</div>
+            <div class="task-meta"><span>TA-345</span><span>Sprint 14</span></div>
+          </div>
+          <div class="task-status review">In Review</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Queue Position -->
+    <div class="card">
+      <div class="card-h"><h3>Workload &amp; Queue</h3></div>
+      <div class="card-b">
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--t2)">Current sprint capacity</span><span style="font-weight:700">4 / 5 tasks</span></div>
+          <div class="pbar"><div class="pbar-track"><div class="pbar-fill" style="width:80%;background:var(--bl)"></div></div><span class="pbar-pct" style="color:var(--bl)">80%</span></div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--t2)">Tasks completed this sprint</span><span style="font-weight:700">3 done</span></div>
+          <div class="pbar"><div class="pbar-track"><div class="pbar-fill" style="width:60%;background:var(--g)"></div></div><span class="pbar-pct" style="color:var(--g)">60%</span></div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span style="color:var(--t2)">Backlog depth</span><span style="font-weight:700">7 tasks queued</span></div>
+          <div class="pbar"><div class="pbar-track"><div class="pbar-fill" style="width:35%;background:var(--y)"></div></div><span class="pbar-pct" style="color:var(--t2)">~2 sprints</span></div>
+        </div>
+        <div style="background:var(--bg);border-radius:8px;padding:10px 12px;font-size:12px;color:var(--t2);margin-top:12px">
+          <strong style="color:var(--text)">No blockers.</strong> All tasks have clear requirements and no dependencies waiting.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</div><!-- .main -->
+
+<script>
+// ═══════════════════════════════════════════════════════════════
+// DATA
+// ═══════════════════════════════════════════════════════════════
+const PEOPLE = {
+  dev: [
+    {id:'sarah.k',name:'Sarah Kim',co:'TradeAlgo',north:'5.2 PRs/wk',lead:'2.1h review',jira:4,status:'g',hist:['g','g','g','y','g','g','g','g']},
+    {id:'marcus.w',name:'Marcus Webb',co:'Vama',north:'4.8 PRs/wk',lead:'2.8h review',jira:3,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'li.chen',name:'Li Chen',co:'TradeAlgo',north:'4.5 PRs/wk',lead:'3.1h review',jira:5,status:'g',hist:['g','g','y','g','g','g','g','g']},
+    {id:'david.p',name:'David Park',co:'Vittori',north:'4.1 PRs/wk',lead:'3.4h review',jira:3,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'emma.r',name:'Emma Rodriguez',co:'Vama',north:'3.9 PRs/wk',lead:'2.6h review',jira:4,status:'g',hist:['y','g','g','g','g','g','g','g']},
+    {id:'alex.j',name:'Alex Johnson',co:'TradeAlgo',north:'3.6 PRs/wk',lead:'3.8h review',jira:3,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'nina.s',name:'Nina Singh',co:'Vama',north:'3.2 PRs/wk',lead:'4.2h review',jira:5,status:'g',hist:['g','g','g','g','y','g','g','g']},
+    {id:'tom.b',name:'Tom Bradley',co:'Vittori',north:'3.0 PRs/wk',lead:'5.1h review',jira:2,status:'g',hist:['y','y','g','g','g','g','y','g']},
+    {id:'yuki.t',name:'Yuki Tanaka',co:'TradeAlgo',north:'2.4 PRs/wk',lead:'6.2h review',jira:4,status:'y',hist:['g','g','g','y','g','y','y','y']},
+    {id:'omar.f',name:'Omar Farouk',co:'Vama',north:'2.1 PRs/wk',lead:'7.8h review',jira:2,status:'y',hist:['g','y','g','g','y','g','y','y']},
+    {id:'jen.l',name:'Jen Liu',co:'Vittori',north:'1.8 PRs/wk',lead:'9.1h review',jira:6,status:'y',hist:['g','g','y','g','y','y','g','y']},
+    {id:'mike.t',name:'Mike Torres',co:'Vama',north:'0.6 PRs/wk',lead:'14h review',jira:1,status:'r',hist:['g','g','g','g','g','y','y','r']},
+  ],
+  sales: [
+    {id:'cole',name:'Cole',co:'Vama',north:'118% quota',lead:'4.2x pipeline',jira:null,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'tyler',name:'Tyler McCormick',co:'TradeAlgo',north:'112% quota',lead:'3.8x pipeline',jira:null,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'enrico.g',name:'Enrico G',co:'Vama',north:'110% quota',lead:'3.5x pipeline',jira:null,status:'g',hist:['g','y','g','g','g','g','g','g']},
+    {id:'morgan.q',name:'Morgan Quinn',co:'TradeAlgo',north:'108% quota',lead:'3.6x pipeline',jira:null,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'lucas',name:'Lucas',co:'Vittori',north:'105% quota',lead:'3.1x pipeline',jira:null,status:'g',hist:['g','g','y','g','g','g','g','g']},
+    {id:'sean.o',name:'Sean O.',co:'Vama',north:'71% quota',lead:'1.8x pipeline',jira:null,status:'y',hist:['g','g','g','y','y','y','y','y']},
+    {id:'d.cooper',name:'D. Cooper',co:'Vittori',north:'38% quota',lead:'0.9x pipeline',jira:null,status:'r',hist:['y','y','y','r','r','r','r','r']},
+    {id:'z.rouissi',name:'Z. Rouissi',co:'Vittori',north:'42% quota',lead:'1.1x pipeline',jira:null,status:'r',hist:['g','y','y','y','y','r','r','r']},
+  ],
+  salesops: [
+    {id:'ana.l',name:'Ana Lopez',co:'Vama',north:'Forecast &plusmn;6%',lead:'96% SLA',jira:8,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'derek.m',name:'Derek Mitchell',co:'TradeAlgo',north:'Forecast &plusmn;9%',lead:'91% SLA',jira:6,status:'g',hist:['g','g','y','g','g','g','g','g']},
+    {id:'lisa.c',name:'Lisa Chang',co:'Vama',north:'Forecast &plusmn;7%',lead:'94% SLA',jira:5,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'raj.p',name:'Raj Patel',co:'TradeAlgo',north:'Forecast &plusmn;11%',lead:'88% SLA',jira:7,status:'g',hist:['y','g','g','g','y','g','g','g']},
+    {id:'sam.w',name:'Sam Wilson',co:'Vittori',north:'Forecast &plusmn;14%',lead:'82% SLA',jira:4,status:'y',hist:['g','g','g','y','g','y','g','y']},
+    {id:'maria.g',name:'Maria Garcia',co:'Vittori',north:'Forecast &plusmn;18%',lead:'78% SLA',jira:3,status:'y',hist:['g','g','y','y','g','g','y','y']},
+  ],
+  marketing: [
+    {id:'kate.r',name:'Kate Rivera',co:'Vama',north:'$52K pipeline',lead:'16% MQL&rarr;SQL',jira:6,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'ben.h',name:'Ben Harper',co:'TradeAlgo',north:'$38K pipeline',lead:'13% MQL&rarr;SQL',jira:5,status:'g',hist:['g','g','y','g','g','g','g','g']},
+    {id:'chloe.d',name:'Chloe Davis',co:'Vama',north:'$31K pipeline',lead:'15% MQL&rarr;SQL',jira:4,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'priya.n',name:'Priya Nair',co:'TradeAlgo',north:'$8K pipeline',lead:'4% MQL&rarr;SQL',jira:3,status:'r',hist:['g','g','y','y','g','y','y','r']},
+  ],
+  finance: [
+    {id:'james.w',name:'James Wu',co:'Vama',north:'3d close',lead:'2.1% variance',jira:null,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'nina.v',name:'Nina Vasquez',co:'TradeAlgo',north:'4d close',lead:'3.8% variance',jira:null,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'alan.t',name:'Alan Tsai',co:'Vittori',north:'5d close',lead:'4.5% variance',jira:null,status:'g',hist:['g','g','y','g','g','g','g','g']},
+    {id:'rosa.m',name:'Rosa Martinez',co:'Vama',north:'5d close',lead:'4.9% variance',jira:null,status:'g',hist:['g','y','g','g','g','y','g','g']},
+    {id:'chris.b',name:'Chris Baker',co:'TradeAlgo',north:'7d close',lead:'7.2% variance',jira:null,status:'y',hist:['g','g','g','g','y','g','g','y']},
+  ],
+  legal: [
+    {id:'sarah.j',name:'Sarah Jensen',co:'Vama',north:'1.4d turnaround',lead:'NPS 9.1',jira:5,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'david.k',name:'David Kowalski',co:'TradeAlgo',north:'2.0d turnaround',lead:'NPS 8.2',jira:4,status:'g',hist:['g','g','g','g','g','g','g','g']},
+    {id:'amy.c',name:'Amy Chen',co:'Vittori',north:'2.8d turnaround',lead:'NPS 7.4',jira:6,status:'y',hist:['g','g','g','g','y','g','y','y']},
+    {id:'rachel.l',name:'Rachel Lin',co:'Vittori',north:'4.2d turnaround',lead:'NPS 5.8',jira:3,status:'r',hist:['g','g','g','g','g','g','y','r']},
+  ]
+};
+
+const DEPT_INFO = {
+  dev:{title:'Development',sub:'12 people across 3 companies',g:8,y:3,r:1,
+    stats:[{l:'Avg PRs / Week',v:'3.8',c:'Target: 3+',cls:'up'},{l:'Bugs Escaped (30d)',v:'1.2',c:'Target: <2',cls:'up'},{l:'Review Turnaround',v:'3.2h',c:'Target: <4h',cls:'up'},{l:'Jira: Open Tasks',v:'38',c:'14 in progress',cls:'fl'}],
+    cols:['Person','Company','PRs/Week','Review Time','Jira Tasks','Status','History']},
+  sales:{title:'Sales',sub:'34 people across 3 brands (showing 8)',g:18,y:10,r:6,
+    stats:[{l:'Avg Quota',v:'87%',c:'Target: 100%',cls:'dn'},{l:'Pipeline Coverage',v:'2.8x',c:'Target: 3x',cls:'fl'},{l:'Calls / Week',v:'4,210',c:'L7D total',cls:'up'},{l:'Demos Booked',v:'47',c:'L7D',cls:'up'}],
+    cols:['Person','Company','Quota','Pipeline','Jira Tasks','Status','History']},
+  salesops:{title:'Sales Ops',sub:'6 people across 3 companies',g:4,y:2,r:0,
+    stats:[{l:'Forecast Accuracy',v:'\u00b18%',c:'Target: \u00b110%',cls:'up'},{l:'SLA Compliance',v:'88%',c:'Target: 90%',cls:'fl'},{l:'Open Requests',v:'22',c:'12 in sprint',cls:'fl'},{l:'Jira: Open Tasks',v:'33',c:'Sprint 14',cls:'fl'}],
+    cols:['Person','Company','Forecast Acc.','SLA Met','Jira Tasks','Status','History']},
+  marketing:{title:'Marketing',sub:'9 people across 3 companies (showing 4)',g:6,y:2,r:1,
+    stats:[{l:'Pipeline Generated',v:'$142K',c:'Target: $180K',cls:'dn'},{l:'MQL\u2192SQL',v:'14%',c:'Target: 12%+',cls:'up'},{l:'Content Velocity',v:'92%',c:'On schedule',cls:'up'},{l:'Jira: Open Tasks',v:'18',c:'Sprint 14',cls:'fl'}],
+    cols:['Person','Company','Pipeline $','MQL\u2192SQL','Jira Tasks','Status','History']},
+  finance:{title:'Finance',sub:'5 people across 3 companies',g:4,y:1,r:0,
+    stats:[{l:'Avg Close Time',v:'4 days',c:'Target: \u22645',cls:'up'},{l:'Forecast Variance',v:'3.2%',c:'Target: <5%',cls:'up'},{l:'AR >60 days',v:'6.8%',c:'Target: <10%',cls:'up'},{l:'Open Items',v:'12',c:'4 high priority',cls:'fl'}],
+    cols:['Person','Company','Close Time','Variance','Jira Tasks','Status','History']},
+  legal:{title:'Legal',sub:'4 people across 3 companies',g:2,y:1,r:1,
+    stats:[{l:'Avg Turnaround',v:'2.1d',c:'NDA SLA: 1-2d',cls:'up'},{l:'Internal NPS',v:'7.8',c:'Target: 8+',cls:'fl'},{l:'Open Matters',v:'18',c:'4 urgent',cls:'fl'},{l:'Jira: Open Tasks',v:'18',c:'6 in progress',cls:'fl'}],
+    cols:['Person','Company','Turnaround','NPS / Satisfaction','Jira Tasks','Status','History']}
+};
+
+// ═══════════════════════════════════════════════════════════════
+// NAVIGATION
+// ═══════════════════════════════════════════════════════════════
+let prevView = 'ceo';
+let currentDept = null;
+
+function showView(id) {
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('v-'+id).classList.add('active');
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  if(id==='ceo') document.querySelector('.nav-item').classList.add('active');
+  const titles={ceo:'CEO Dashboard',dept:'Department',person:'Person Detail'};
+  document.getElementById('page-title').textContent=titles[id]||'';
+  document.getElementById('crumb').textContent='';
+  document.getElementById('side').classList.remove('open');
+  if(id!=='person') prevView=id;
+}
+
+function showDept(key) {
+  currentDept=key;
+  const info=DEPT_INFO[key];
+  const people=PEOPLE[key];
+  document.getElementById('dept-title').textContent=info.title;
+  document.getElementById('dept-sub').textContent=info.sub;
+  document.getElementById('dept-health').innerHTML=
+    '<span class="tl g"><span class="dot g"></span> '+info.g+'</span>'+
+    '<span class="tl y"><span class="dot y"></span> '+info.y+'</span>'+
+    (info.r?'<span class="tl r"><span class="dot r"></span> '+info.r+'</span>':'');
+  document.getElementById('dept-stats').innerHTML=info.stats.map(s=>
+    '<div class="stat"><div class="l">'+s.l+'</div><div class="v">'+s.v+'</div><div class="c '+s.cls+'">'+s.c+'</div></div>'
+  ).join('');
+  document.getElementById('dept-table').querySelector('thead').innerHTML='<tr>'+info.cols.map(c=>'<th>'+c+'</th>').join('')+'</tr>';
+  const tbody=document.getElementById('dept-tbody');
+  tbody.innerHTML=people.map(p=>{
+    const hist=p.hist.slice(-4).map(h=>'<div class="sd" style="width:8px;height:8px;border-radius:50%;background:var(--'+h+')"></div>').join('');
+    const statusCls=p.status;
+    const statusLabel={g:'Green',y:'Yellow',r:'Red'}[p.status];
+    return '<tr onclick="showPerson(\''+p.id+'\')">'+
+      '<td><strong>'+p.name+'</strong></td>'+
+      '<td style="color:var(--t2)">'+p.co+'</td>'+
+      '<td><strong>'+p.north+'</strong></td>'+
+      '<td>'+p.lead+'</td>'+
+      '<td>'+(p.jira!==null?p.jira+' tasks':'&mdash;')+'</td>'+
+      '<td><span class="tl '+statusCls+'"><span class="dot '+statusCls+'"></span> '+statusLabel+'</span></td>'+
+      '<td><div style="display:flex;gap:3px">'+hist+'</div></td>'+
+      '</tr>';
+  }).join('');
+  document.getElementById('dept-table-title').textContent=info.title+' Team';
+  showView('dept');
+  document.getElementById('page-title').textContent=info.title;
+}
+
+function showPerson(id) {
+  let person=null, dept=null;
+  for(const[k,arr] of Object.entries(PEOPLE)){
+    const found=arr.find(p=>p.id===id);
+    if(found){person=found;dept=k;break;}
+  }
+  if(!person) return;
+  const info=DEPT_INFO[dept];
+  const initials=person.name.split(' ').map(w=>w[0]).join('').substring(0,2).toUpperCase();
+  const colors={g:'var(--g)',y:'var(--y)',r:'var(--r)'};
+  document.getElementById('person-avatar').textContent=initials;
+  document.getElementById('person-avatar').style.background=colors[person.status];
+  document.getElementById('person-name').textContent=person.name;
+  const sl={g:'Green',y:'Yellow',r:'Red'}[person.status];
+  document.getElementById('person-status').className='tl '+person.status;
+  document.getElementById('person-status').innerHTML='<span class="dot '+person.status+'"></span> '+sl;
+  document.getElementById('person-dept').textContent=info.title;
+  document.getElementById('person-company').textContent=person.co;
+  document.getElementById('person-email').textContent=person.id.replace('.','')+('@'+person.co.toLowerCase().replace(/\s/g,'')+'.com');
+
+  // History
+  const hc=document.getElementById('person-history');
+  hc.innerHTML=person.hist.map((h,i)=>{
+    const isNow=i===person.hist.length-1;
+    const wrap=isNow?'style="border:2px solid var(--bl);border-radius:8px;padding:1px"':'';
+    const lbl=isNow?'<div style="font-size:9px;color:var(--bl);font-weight:700;margin-top:2px">Now</div>':'<div style="font-size:9px;color:var(--t3);margin-top:2px">W'+(i+1)+'</div>';
+    return '<div style="text-align:center" '+wrap+'><div class="sd" style="width:28px;height:28px;border-radius:6px;background:var(--'+h+')"></div>'+lbl+'</div>';
+  }).join('');
+
+  // Metrics — department-specific
+  const ps1=document.getElementById('ps-1');
+  const ps2=document.getElementById('ps-2');
+  const ps3=document.getElementById('ps-3');
+  const ps1t=document.getElementById('ps-1t');
+  const ps2t=document.getElementById('ps-2t');
+  const ps3t=document.getElementById('ps-3t');
+  const plabel=document.getElementById('perf-section-label');
+
+  if(dept==='dev'){
+    plabel.textContent='Performance (from GitHub)';
+    ps1.parentElement.querySelector('.l').textContent='PRs Merged / Week';
+    ps1.textContent=person.north.split(' ')[0];
+    ps1t.textContent='Target: 3+';
+    ps2.parentElement.querySelector('.l').textContent='Bugs Escaped (30d)';
+    ps2.textContent=person.status==='r'?'5':'0';
+    ps2t.textContent='Target: <2';
+    ps3.parentElement.querySelector('.l').textContent='Review Turnaround';
+    ps3.textContent=person.lead.split(' ')[0];
+    ps3t.textContent='Target: <4h';
+  } else if(dept==='sales'){
+    plabel.textContent='Performance (Sales Metrics)';
+    ps1.parentElement.querySelector('.l').textContent='Quota Attainment';
+    ps1.textContent=person.north;
+    ps1t.textContent='Target: 100%';
+    ps2.parentElement.querySelector('.l').textContent='Pipeline Coverage';
+    ps2.textContent=person.lead;
+    ps2t.textContent='Target: 3x';
+    ps3.parentElement.querySelector('.l').textContent='Calls This Week';
+    ps3.textContent=Math.floor(Math.random()*200+100)+'';
+    ps3t.textContent='Tracked from GREG';
+  } else if(dept==='salesops'){
+    plabel.textContent='Performance (Ops Metrics)';
+    ps1.parentElement.querySelector('.l').textContent='Forecast Accuracy';
+    ps1.textContent=person.north;
+    ps1t.textContent='Target: \u00b110%';
+    ps2.parentElement.querySelector('.l').textContent='SLA Compliance';
+    ps2.textContent=person.lead;
+    ps2t.textContent='Target: 90%+';
+    ps3.parentElement.querySelector('.l').textContent='Requests Closed (L7D)';
+    ps3.textContent=Math.floor(Math.random()*10+5)+'';
+    ps3t.textContent='From Jira';
+  } else if(dept==='marketing'){
+    plabel.textContent='Performance (Marketing Metrics)';
+    ps1.parentElement.querySelector('.l').textContent='Pipeline Generated';
+    ps1.textContent=person.north;
+    ps1t.textContent='Monthly target';
+    ps2.parentElement.querySelector('.l').textContent='MQL \u2192 SQL Rate';
+    ps2.textContent=person.lead;
+    ps2t.textContent='Target: 12%+';
+    ps3.parentElement.querySelector('.l').textContent='Content Shipped';
+    ps3.textContent=Math.floor(Math.random()*5+2)+' pieces';
+    ps3t.textContent='This sprint';
+  } else if(dept==='finance'){
+    plabel.textContent='Performance (Finance Metrics)';
+    ps1.parentElement.querySelector('.l').textContent='Close Time';
+    ps1.textContent=person.north;
+    ps1t.textContent='Target: \u22645 days';
+    ps2.parentElement.querySelector('.l').textContent='Forecast Variance';
+    ps2.textContent=person.lead;
+    ps2t.textContent='Target: <5%';
+    ps3.parentElement.querySelector('.l').textContent='AR > 60 Days';
+    ps3.textContent=Math.floor(Math.random()*8+2)+'%';
+    ps3t.textContent='Target: <10%';
+  } else if(dept==='legal'){
+    plabel.textContent='Performance (Legal Metrics)';
+    ps1.parentElement.querySelector('.l').textContent='Avg Turnaround';
+    ps1.textContent=person.north;
+    ps1t.textContent='NDA: 1-2d, Standard: 3-5d';
+    ps2.parentElement.querySelector('.l').textContent='Internal NPS';
+    ps2.textContent=person.lead;
+    ps2t.textContent='Target: 8+';
+    ps3.parentElement.querySelector('.l').textContent='Open Matters';
+    ps3.textContent=Math.floor(Math.random()*6+2)+'';
+    ps3t.textContent='Current workload';
+  }
+
+  [ps1,ps2,ps3].forEach(el=>{el.style.color=person.status==='r'?'var(--r)':person.status==='y'?'var(--y)':'var(--g)'});
+
+  showView('person');
+  document.getElementById('page-title').textContent=person.name;
+  document.getElementById('crumb').textContent=info.title;
+}
+
+function goBack(){
+  if(currentDept) showDept(currentDept);
+  else showView('ceo');
+}
+</script>
+</body>
+</html>

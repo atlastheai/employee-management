@@ -1,0 +1,366 @@
+================================================================================
+ORGCOMMAND - CRITICAL QUESTIONS FOR CEO
+================================================================================
+
+Before we start building, I need answers to these 8 questions to architect 
+the system correctly. Please fill in your answers below each question.
+
+================================================================================
+
+QUESTION 1: WHICH SPECIFIC SYSTEMS DO YOU USE?
+================================================================================
+
+You mentioned CRM, Jira/Linear, GitHub, Ticketing systems.
+
+a) CRM System(s):
+   [ ] Salesforce
+   [ ] HubSpot
+   [ ] Pipedrive
+   [ ] Zoho
+   [ ] Other: ___________
+   
+   Same across all 4 companies? [ ] Yes  [ ] No
+   If no, which company uses which? _________________________________
+
+b) Project Management:
+   [ ] Jira
+   [ ] Linear
+   [ ] Asana
+   [ ] Monday.com
+   [ ] Other: ___________
+   
+   Same across all 4 companies? [ ] Yes  [ ] No
+   If no, which company uses which? _________________________________
+
+c) Ticketing/Support:
+   [ ] Zendesk
+   [ ] Freshdesk
+   [ ] Intercom
+   [ ] Help Scout
+   [ ] Other: ___________
+   
+   Same across all 4 companies? [ ] Yes  [ ] No
+   If no, which company uses which? _________________________________
+
+d) Code Repository:
+   [ ] GitHub
+   [ ] GitLab
+   [ ] Bitbucket
+   [ ] Other: ___________
+   
+   Same across all 4 companies? [ ] Yes  [ ] No
+   If no, which company uses which? _________________________________
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 2: HR SYSTEMS - WHAT EXISTS TODAY?
+================================================================================
+
+You said "multiple HR systems but no idea what they do."
+
+a) What are the HR systems?
+   System 1: ___________
+   System 2: ___________
+   System 3: ___________
+   System 4: ___________
+
+b) Can you export CSV files from them?
+   [ ] Yes, easily
+   [ ] Yes, but complicated
+   [ ] No
+   [ ] Don't know
+
+c) Do they have APIs?
+   [ ] Yes
+   [ ] No
+   [ ] Don't know
+
+d) What data do they have?
+   [ ] Names
+   [ ] Email addresses
+   [ ] Job titles
+   [ ] Start dates
+   [ ] Salaries/compensation
+   [ ] Manager assignments
+   [ ] Team/department
+   [ ] Other: ___________
+
+e) Or are we starting from scratch with a spreadsheet?
+   [ ] Yes, we'll build a fresh roster manually
+   [ ] No, we can get data from existing systems
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 3: EMAIL MATCHING ACROSS SYSTEMS
+================================================================================
+
+Your KPI data sources track people by email or username. We need to match 
+them to HR records.
+
+a) Do people have consistent email addresses across all systems?
+   [ ] Yes - same email everywhere (e.g., john.doe@company.com)
+   [ ] No - different formats in different systems
+   [ ] Not sure
+
+b) If NO, give an example of the mismatch:
+   HR System:      _________________________________
+   CRM:            _________________________________
+   Jira:           _________________________________
+   GitHub:         _________________________________
+
+c) Do contractors use company email addresses?
+   [ ] Yes
+   [ ] No - they use personal emails
+   [ ] Mixed
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 4: CONTRACTORS - HOW ARE THEY PAID/TRACKED?
+================================================================================
+
+a) Do contractors have written SOWs (Statements of Work)?
+   [ ] Yes, always
+   [ ] Sometimes
+   [ ] No - it's informal
+
+b) Are SOWs project-based or ongoing?
+   [ ] Project-based (specific deliverables, end date)
+   [ ] Ongoing (monthly retainer, recurring work)
+   [ ] Mixed
+
+c) How do you currently track what they're supposed to deliver?
+   [ ] SOW documents (Word/PDF)
+   [ ] Email agreements
+   [ ] Verbal agreements
+   [ ] Not really tracked
+   [ ] Other: ___________
+
+d) Do you know if they delivered on time?
+   [ ] Yes, I have this tracked somewhere
+   [ ] No, I don't really know
+   [ ] It's in my head / email somewhere
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 5: MANAGER HIERARCHY - DOES IT EXIST?
+================================================================================
+
+a) Do you have a formal org chart?
+   [ ] Yes - documented in [system name: ___________]
+   [ ] Yes - in my head / on paper
+   [ ] No - flat org, everyone reports to me
+   [ ] Partially - some teams have managers, others don't
+
+b) If you have managers, roughly how many?
+   Number of managers: _____
+
+c) Can you provide a simple hierarchy example?
+   Example:
+   - Carlos (CEO)
+     - Manager 1 (Sales) → 10 salespeople
+     - Manager 2 (Engineering) → 15 developers
+     - Manager 3 (Support) → 8 support agents
+     - 167 others report directly to Carlos
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 6: PERFORMANCE THRESHOLDS - YOUR RISK TOLERANCE
+================================================================================
+
+The proposal suggests:
+- Red for 1 period → Flag to manager
+- Red for 2 consecutive periods → Escalate to CEO
+- Red for 3+ consecutive periods → Auto-draft termination recommendation
+
+a) Are these thresholds right for your culture?
+   [ ] Yes, exactly right
+   [ ] No, I'm more aggressive (describe below)
+   [ ] No, I'm more forgiving (describe below)
+
+b) What's your actual decision-making style?
+   When someone underperforms:
+   [ ] I want to know immediately (1 period)
+   [ ] I give them a chance to improve (2-3 periods)
+   [ ] I wait to see a pattern (4+ periods)
+
+c) When do you pull the trigger on termination?
+   [ ] First red flag if it's critical
+   [ ] 2 consecutive reds
+   [ ] 3 consecutive reds
+   [ ] Other: ___________
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 7: MULTI-CURRENCY REALITY
+================================================================================
+
+You mentioned US (USD), UK (GBP), Singapore (SGD).
+
+a) How do you want to see costs in the dashboard?
+   [ ] Everything normalized to USD
+   [ ] Show in local currency (GBP for UK staff, etc.)
+   [ ] Both (local currency + USD equivalent)
+
+b) If normalized to USD, what exchange rate?
+   [ ] Use a fixed rate I'll provide
+   [ ] Use current/recent spot rate (manual update)
+   [ ] Don't care, just pick one and stick to it
+
+c) What exchange rates should we use? (if normalized)
+   1 GBP = _____ USD
+   1 SGD = _____ USD
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+QUESTION 8: SHIP INCREMENTALLY OR WAIT FOR FULL MVP?
+================================================================================
+
+a) When do you want to start using this system?
+
+   OPTION A: INCREMENTAL (Faster to value)
+   - Phase 1 (Week 1): See everyone in a basic table (localhost only)
+   - Phase 2 (Week 2): Add KPIs manually, see traffic lights
+   - Phase 3 (Week 3): Full dashboard live in production
+   You start using it at Week 3, we keep building while you use it.
+
+   OPTION B: FULL MVP (More polished at launch)
+   - Build Phase 1-3 together (Week 1-3)
+   - Nothing goes to production until it's complete
+   - You get the full dashboard on Week 3 all at once
+
+   Which do you prefer?
+   [ ] Option A - Incremental (I want to see progress weekly)
+   [ ] Option B - Full MVP (I'll wait for the complete thing)
+
+b) Do you have a VPS ready, or do we need to set one up?
+   [ ] I have a VPS ready (provider: _______)
+   [ ] Need to provision one (I'll handle it)
+   [ ] Need to provision one (you handle it)
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+BONUS QUESTION: SAMPLE DATA
+================================================================================
+
+Can you provide a sample CSV with ~10 rows of fake/anonymized employee data 
+that matches your current structure?
+
+Even if it's just:
+FirstName,LastName,Email,Role,Company,Team,Location,MonthlyCost,StartDate
+
+This helps me understand your data format.
+
+a) Can you provide this?
+   [ ] Yes, I'll create it
+   [ ] Yes, I can export from [system: _______]
+   [ ] No, but I can describe the format
+   [ ] Let's just make up a format
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+
+WRAP-UP
+================================================================================
+
+Any other context, concerns, or constraints I should know about?
+
+YOUR ANSWER:
+
+
+
+
+
+
+
+
+================================================================================
+END OF QUESTIONNAIRE
+================================================================================
+
+Please fill this out and send it back. Once I have these answers, I'll:
+
+1. Refine the MASTERPLAN with your specific requirements
+2. Create detailed implementation specs for each phase
+3. Hand it to Claude Code in the tmux session to start building
+
+- Atlas 📐

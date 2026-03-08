@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GREG Codebase Analysis - ATTIX KPI Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f8fa;
+    --border: #e2e5ea;
+    --border-light: #eef0f3;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --yellow: #f59e0b;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #fde68a;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --purple: #8b5cf6;
+    --purple-bg: #f5f3ff;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page { max-width: 920px; margin: 0 auto; padding: 40px 50px; }
+
+  /* Cover */
+  .cover {
+    text-align: center; padding: 50px 0 36px;
+    border-bottom: 3px solid var(--text-primary); margin-bottom: 40px;
+  }
+  .cover h1 { font-size: 36px; font-weight: 800; letter-spacing: 3px; margin-bottom: 4px; }
+  .cover .sub { font-size: 16px; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 20px; }
+  .cover .meta { font-size: 13px; color: var(--text-muted); }
+  .cover .meta strong { color: var(--text-secondary); }
+
+  /* TOC */
+  .toc {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 44px;
+  }
+  .toc h2 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 14px; }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before { content: counter(toc, decimal-leading-zero) "."; font-weight: 700; margin-right: 10px; font-size: 13px; }
+
+  /* Sections */
+  .section { margin-bottom: 48px; }
+  .section-num { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; }
+  h2.section-title { font-size: 24px; font-weight: 700; padding-bottom: 10px; border-bottom: 2px solid var(--text-primary); margin-bottom: 20px; }
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 15px; font-weight: 600; color: #333; margin: 18px 0 8px; }
+  p { margin-bottom: 12px; color: #333; }
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { margin-bottom: 5px; color: #333; }
+
+  /* Callouts */
+  .callout { border-left: 4px solid var(--text-primary); background: var(--bg-subtle); padding: 16px 20px; margin: 18px 0; border-radius: 0 var(--radius) var(--radius) 0; }
+  .callout.critical { border-left-color: var(--red); background: var(--red-bg); }
+  .callout.safe { border-left-color: var(--green); background: var(--green-bg); }
+  .callout.info { border-left-color: var(--blue); background: var(--blue-bg); }
+  .callout.warn { border-left-color: var(--yellow); background: var(--yellow-bg); }
+  .callout-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .callout.critical .callout-label { color: var(--red); }
+  .callout.safe .callout-label { color: var(--green); }
+  .callout.info .callout-label { color: var(--blue); }
+  .callout.warn .callout-label { color: var(--yellow); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  thead th { background: var(--text-primary); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: 0.5px; text-transform: uppercase; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--bg-subtle); }
+
+  code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: #c0392b; }
+
+  .diagram {
+    background: #0f172a; color: #e2e8f0; padding: 18px 22px; border-radius: var(--radius);
+    font-family: 'SF Mono', Consolas, monospace; font-size: 13px; line-height: 1.5;
+    overflow-x: auto; white-space: pre; margin: 14px 0;
+  }
+
+  /* Stats Grid */
+  .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin: 18px 0; }
+  .stat-box { background: var(--bg-subtle); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; text-align: center; }
+  .stat-val { font-size: 26px; font-weight: 800; }
+  .stat-lbl { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+  /* Brand Cards */
+  .brand-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 18px 0; }
+  .brand-card { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; }
+  .brand-name { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .brand-detail { font-size: 13px; color: var(--text-secondary); margin-bottom: 4px; }
+
+  /* Flow Diagram */
+  .flow-box { display: flex; align-items: center; gap: 8px; margin: 6px 0; font-size: 13px; }
+  .flow-arrow { color: var(--text-muted); font-weight: 700; }
+  .flow-node { background: var(--bg-subtle); border: 1px solid var(--border); border-radius: 6px; padding: 6px 12px; font-weight: 500; }
+  .flow-node.source { background: var(--blue-bg); border-color: var(--blue-border); color: var(--blue); }
+  .flow-node.process { background: var(--purple-bg); border-color: #ddd6fe; color: var(--purple); }
+  .flow-node.store { background: var(--green-bg); border-color: var(--green-border); color: var(--green); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  .footer { text-align: center; padding: 28px 0; border-top: 2px solid var(--text-primary); margin-top: 48px; font-size: 12px; color: var(--text-muted); letter-spacing: 1px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <h1>CODEBASE ANALYSIS</h1>
+  <div class="sub">greg / ATTIX KPI Intelligence Dashboard</div>
+  <p class="meta">
+    <strong>Codebase:</strong> github.com/greg &nbsp;&middot;&nbsp;
+    <strong>Date:</strong> February 28, 2026 &nbsp;&middot;&nbsp;
+    <strong>Analyzed by:</strong> Atlas
+  </p>
+  <p class="meta" style="margin-top:6px">
+    <strong>Main file:</strong> index.py (7,419 lines / 349 KB) &nbsp;&middot;&nbsp;
+    <strong>Total files:</strong> ~100 &nbsp;&middot;&nbsp;
+    <strong>Stack:</strong> Python / Flask / PostgreSQL / Anthropic Claude
+  </p>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li>Executive Summary &mdash; What Is This System?</li>
+    <li>The Three Brands</li>
+    <li>Architecture &amp; Tech Stack</li>
+    <li>Database Schema (13 Tables)</li>
+    <li>Data Ingestion &mdash; How Data Gets In</li>
+    <li>AI Intelligence Engine (Anthropic Claude)</li>
+    <li>All 76 Routes &mdash; Full Endpoint Map</li>
+    <li>KPI Metrics &amp; Business Logic</li>
+    <li>Deployment &amp; Infrastructure</li>
+    <li>Strengths, Weaknesses, and Observations</li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- 01. EXECUTIVE SUMMARY -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 01</div>
+  <h2 class="section-title">Executive Summary &mdash; What Is This System?</h2>
+
+  <p>
+    <strong>"greg"</strong> is a <strong>real-time KPI intelligence dashboard</strong> branded as <strong>ATTIX</strong>.
+    It tracks sales team performance across <strong>3 brands</strong> (Vama, Vittori, TradeAlgo) by ingesting
+    call data, SMS activity, tech demos, Calendly meetings, Zoho SalesIQ chat metrics, and GitHub developer
+    activity &mdash; then uses <strong>Anthropic's Claude AI</strong> to generate daily executive-level performance
+    analysis for each team.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-val">3</div>
+      <div class="stat-lbl">Brands Tracked</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val">76</div>
+      <div class="stat-lbl">API Routes</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val">13</div>
+      <div class="stat-lbl">Database Tables</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-val">7,419</div>
+      <div class="stat-lbl">Lines of Code</div>
+    </div>
+  </div>
+
+  <div class="callout safe">
+    <div class="callout-label">What It Does in One Sentence</div>
+    <p style="margin-bottom:0">
+      ATTIX ingests phone call, SMS, demo, chat, and code activity data from multiple sources via
+      webhooks, aggregates it per sales agent, then runs it through Claude AI every morning at 7 AM PT
+      to generate a performance brief that tells management who's hitting quota, who's slipping, and
+      what to do about it.
+    </p>
+  </div>
+
+  <h3>Who Uses It</h3>
+  <table>
+    <thead>
+      <tr><th>User</th><th>Email Domain</th><th>Role</th></tr>
+    </thead>
+    <tbody>
+      <tr><td>Carlos</td><td>carlos@attix.com</td><td>CEO / Primary consumer of dashboards</td></tr>
+      <tr><td>Roney</td><td>roney@tradealliance.io</td><td>Operations lead</td></tr>
+      <tr><td>Saad</td><td>saad.a@attix.com</td><td>Admin</td></tr>
+      <tr><td>Nicholas</td><td>nicholas.n@attix.com</td><td>Admin</td></tr>
+      <tr><td>Patrick</td><td>patrick@attix.com</td><td>Admin</td></tr>
+    </tbody>
+  </table>
+  <p>Authentication is email + password (SHA-256 salted hashes). 5 authorized users. Session lasts 30 days.</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 02. THE THREE BRANDS -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 02</div>
+  <h2 class="section-title">The Three Brands</h2>
+
+  <div class="brand-grid">
+    <div class="brand-card">
+      <div class="brand-name" style="color:#3b82f6">Vama</div>
+      <div class="brand-detail"><strong>CRM:</strong> Pipedrive (own API key)</div>
+      <div class="brand-detail"><strong>Agents:</strong> 10 (4 SR + 6 JR)</div>
+      <div class="brand-detail"><strong>Tracks:</strong> Calls, SMS, Tech Demos, TOs</div>
+      <div class="brand-detail"><strong>JR Quota:</strong> 200 calls/day, 10 connections, 1 demo/week</div>
+      <div class="brand-detail"><strong>SR Quota:</strong> 50 calls/day, 5 connections, 3 demos closed/week</div>
+      <div class="brand-detail"><strong>Email domain:</strong> @vama.com, @vama.email</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-name" style="color:#8b5cf6">Vittori</div>
+      <div class="brand-detail"><strong>CRM:</strong> Pipedrive (own API key)</div>
+      <div class="brand-detail"><strong>Agents:</strong> 5 (1 SR + 4 JR)</div>
+      <div class="brand-detail"><strong>Tracks:</strong> Calls, SMS, Tech Demos, TOs</div>
+      <div class="brand-detail"><strong>JR Quota:</strong> 300 calls/day, 9 connections, 1 demo/week</div>
+      <div class="brand-detail"><strong>SR Quota:</strong> 20 calls/day, 2 connections, 3 demos closed/week</div>
+      <div class="brand-detail"><strong>Email domain:</strong> @vittori.com</div>
+    </div>
+    <div class="brand-card">
+      <div class="brand-name" style="color:#f59e0b">TradeAlgo</div>
+      <div class="brand-detail"><strong>CRM:</strong> Zoho SalesIQ</div>
+      <div class="brand-detail"><strong>Agents:</strong> 18 BDR + 8 Support + Analysts</div>
+      <div class="brand-detail"><strong>Tracks:</strong> Calls, SMS, Chat (SalesIQ), Calendly</div>
+      <div class="brand-detail"><strong>BDR Tiers:</strong> SR (100 calls), JR Exec (150), JR (150)</div>
+      <div class="brand-detail"><strong>Support:</strong> Chat tickets, CSAT, response time</div>
+      <div class="brand-detail"><strong>Email domains:</strong> @tradealgo.com, @tradealliance.io, @tatechservice.com</div>
+    </div>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Key Insight</div>
+    <p style="margin-bottom:0">
+      Each brand has its own Pipedrive/CRM instance, its own set of agents with different quotas,
+      and its own BDR dashboard page. But the AI intelligence engine, webhook infrastructure, and
+      database structure are shared across all three. The code uses a "brand adapter" pattern &mdash;
+      same logic, different model classes per brand.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 03. ARCHITECTURE -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 03</div>
+  <h2 class="section-title">Architecture &amp; Tech Stack</h2>
+
+  <table>
+    <thead>
+      <tr><th>Layer</th><th>Technology</th><th>Details</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><strong>Runtime</strong></td><td>Python 3.x</td><td>Single-file application (index.py, 7,419 lines)</td></tr>
+      <tr><td><strong>Web Framework</strong></td><td>Flask</td><td>Routes, templates, sessions, static files</td></tr>
+      <tr><td><strong>ORM / Database</strong></td><td>Flask-SQLAlchemy + PostgreSQL</td><td>13 SQLAlchemy models, hosted on Railway</td></tr>
+      <tr><td><strong>WSGI Server</strong></td><td>Gunicorn</td><td>1 worker, 8 threads, 360s timeout</td></tr>
+      <tr><td><strong>AI Engine</strong></td><td>Anthropic Claude (claude-sonnet-4-6)</td><td>6 analysis types + interactive Q&A + executive homepage brief</td></tr>
+      <tr><td><strong>Scheduler</strong></td><td>APScheduler</td><td>Daily 7 AM PT cron job for AI refresh</td></tr>
+      <tr><td><strong>External APIs</strong></td><td>Pipedrive (x2), Zoho SalesIQ, Calendly, GitHub</td><td>Webhooks + polling for data ingestion</td></tr>
+      <tr><td><strong>Templates</strong></td><td>Jinja2 (Flask)</td><td>15 HTML templates with dark matrix theme</td></tr>
+      <tr><td><strong>Data Import</strong></td><td>Google Apps Script</td><td>Pushes Google Sheet rows to webhooks every 5 minutes</td></tr>
+      <tr><td><strong>Deployment</strong></td><td>Railway</td><td>Single-service deployment with Procfile</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Architecture Diagram</h3>
+
+  <div class="diagram">
+DATA SOURCES                           ATTIX (greg)                        OUTPUT
+============                           ============                        ======
+
+Kixie (Phone)                     +------------------+
+  calls webhook  ───────────────> |                  |
+  SMS webhook    ───────────────> |   Flask App      |
+                                  |   (index.py)     |
+Google Sheets                     |                  |             ┌──> BDR Dashboards (x3)
+  Apps Script    ───────────────> |   76 routes      |             │     - Vama BDR
+  (demos, TOs)                    |   13 DB tables   | ──────────> ├──> Support Dashboard
+                                  |   AI engine      |             │     - TradeAlgo Support
+Zoho SalesIQ                      |                  |             ├──> Analyst Dashboard
+  chat webhook   ───────────────> |                  |             │     - Calendly metrics
+                                  |   ┌──────────┐   |             ├──> Developer Dashboard
+Calendly API                      |   │PostgreSQL│   |             │     - GitHub activity
+  (polled)       ──── API call ─> |   │ Railway  │   |             ├──> Intelligence Pages (x6)
+                                  |   └──────────┘   |             │     - AI analysis per team
+GitHub                            |                  |             └──> Homepage Brief
+  push webhook   ───────────────> |   ┌──────────┐   |                   - Executive summary
+                                  |   │ Claude   │   |
+Pipedrive API                     |   │ AI (7AM) │   |
+  (name→email)   ──── API call ─> |   └──────────┘   |
+                                  +------------------+</div>
+
+  <h3>UI Theme</h3>
+  <p>
+    The entire UI uses a <strong>dark "matrix" hacker aesthetic</strong> &mdash; black/dark green backgrounds,
+    green glowing text (#00ff41), monospace fonts (Courier New), scanline effects, glassmorphism cards,
+    and matrix-rain animations on the login page. The brand name displayed in the UI is <strong>"ATTIX"</strong>
+    with the tagline "KPI Intelligence Dashboard."
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 04. DATABASE SCHEMA -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 04</div>
+  <h2 class="section-title">Database Schema (13 Tables)</h2>
+
+  <h3>Call Tracking (3 tables)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Brand</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr><td><code>vama_calls</code></td><td>Vama</td><td>id, email, duration, call_date, call_count, connection_count, outgoing_count</td></tr>
+      <tr><td><code>vittori_calls</code></td><td>Vittori</td><td>(identical structure)</td></tr>
+      <tr><td><code>ta_calls</code></td><td>TradeAlgo</td><td>(identical structure)</td></tr>
+    </tbody>
+  </table>
+  <p><em>One row per (email, call_date) &mdash; aggregated daily. Duration in seconds. Connection = answered call. Outgoing = outbound call.</em></p>
+
+  <h3>SMS Tracking (3 tables)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Brand</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr><td><code>vama_sms</code></td><td>Vama</td><td>id, email, sms_date, sms_count</td></tr>
+      <tr><td><code>vittori_sms</code></td><td>Vittori</td><td>(identical)</td></tr>
+      <tr><td><code>ta_sms</code></td><td>TradeAlgo</td><td>(identical)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Tech Demos (2 tables)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Brand</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr><td><code>vama_tech_demos</code></td><td>Vama</td><td>id, demo_date, jr_email, sr_email, raw_datetime (dedup key)</td></tr>
+      <tr><td><code>vittori_tech_demos</code></td><td>Vittori</td><td>(identical)</td></tr>
+    </tbody>
+  </table>
+  <p><em>Tech demos involve a JR (setter) who books the demo and an SR (closer) who runs it. Tracks the handoff pipeline.</em></p>
+
+  <h3>Transfer Outcomes / TOs (2 tables)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Brand</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr><td><code>vama_tos</code></td><td>Vama</td><td>id, transfer_date, jr_email, to_count. UniqueConstraint(jr_email, transfer_date)</td></tr>
+      <tr><td><code>vittori_tos</code></td><td>Vittori</td><td>(identical)</td></tr>
+    </tbody>
+  </table>
+  <p><em>TOs = phone transfers from JR to SR, logged in Pipedrive. Counts per JR per day.</em></p>
+
+  <h3>Zoho SalesIQ Chat (1 table)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>ta_salesiq</code></td>
+        <td>id, conv_id, email, operator_name, event_type (completed/missed/rated), chat_date, ticket_count, duration_sec, wait_time_sec, first_response_sec, rating (CSAT 1-5), missed (0/1), raw_payload</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>GitHub Activity (1 table)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>github_activity</code></td>
+        <td>id, event_id (dedup), actor (username), repo, event_type (push/pull_request/review), action (opened/closed/merged/submitted), pr_number, pr_title, pr_url, commit_count, event_date, created_at, raw_payload</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>AI Cache (1 table)</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Columns</th></tr></thead>
+    <tbody>
+      <tr>
+        <td><code>ai_analysis_cache</code></td>
+        <td>id, brand (unique &mdash; one row per brand), analysis (text), agent_count, generated_at</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><em>Stores the most recent AI-generated analysis for each brand. Updated daily at 7 AM PT or on-demand.</em></p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 05. DATA INGESTION -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 05</div>
+  <h2 class="section-title">Data Ingestion &mdash; How Data Gets In</h2>
+
+  <h3>Real-Time Webhooks (12 endpoints)</h3>
+  <table>
+    <thead><tr><th>Webhook</th><th>Source System</th><th>Data</th><th>Frequency</th></tr></thead>
+    <tbody>
+      <tr><td><code>/webhook/vamacalls</code></td><td>Kixie (phone system)</td><td>Call events: email, duration, type</td><td>Real-time per call</td></tr>
+      <tr><td><code>/webhook/vittoricalls</code></td><td>Kixie</td><td>Call events</td><td>Real-time</td></tr>
+      <tr><td><code>/webhook/tradealgocalls</code></td><td>Kixie</td><td>Call events</td><td>Real-time</td></tr>
+      <tr><td><code>/webhook/vamasms</code></td><td>SMS provider</td><td>SMS events: email, date, count</td><td>Real-time</td></tr>
+      <tr><td><code>/webhook/vittorisms</code></td><td>SMS provider</td><td>SMS events</td><td>Real-time</td></tr>
+      <tr><td><code>/webhook/tradealgosms</code></td><td>SMS provider</td><td>SMS events</td><td>Real-time</td></tr>
+      <tr><td><code>/webhook/vama_demos</code></td><td>Google Apps Script</td><td>Tech demo rows (JR + SR emails, date)</td><td>Every 5 min</td></tr>
+      <tr><td><code>/webhook/vittori_demos</code></td><td>Google Apps Script</td><td>Tech demo rows with SR name resolution</td><td>Every 5 min</td></tr>
+      <tr><td><code>/webhook/vittori_tos</code></td><td>Google Apps Script</td><td>Transfer outcomes per JR per day</td><td>On sheet edit</td></tr>
+      <tr><td><code>/webhook/vama_tos</code></td><td>Google Apps Script</td><td>Transfer outcomes</td><td>On sheet edit</td></tr>
+      <tr><td><code>/webhook/zohosalesiq</code></td><td>Zoho SalesIQ</td><td>Chat completed/missed/rated events</td><td>Real-time per chat</td></tr>
+      <tr><td><code>/webhook/github</code></td><td>GitHub</td><td>Push, PR, review events</td><td>Real-time per event</td></tr>
+    </tbody>
+  </table>
+
+  <h3>API Polling</h3>
+  <table>
+    <thead><tr><th>API</th><th>Data Fetched</th><th>When</th></tr></thead>
+    <tbody>
+      <tr><td>Pipedrive (Vama)</td><td>User name&rarr;email map for TO resolution</td><td>On first request, cached in memory</td></tr>
+      <tr><td>Pipedrive (Vittori)</td><td>User name&rarr;email map for TO resolution</td><td>On first request, cached in memory</td></tr>
+      <tr><td>Calendly</td><td>Meeting events (booked/completed/canceled) for Analyst team</td><td>On page load, 90-day window</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Manual CSV Import (7 import routes)</h3>
+  <p>
+    The <code>/import</code> page allows manual CSV upload for bulk data loading. Available imports:
+    Vama calls, Vittori calls, TradeAlgo calls, Vama SMS, Vittori SMS, TradeAlgo SMS, Vama demos,
+    Vittori demos, and SalesIQ conversations. All imports use upsert logic (aggregate + deduplicate).
+  </p>
+
+  <h3>Google Apps Script Integration</h3>
+  <p>
+    Three Google Apps Scripts (<code>vama_demo_sheet_script.js</code>, <code>vittori_demo_sheet_script.js</code>,
+    <code>vittori_to_sheet_script.js</code>) are installed in Google Sheets used by the sales teams.
+    They push new rows to ATTIX webhooks on every sheet edit + reconcile all data every 5 minutes.
+    This is how tech demo and TO data flows from Google Sheets into the dashboard automatically.
+  </p>
+
+  <h3>Bulk SQL Import</h3>
+  <p>
+    47 SQL batch files (<code>vama_batch_001.sql</code> through <code>vama_batch_047.sql</code>, totaling
+    ~31 MB) contain historical Vama call data INSERT statements. These were used for initial data migration
+    via <code>batch_import.py</code> and <code>railway_import.py</code>.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 06. AI ENGINE -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 06</div>
+  <h2 class="section-title">AI Intelligence Engine (Anthropic Claude)</h2>
+
+  <div class="callout info">
+    <div class="callout-label">Core Technology</div>
+    <p style="margin-bottom:0">
+      Uses <strong>Anthropic's Claude (claude-sonnet-4-6)</strong> via the <code>api.anthropic.com/v1/messages</code>
+      API. Authentication via <code>ANTHROPIC_API_KEY</code> environment variable. Results are cached
+      in the <code>ai_analysis_cache</code> database table.
+    </p>
+  </div>
+
+  <h3>7 AI Analysis Types</h3>
+
+  <table>
+    <thead><tr><th>Analysis</th><th>Cache Brand Key</th><th>What It Analyzes</th><th>Max Tokens</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Vama BDR</strong></td><td>"Vama"</td><td>Call counts, connection rates, SMS, tech demos (sent/closed), TOs, quota attainment per agent</td><td>2,048</td></tr>
+      <tr><td><strong>Vittori BDR</strong></td><td>"Vittori"</td><td>Same structure as Vama with Vittori quotas</td><td>2,048</td></tr>
+      <tr><td><strong>TradeAlgo BDR</strong></td><td>"TradeAlgo"</td><td>Calls, connections for 18 agents across 3 tiers (SR/JR Exec/JR)</td><td>2,048</td></tr>
+      <tr><td><strong>TradeAlgo Support</strong></td><td>"TradeAlgoSupport"</td><td>SalesIQ tickets, CSAT scores, response times, missed chats, Calendly meetings</td><td>2,048</td></tr>
+      <tr><td><strong>Analyst Team</strong></td><td>"Analyst"</td><td>Calendly meeting data: bookings, show rates, cancellations, pipeline</td><td>2,048</td></tr>
+      <tr><td><strong>Developers</strong></td><td>"Developers"</td><td>GitHub commits, PRs opened/merged, code reviews, per-developer activity</td><td>1,024</td></tr>
+      <tr><td><strong>Homepage Brief</strong></td><td>"Homepage"</td><td>Executive summary aggregating all 6 team analyses</td><td>3,000</td></tr>
+    </tbody>
+  </table>
+
+  <h3>How AI Analysis Works</h3>
+
+  <ol>
+    <li><strong>Data Collection:</strong> Query PostgreSQL for last 6 months of metrics per agent</li>
+    <li><strong>Pre-Computation:</strong> Calculate L7D/L30 totals, WoW/MoM trends, z-scores, quota attainment tiers, anomaly flags</li>
+    <li><strong>Prompt Construction:</strong> Build a detailed data summary with agent snapshots, then add role instructions (e.g., "You are a senior revenue analyst")</li>
+    <li><strong>Claude API Call:</strong> Send to Anthropic, receive structured analysis text</li>
+    <li><strong>Cache:</strong> Store result in <code>ai_analysis_cache</code> table for instant retrieval</li>
+    <li><strong>Serve:</strong> Dashboard pages display cached analysis, with background refresh triggered on page load</li>
+  </ol>
+
+  <h3>Output Format (AI Sections)</h3>
+  <p>Each BDR analysis generates these standard sections:</p>
+  <ul>
+    <li><strong>THIS WEEK</strong> &mdash; Key numbers for the current period</li>
+    <li><strong>MONTHLY PULSE</strong> &mdash; L30 trends vs prior period</li>
+    <li><strong>TOP PERFORMERS</strong> &mdash; Who's exceeding quota and why</li>
+    <li><strong>ACTION REQUIRED</strong> &mdash; Who's underperforming (by name, with numbers)</li>
+    <li><strong>PATTERN INSIGHTS</strong> &mdash; Statistical anomalies, day-of-week patterns</li>
+    <li><strong>RECOMMENDATIONS</strong> &mdash; Specific actionable steps for management</li>
+  </ul>
+
+  <h3>Quota Attainment Tiers</h3>
+  <table>
+    <thead><tr><th>Tier</th><th>Threshold</th><th>Meaning</th></tr></thead>
+    <tbody>
+      <tr><td style="color:var(--green); font-weight:600">&#10003; On quota</td><td>&ge; 100%</td><td>Meeting or exceeding target</td></tr>
+      <tr><td style="color:var(--yellow); font-weight:600">&#9679; Slightly below</td><td>70&ndash;99%</td><td>Close but not hitting target</td></tr>
+      <tr><td style="color:var(--red); font-weight:600">&#9679; At risk</td><td>50&ndash;69%</td><td>Falling significantly behind</td></tr>
+      <tr><td style="color:var(--red); font-weight:600">&#9888; Significantly behind</td><td>&lt; 50%</td><td>Critical underperformance</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Interactive Q&A</h3>
+  <p>
+    The <code>/ask/&lt;brand&gt;</code> POST endpoint enables conversational follow-up questions on any
+    brand's data. Users can ask things like "Why did John's connection rate drop?" and Claude responds
+    with the cached analysis context + quota targets. Supports conversation history for multi-turn exchanges.
+  </p>
+
+  <h3>Scheduled Daily Refresh</h3>
+  <p>
+    APScheduler runs <code>_scheduled_morning_refresh()</code> at <strong>7:00 AM Pacific Time</strong> every day.
+    It sequentially regenerates all 6 brand analyses plus the homepage brief. This ensures the dashboard
+    has fresh AI analysis ready when management checks it each morning.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 07. ALL ROUTES -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 07</div>
+  <h2 class="section-title">All 76 Routes &mdash; Full Endpoint Map</h2>
+
+  <h3>Dashboard Pages (7 routes, login required)</h3>
+  <table>
+    <thead><tr><th>Route</th><th>Page</th></tr></thead>
+    <tbody>
+      <tr><td><code>/</code></td><td>Homepage &mdash; Executive brief across all brands</td></tr>
+      <tr><td><code>/vama_bdr</code></td><td>Vama BDR dashboard (calls, SMS, demos, TOs)</td></tr>
+      <tr><td><code>/vittori_bdr</code></td><td>Vittori BDR dashboard</td></tr>
+      <tr><td><code>/tradealgo_bdr</code></td><td>TradeAlgo BDR dashboard</td></tr>
+      <tr><td><code>/tradealgo_support</code></td><td>TradeAlgo Support dashboard (SalesIQ + Calendly)</td></tr>
+      <tr><td><code>/tradealgo_analyst</code></td><td>Analyst team dashboard (Calendly meetings)</td></tr>
+      <tr><td><code>/developers</code></td><td>Developer dashboard (GitHub activity)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>AI Intelligence (8 routes, login required)</h3>
+  <table>
+    <thead><tr><th>Route</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>/vama_intelligence</code></td><td>Vama AI analysis (returns JSON, triggers background refresh)</td></tr>
+      <tr><td><code>/vittori_intelligence</code></td><td>Vittori AI analysis</td></tr>
+      <tr><td><code>/tradealgo_intelligence</code></td><td>TradeAlgo BDR AI analysis</td></tr>
+      <tr><td><code>/tradealgo_support_intelligence</code></td><td>TradeAlgo Support AI analysis</td></tr>
+      <tr><td><code>/analyst_intelligence</code></td><td>Analyst team AI analysis</td></tr>
+      <tr><td><code>/developers_intelligence</code></td><td>Developer team AI analysis</td></tr>
+      <tr><td><code>/homepage_intelligence</code></td><td>Executive summary brief</td></tr>
+      <tr><td><code>/ask/&lt;brand&gt;</code></td><td>Interactive AI Q&A (POST, supports 6 brands)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Webhooks (12 routes, public / no login)</h3>
+  <p>
+    <code>/webhook/vamacalls</code>, <code>/webhook/vittoricalls</code>, <code>/webhook/tradealgocalls</code>,
+    <code>/webhook/vamasms</code>, <code>/webhook/vittorisms</code>, <code>/webhook/tradealgosms</code>,
+    <code>/webhook/vama_demos</code>, <code>/webhook/vittori_demos</code>,
+    <code>/webhook/vittori_tos</code>, <code>/webhook/vama_tos</code>,
+    <code>/webhook/zohosalesiq</code>, <code>/webhook/github</code>
+  </p>
+
+  <h3>CSV Import (10 routes, login required)</h3>
+  <p>
+    <code>/import/vama_calls</code>, <code>/import/vittori_calls</code>, <code>/import/tradealgo_calls</code>,
+    <code>/import/vama_sms</code>, <code>/import/vittori_sms</code>, <code>/import/tradealgo_sms</code>,
+    <code>/import/vama_demos</code>, <code>/import/vittori_demos</code>,
+    <code>/import/salesiq_csv</code>, <code>/import/salesiq_csv_diagnose</code>
+  </p>
+
+  <h3>Admin / Cleanup (16 routes, login required)</h3>
+  <p>
+    Date-range cleanup, per-brand data clearing (calls, SMS, demos, TOs, SalesIQ),
+    deduplication, backfill, and data inspection endpoints.
+  </p>
+
+  <h3>Debug (11 routes, login required)</h3>
+  <p>
+    <code>/debug_agent_calls</code>, <code>/debug_webhooks</code>, <code>/debug_calendly</code>,
+    <code>/debug_support_calendly</code>, <code>/debug_analyst_data</code>, <code>/debug_salesiq</code>,
+    <code>/debug_salesiq_agents</code>, <code>/debug_github</code>, <code>/debug_vittori_to_names</code>,
+    <code>/debug_vama_to_names</code>, <code>/debug_intelligence</code>
+  </p>
+
+  <h3>System (3 routes)</h3>
+  <p>
+    <code>/version</code> (public), <code>/login</code> + <code>/logout</code>,
+    <code>/internal/refresh_ai</code> (protected by CRON_SECRET), <code>/ai_status/&lt;brand&gt;</code>
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 08. BUSINESS LOGIC -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 08</div>
+  <h2 class="section-title">KPI Metrics &amp; Business Logic</h2>
+
+  <h3>BDR Metrics (Vama, Vittori, TradeAlgo)</h3>
+  <table>
+    <thead><tr><th>Metric</th><th>How Calculated</th><th>Used For</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Daily Calls</strong></td><td>SUM(call_count) per agent per day</td><td>Activity volume vs quota</td></tr>
+      <tr><td><strong>Connections</strong></td><td>SUM(connection_count) per agent per day</td><td>Answered calls &mdash; quality indicator</td></tr>
+      <tr><td><strong>Connection Rate</strong></td><td>connections / calls</td><td>Call quality benchmark (Vama JR: 5%, SR: 10%)</td></tr>
+      <tr><td><strong>Duration (minutes)</strong></td><td>SUM(duration) / 60 per agent per day</td><td>Talk time vs quota</td></tr>
+      <tr><td><strong>Outgoing Calls</strong></td><td>SUM(outgoing_count) per agent per day</td><td>Outbound proactivity</td></tr>
+      <tr><td><strong>SMS Sent</strong></td><td>SUM(sms_count) per agent per day</td><td>Multi-channel activity</td></tr>
+      <tr><td><strong>Demos Sent (JR)</strong></td><td>COUNT demos where jr_email = agent</td><td>JR pipeline contribution</td></tr>
+      <tr><td><strong>Demos Closed (SR)</strong></td><td>COUNT demos where sr_email = agent</td><td>SR conversion ability</td></tr>
+      <tr><td><strong>TOs (Transfers)</strong></td><td>SUM(to_count) per JR per day</td><td>Phone handoffs from JR to SR</td></tr>
+      <tr><td><strong>L7D Attainment</strong></td><td>(actual L7D / (daily_quota &times; 5)) &times; 100%</td><td>Weekly quota status</td></tr>
+      <tr><td><strong>WoW Change</strong></td><td>(this_week &minus; last_week) / last_week</td><td>Momentum direction</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Support Metrics (TradeAlgo Support)</h3>
+  <table>
+    <thead><tr><th>Metric</th><th>Source</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Tickets Handled</strong></td><td>SalesIQ ticket_count</td><td>Volume per agent</td></tr>
+      <tr><td><strong>CSAT Rating</strong></td><td>SalesIQ rating (1-5 scale)</td><td>Customer satisfaction</td></tr>
+      <tr><td><strong>First Response Time</strong></td><td>SalesIQ first_response_sec</td><td>Speed to first reply</td></tr>
+      <tr><td><strong>Wait Time</strong></td><td>SalesIQ wait_time_sec</td><td>Customer wait duration</td></tr>
+      <tr><td><strong>Missed Chats</strong></td><td>SalesIQ missed flag</td><td>Unanswered conversations</td></tr>
+      <tr><td><strong>Calls + SMS</strong></td><td>ta_calls + ta_sms</td><td>Supplementary outreach (incidental for support)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Developer Metrics</h3>
+  <table>
+    <thead><tr><th>Metric</th><th>Source</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Commits</strong></td><td>GitHub push events (commit_count)</td><td>Code output volume</td></tr>
+      <tr><td><strong>PRs Opened</strong></td><td>GitHub pull_request.opened</td><td>Work initiation</td></tr>
+      <tr><td><strong>PRs Merged</strong></td><td>GitHub pull_request.closed+merged</td><td>Work completion</td></tr>
+      <tr><td><strong>Reviews Submitted</strong></td><td>GitHub pull_request_review.submitted</td><td>Collaboration / code quality</td></tr>
+      <tr><td><strong>Repo Activity</strong></td><td>Grouped by repo name</td><td>Which repos are active</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Hidden Email Filtering</h3>
+  <p>
+    Certain emails are excluded from dashboards and AI analysis: admin accounts (<code>saad.a@vama.com</code>),
+    IT test accounts (<code>it@vittori.com</code>), departed employees (<code>j.morrison@vittori.com</code>, etc.),
+    and careers/bot accounts. This filtering is centralized in <code>_VAMA_HIDDEN_EMAILS</code> and
+    <code>_VITTORI_HIDDEN_EMAILS</code> sets.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 09. DEPLOYMENT -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 09</div>
+  <h2 class="section-title">Deployment &amp; Infrastructure</h2>
+
+  <h3>Railway Configuration</h3>
+  <table>
+    <thead><tr><th>Setting</th><th>Value</th></tr></thead>
+    <tbody>
+      <tr><td>Procfile</td><td><code>web: gunicorn --bind 0.0.0.0:$PORT --timeout 360 --workers 1 --threads 8 index:app</code></td></tr>
+      <tr><td>Database</td><td>PostgreSQL on Railway (internal networking)</td></tr>
+      <tr><td>Production URL</td><td><code>web-production-ce87.up.railway.app</code></td></tr>
+      <tr><td>Workers</td><td>1 (single worker to avoid DB connection conflicts)</td></tr>
+      <tr><td>Threads</td><td>8 (handles concurrent requests within single worker)</td></tr>
+      <tr><td>Timeout</td><td>360 seconds (extended for AI generation)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Environment Variables Required</h3>
+  <table>
+    <thead><tr><th>Variable</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>DATABASE_URL</code></td><td>PostgreSQL connection string</td></tr>
+      <tr><td><code>SECRET_KEY</code></td><td>Flask session encryption key</td></tr>
+      <tr><td><code>ANTHROPIC_API_KEY</code></td><td>Claude AI API access</td></tr>
+      <tr><td><code>PIPEDRIVE_API_KEY</code></td><td>Vittori Pipedrive (name&rarr;email resolution)</td></tr>
+      <tr><td><code>VAMA_PIPEDRIVE_API_KEY</code></td><td>Vama Pipedrive (name&rarr;email resolution)</td></tr>
+      <tr><td><code>CALENDLY_API_KEY</code></td><td>Analyst team meeting data</td></tr>
+      <tr><td><code>CALENDLY_SUPPORT_API_KEY</code></td><td>Support team meeting data</td></tr>
+      <tr><td><code>GITHUB_WEBHOOK_SECRET</code></td><td>GitHub webhook HMAC validation</td></tr>
+      <tr><td><code>CRON_SECRET</code></td><td>Protects the <code>/internal/refresh_ai</code> manual trigger</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Dependencies</h3>
+  <p>
+    Minimal: <code>Flask</code>, <code>gunicorn</code>, <code>flask_sqlalchemy</code>,
+    <code>psycopg2-binary</code>, <code>requests</code>, <code>apscheduler</code>, <code>pytz</code>.
+    No heavy frameworks. Anthropic API is called via raw HTTP requests, not the SDK.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 10. OBSERVATIONS -->
+<!-- ============================================================ -->
+<div class="section">
+  <div class="section-num">Section 10</div>
+  <h2 class="section-title">Strengths, Weaknesses, and Observations</h2>
+
+  <h3>Strengths</h3>
+  <ul>
+    <li><strong>Real business value:</strong> This system is clearly in active use. It solves the real problem of "who's hitting quota and who isn't?" with AI-generated daily briefings.</li>
+    <li><strong>Robust data ingestion:</strong> 12 webhook endpoints + CSV import + API polling + Google Apps Script integration. Covers most data sources automatically.</li>
+    <li><strong>Deduplication everywhere:</strong> Almost every data entry path has dedup logic (unique constraints, upsert patterns, raw_datetime keys). Data integrity is well-handled.</li>
+    <li><strong>Practical AI integration:</strong> Background thread pattern avoids Railway's 30s timeout. Caching ensures instant page loads. Morning cron ensures fresh data by start of business.</li>
+    <li><strong>Interactive AI Q&A:</strong> Users can ask follow-up questions about any team's data &mdash; a genuine AI chatbot built on top of real performance data.</li>
+    <li><strong>Hidden email management:</strong> Clean pattern for excluding admin/departed employees from dashboards and AI analysis.</li>
+  </ul>
+
+  <h3>Weaknesses / Technical Debt</h3>
+  <ul>
+    <li><strong>Single-file monolith:</strong> 7,419 lines in one file (<code>index.py</code>). Models, routes, business logic, AI prompts, webhook handlers, admin functions &mdash; all co-located. Difficult to navigate, test, or refactor.</li>
+    <li><strong>Hardcoded quotas:</strong> Agent quotas are Python dictionaries in source code. Adding/removing an agent requires a code deploy. Should be database-configurable.</li>
+    <li><strong>Hardcoded credentials in defaults:</strong> Default values for <code>DATABASE_URL</code>, <code>SECRET_KEY</code>, Pipedrive API keys, and GitHub webhook secret are hardcoded as fallbacks in the source code. These should be required environment variables with no defaults.</li>
+    <li><strong>No automated tests:</strong> Zero test files. A system tracking 30+ agents across 3 brands with complex quota logic has no test coverage.</li>
+    <li><strong>1 Gunicorn worker:</strong> Limits concurrent request handling. Background AI jobs block the thread pool. Under load, this could cause request queuing.</li>
+    <li><strong>Fix/patch scripts accumulated:</strong> 20+ standalone Python scripts (<code>fix_mobile_matrix.py</code>, <code>fix_layout_v2.py</code>, <code>apply_table_theme_v2.py</code>, etc.) suggest iterative UI patching rather than systematic design.</li>
+    <li><strong>No database migrations:</strong> Schema changes done via <code>ALTER TABLE ... ADD COLUMN IF NOT EXISTS</code> at startup. Fine for now, fragile at scale.</li>
+  </ul>
+
+  <h3>Relationship to ORGCOMMAND</h3>
+
+  <div class="callout warn">
+    <div class="callout-label">Important Context for Carlos</div>
+    <p style="margin-bottom:0">
+      <strong>"greg" (ATTIX) is already solving a subset of the ORGCOMMAND problem.</strong>
+      It tracks per-agent KPIs (calls, connections, demos) with quota thresholds and
+      AI-generated performance analysis. ORGCOMMAND extends this concept to cover
+      <em>all</em> personnel (not just sales/BDR), adds cost tracking, contractor management,
+      and termination workflows. The KPI engine architecture in ATTIX &mdash; webhooks &rarr; database
+      &rarr; AI analysis &rarr; dashboard &mdash; is essentially the same pattern ORGCOMMAND will follow.
+    </p>
+  </div>
+
+  <table>
+    <thead><tr><th>Capability</th><th>ATTIX (greg)</th><th>ORGCOMMAND</th></tr></thead>
+    <tbody>
+      <tr><td>Personnel tracked</td><td>~30 BDR agents + support + devs</td><td>200+ all types</td></tr>
+      <tr><td>KPI types</td><td>Calls, SMS, demos, TOs, chats, commits</td><td>Configurable per role</td></tr>
+      <tr><td>Quota tracking</td><td>Hardcoded per agent in code</td><td>Database-configurable per person</td></tr>
+      <tr><td>AI analysis</td><td>Claude via Anthropic API</td><td>Planned for Phase 4+</td></tr>
+      <tr><td>Cost tracking</td><td>None</td><td>Monthly cost per person (USD)</td></tr>
+      <tr><td>Contractor tracking</td><td>None</td><td>Full retainer + deliverable tracking</td></tr>
+      <tr><td>Performance alerts</td><td>AI flags underperformers in daily brief</td><td>Configurable threshold profiles + escalation</td></tr>
+      <tr><td>Termination workflow</td><td>None</td><td>Consecutive-red recommendations</td></tr>
+      <tr><td>Org chart</td><td>None (flat brand teams)</td><td>Flexible hierarchy with optional managers</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<hr>
+
+<div class="callout safe">
+  <div class="callout-label">Summary</div>
+  <p style="margin-bottom:0">
+    "greg" is a <strong>production-grade sales KPI intelligence dashboard</strong> that's actively used
+    to monitor BDR performance across 3 brands. It ingests data from 6+ external systems via real-time
+    webhooks, runs it through Claude AI every morning, and presents it in a polished matrix-themed
+    dashboard. The architecture is pragmatic (single-file Flask app on Railway), the AI integration is
+    well-engineered (background jobs, caching, interactive Q&A), and the data pipeline is thorough
+    (12 webhooks + CSV + Google Apps Script). Technical debt exists (monolith, hardcoded quotas,
+    no tests) but the system clearly delivers value in its current form.
+  </p>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  GREG / ATTIX CODEBASE ANALYSIS &nbsp;&middot;&nbsp; February 2026 &nbsp;&middot;&nbsp; Atlas
+</div>
+
+</div>
+</body>
+</html>

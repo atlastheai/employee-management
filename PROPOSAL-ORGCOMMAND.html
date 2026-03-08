@@ -1,0 +1,2037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - CEO Master Management System Proposal</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif;
+    background: #ffffff;
+    color: #1a1a2e;
+    line-height: 1.7;
+    font-size: 15px;
+  }
+
+  .page-container {
+    max-width: 920px;
+    margin: 0 auto;
+    padding: 40px 50px;
+  }
+
+  /* Cover Header */
+  .cover-header {
+    text-align: center;
+    padding: 60px 0 40px;
+    border-bottom: 3px solid #1a1a2e;
+    margin-bottom: 40px;
+  }
+
+  .cover-header .system-name {
+    font-size: 48px;
+    font-weight: 800;
+    letter-spacing: 6px;
+    color: #1a1a2e;
+    margin-bottom: 8px;
+  }
+
+  .cover-header .tagline {
+    font-size: 16px;
+    color: #555;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+  }
+
+  .cover-header .meta-line {
+    font-size: 13px;
+    color: #888;
+  }
+
+  .cover-header .meta-line strong {
+    color: #555;
+  }
+
+  .confidential-badge {
+    display: inline-block;
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 11px;
+    letter-spacing: 2px;
+    padding: 6px 18px;
+    border-radius: 2px;
+    margin-top: 20px;
+    text-transform: uppercase;
+  }
+
+  /* Table of Contents */
+  .toc {
+    background: #f8f9fb;
+    border: 1px solid #e8eaed;
+    border-radius: 6px;
+    padding: 30px 35px;
+    margin-bottom: 50px;
+  }
+
+  .toc h2 {
+    font-size: 14px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #888;
+    margin-bottom: 16px;
+  }
+
+  .toc ol {
+    list-style: none;
+    counter-reset: toc-counter;
+  }
+
+  .toc ol li {
+    counter-increment: toc-counter;
+    padding: 6px 0;
+    border-bottom: 1px solid #eee;
+    font-size: 14px;
+  }
+
+  .toc ol li:last-child { border-bottom: none; }
+
+  .toc ol li::before {
+    content: counter(toc-counter, decimal-leading-zero) ".";
+    font-weight: 700;
+    color: #1a1a2e;
+    margin-right: 10px;
+    font-size: 13px;
+  }
+
+  .toc ol li a {
+    color: #1a1a2e;
+    text-decoration: none;
+  }
+
+  .toc ol li a:hover { text-decoration: underline; }
+
+  /* Section Headers */
+  .section {
+    margin-bottom: 50px;
+    page-break-inside: avoid;
+  }
+
+  .section-number {
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: #999;
+    margin-bottom: 4px;
+  }
+
+  h2.section-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #1a1a2e;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #1a1a2e;
+    margin-bottom: 24px;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1a1a2e;
+    margin: 28px 0 12px;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    color: #333;
+    margin: 20px 0 8px;
+  }
+
+  p {
+    margin-bottom: 14px;
+    color: #333;
+  }
+
+  /* Callout Boxes */
+  .callout {
+    border-left: 4px solid #1a1a2e;
+    background: #f8f9fb;
+    padding: 18px 22px;
+    margin: 20px 0;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .callout.decision {
+    border-left-color: #e74c3c;
+    background: #fef5f5;
+  }
+
+  .callout.insight {
+    border-left-color: #2ecc71;
+    background: #f0faf4;
+  }
+
+  .callout.warning {
+    border-left-color: #f39c12;
+    background: #fef9ed;
+  }
+
+  .callout-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .callout.decision .callout-label { color: #e74c3c; }
+  .callout.insight .callout-label { color: #2ecc71; }
+  .callout.warning .callout-label { color: #f39c12; }
+
+  /* Tables */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 18px 0;
+    font-size: 14px;
+  }
+
+  thead th {
+    background: #1a1a2e;
+    color: #fff;
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid #eee;
+    vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) { background: #fafbfc; }
+
+  tbody tr:hover { background: #f0f2f5; }
+
+  /* Lists */
+  ul, ol {
+    margin: 10px 0 14px 22px;
+  }
+
+  li {
+    margin-bottom: 6px;
+    color: #333;
+  }
+
+  /* Phase Cards */
+  .phase-card {
+    border: 1px solid #e0e3e8;
+    border-radius: 8px;
+    margin: 20px 0;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    display: flex;
+    align-items: center;
+    padding: 14px 20px;
+    background: #f8f9fb;
+    border-bottom: 1px solid #e0e3e8;
+  }
+
+  .phase-number {
+    background: #1a1a2e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 12px;
+    border-radius: 3px;
+    margin-right: 14px;
+    letter-spacing: 1px;
+  }
+
+  .phase-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a1a2e;
+    flex: 1;
+  }
+
+  .phase-timeline {
+    font-size: 13px;
+    color: #888;
+    font-weight: 500;
+  }
+
+  .phase-body {
+    padding: 18px 20px;
+  }
+
+  .phase-goal {
+    font-style: italic;
+    color: #666;
+    margin-bottom: 12px;
+    font-size: 14px;
+  }
+
+  /* Traffic Lights */
+  .traffic-light {
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .traffic-light.green { background: #2ecc71; }
+  .traffic-light.yellow { background: #f1c40f; }
+  .traffic-light.red { background: #e74c3c; }
+
+  /* Data Model Diagram */
+  .data-model-box {
+    background: #f8f9fb;
+    border: 1px solid #e0e3e8;
+    border-radius: 8px;
+    padding: 20px;
+    margin: 18px 0;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* Stat Grid */
+  .stat-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin: 20px 0;
+  }
+
+  .stat-box {
+    background: #f8f9fb;
+    border: 1px solid #e0e3e8;
+    border-radius: 6px;
+    padding: 18px;
+    text-align: center;
+  }
+
+  .stat-value {
+    font-size: 28px;
+    font-weight: 800;
+    color: #1a1a2e;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: #888;
+    margin-top: 4px;
+  }
+
+  /* Inline Code */
+  code {
+    background: #f0f2f5;
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+    font-size: 13px;
+    color: #c0392b;
+  }
+
+  /* Divider */
+  hr {
+    border: none;
+    border-top: 1px solid #e0e3e8;
+    margin: 40px 0;
+  }
+
+  /* Footer */
+  .doc-footer {
+    text-align: center;
+    padding: 30px 0;
+    border-top: 2px solid #1a1a2e;
+    margin-top: 60px;
+    font-size: 12px;
+    color: #999;
+    letter-spacing: 1px;
+  }
+
+  /* Print styles */
+  @media print {
+    body { font-size: 12px; }
+    .page-container { padding: 20px; }
+    .section { page-break-inside: avoid; }
+    .phase-card { page-break-inside: avoid; }
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .page-container { padding: 20px; }
+    .stat-grid { grid-template-columns: repeat(2, 1fr); }
+    .cover-header .system-name { font-size: 32px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="page-container">
+
+<!-- ============================================================ -->
+<!-- COVER -->
+<!-- ============================================================ -->
+<div class="cover-header">
+  <div class="system-name">ORGCOMMAND</div>
+  <div class="tagline">CEO Master Management System</div>
+  <p class="meta-line">
+    <strong>Prepared for:</strong> Carlos &nbsp;&middot;&nbsp;
+    <strong>Date:</strong> February 28, 2026 &nbsp;&middot;&nbsp;
+    <strong>Version:</strong> 1.0
+  </p>
+  <p class="meta-line">
+    <strong>Architect:</strong> Atlas &nbsp;&middot;&nbsp;
+    <strong>Scope:</strong> 4 Companies &middot; 3 Geographies &middot; 200+ Personnel
+  </p>
+  <div class="confidential-badge">Confidential &mdash; For Internal Review Only</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- TABLE OF CONTENTS -->
+<!-- ============================================================ -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#exec-summary">Executive Summary</a></li>
+    <li><a href="#your-answers">Your Answers &mdash; What We Learned</a></li>
+    <li><a href="#architecture">System Architecture</a></li>
+    <li><a href="#data-model">Data Model</a></li>
+    <li><a href="#features">Feature Breakdown by Phase</a></li>
+    <li><a href="#contractors">Contractor Management Solution</a></li>
+    <li><a href="#performance">Performance Threshold System</a></li>
+    <li><a href="#integrations">Data Integration Strategy</a></li>
+    <li><a href="#tech-stack">Tech Stack</a></li>
+    <li><a href="#timeline">Timeline &amp; Phased Rollout</a></li>
+    <li><a href="#cost">Cost &amp; Resource Requirements</a></li>
+    <li><a href="#risks">Risks &amp; Mitigations</a></li>
+    <li><a href="#next-steps">Next Steps</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- 01. EXECUTIVE SUMMARY -->
+<!-- ============================================================ -->
+<div class="section" id="exec-summary">
+  <div class="section-number">Section 01</div>
+  <h2 class="section-title">Executive Summary</h2>
+
+  <p>
+    <strong>ORGCOMMAND</strong> is a CEO-owned command center that gives you complete visibility into
+    who works across your 4 organizations, what they're doing, and whether they're productive. It
+    replaces the current state &mdash; disconnected HR systems, untracked contractors, zero
+    performance accountability &mdash; with a single dashboard where every person, every cost, and
+    every KPI is visible at a glance.
+  </p>
+
+  <div class="stat-grid">
+    <div class="stat-box">
+      <div class="stat-value">4</div>
+      <div class="stat-label">Companies</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">200+</div>
+      <div class="stat-label">Personnel</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">3</div>
+      <div class="stat-label">Geographies</div>
+    </div>
+    <div class="stat-box">
+      <div class="stat-value">USD</div>
+      <div class="stat-label">Normalized</div>
+    </div>
+  </div>
+
+  <h3>The Problem</h3>
+  <ul>
+    <li>No unified view of headcount across companies</li>
+    <li>Multiple disconnected tools (Zoho, Pipedrive, Jira, GitHub, possibly Zenefits)</li>
+    <li>Contractors on ongoing retainers with <strong>zero delivery tracking</strong></li>
+    <li>Cannot identify non-productive personnel for termination</li>
+    <li>Partial org chart &mdash; some teams have managers, others are flat</li>
+    <li>Losing money with no accountability mechanism</li>
+  </ul>
+
+  <h3>The Solution</h3>
+  <p>A phased build of ORGCOMMAND that starts simple and grows:</p>
+  <ol>
+    <li><strong>Phase 1 (Week 1-2):</strong> Import your roster via CSV. See everyone in one place.</li>
+    <li><strong>Phase 2 (Week 3-4):</strong> Add KPIs manually. Traffic-light dashboard. CEO uses it daily.</li>
+    <li><strong>Phase 3 (Week 5-7):</strong> Contractor tracking with retainer &amp; deliverable monitoring.</li>
+    <li><strong>Phase 4 (Week 8-12):</strong> API integrations (Zoho, Pipedrive, Jira, GitHub). Data flows automatically.</li>
+  </ol>
+
+  <div class="callout insight">
+    <div class="callout-label">Key Insight</div>
+    <p style="margin-bottom:0">
+      You don't need to wait for integrations to get value. Phase 1 alone &mdash; just seeing
+      all 200+ people with their costs in one table &mdash; is something you don't have today.
+      We start manual, prove the value, then automate.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 02. YOUR ANSWERS -->
+<!-- ============================================================ -->
+<div class="section" id="your-answers">
+  <div class="section-number">Section 02</div>
+  <h2 class="section-title">Your Answers &mdash; What We Learned</h2>
+
+  <p>
+    Based on the completed questionnaire, here's how your answers shape every architectural decision
+    in this proposal:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:30%">Area</th>
+        <th>Your Answer</th>
+        <th style="width:30%">Architectural Impact</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CRM</strong></td>
+        <td>Zoho + Pipedrive (different across companies)</td>
+        <td>Must build 2 CRM connectors with a unified adapter layer</td>
+      </tr>
+      <tr>
+        <td><strong>Project Mgmt</strong></td>
+        <td>Jira (uncertain)</td>
+        <td>Build Jira connector first; defer others until confirmed</td>
+      </tr>
+      <tr>
+        <td><strong>Code Repos</strong></td>
+        <td>GitHub (all companies)</td>
+        <td>Single GitHub connector &mdash; simplest integration</td>
+      </tr>
+      <tr>
+        <td><strong>HR System</strong></td>
+        <td>Zenefits (maybe), but starting from scratch</td>
+        <td>Manual CSV import is Phase 1; Zenefits API is optional Phase 4</td>
+      </tr>
+      <tr>
+        <td><strong>Email Matching</strong></td>
+        <td>Consistent email across all systems</td>
+        <td>Email is the universal key. <strong>This is excellent.</strong> Drastically simplifies matching.</td>
+      </tr>
+      <tr>
+        <td><strong>Contractors</strong></td>
+        <td>Company emails, ongoing retainers, not tracked, unknown if delivered</td>
+        <td>Need a full retainer tracking module with deliverable logging</td>
+      </tr>
+      <tr>
+        <td><strong>Org Chart</strong></td>
+        <td>Partial &mdash; some teams have managers, others don't</td>
+        <td>Flexible hierarchy: optional manager field, not enforced</td>
+      </tr>
+      <tr>
+        <td><strong>Performance</strong></td>
+        <td>Immediate visibility (1 period), termination at 2-3 reds, "it depends"</td>
+        <td>Configurable thresholds per role/team, not one-size-fits-all</td>
+      </tr>
+      <tr>
+        <td><strong>Currency</strong></td>
+        <td>Normalized to USD, don't care about exchange details</td>
+        <td>Store everything as USD. Simple. No currency service needed.</td>
+      </tr>
+      <tr>
+        <td><strong>Sample Data</strong></td>
+        <td>Not provided</td>
+        <td>We'll design a CSV template for you to populate</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">Bottom Line</div>
+    <p style="margin-bottom:0">
+      Your answers confirm a <strong>clean architecture</strong>. The biggest simplifier: consistent
+      email across systems. The biggest complexity: multi-CRM reality (Zoho + Pipedrive) and
+      contractor tracking from zero. Both are manageable.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 03. SYSTEM ARCHITECTURE -->
+<!-- ============================================================ -->
+<div class="section" id="architecture">
+  <div class="section-number">Section 03</div>
+  <h2 class="section-title">System Architecture</h2>
+
+  <h3>High-Level Architecture</h3>
+
+  <div class="data-model-box">
++------------------------------------------------------------------+
+|                        ORGCOMMAND PLATFORM                       |
++------------------------------------------------------------------+
+|                                                                  |
+|  +------------------+    +-----------------+    +-------------+  |
+|  |   WEB DASHBOARD  |    |   REST API      |    |  SCHEDULER  |  |
+|  |   (Next.js/React)|<-->|   (Node.js)     |<-->| (cron jobs) |  |
+|  +------------------+    +-----------------+    +-------------+  |
+|                                |                       |         |
+|                          +-----v-------+               |         |
+|                          | PostgreSQL  |               |         |
+|                          | Database    |               |         |
+|                          +-----^-------+               |         |
+|                                |                       |         |
+|  +------------------------------------------------------------+  |
+|  |                  INTEGRATION LAYER                         |  |
+|  |                                                            |  |
+|  |  +---------+  +-----------+  +------+  +--------+         |  |
+|  |  | Zoho    |  | Pipedrive |  | Jira |  | GitHub |         |  |
+|  |  | Adapter |  | Adapter   |  | API  |  | API    |  (CSV)  |  |
+|  |  +---------+  +-----------+  +------+  +--------+         |  |
+|  +------------------------------------------------------------+  |
+|                                                                  |
++------------------------------------------------------------------+</div>
+
+  <h3>Core Design Principles</h3>
+
+  <h4>1. Email as Universal Identifier</h4>
+  <p>
+    Every person in ORGCOMMAND is identified by their email address. Since you confirmed emails are
+    consistent across all systems, this becomes the join key between HR roster data, CRM metrics,
+    Jira tickets, and GitHub commits. No fuzzy matching, no alias tables &mdash; clean 1:1 mapping.
+  </p>
+
+  <h4>2. Multi-CRM Unified Adapter</h4>
+  <p>
+    Zoho and Pipedrive have different APIs but serve the same purpose: tracking sales activity.
+    We build a <strong>CRM Adapter Layer</strong> that normalizes both into a single data format:
+  </p>
+  <ul>
+    <li><code>deals_created</code> &mdash; Number of new deals/opportunities</li>
+    <li><code>deals_closed</code> &mdash; Number of won deals</li>
+    <li><code>revenue_generated</code> &mdash; USD value of closed deals</li>
+    <li><code>pipeline_value</code> &mdash; Total pipeline in USD</li>
+    <li><code>activities_logged</code> &mdash; Calls, emails, meetings logged</li>
+  </ul>
+  <p>
+    The adapter maps Zoho's API fields and Pipedrive's API fields into these common metrics.
+    The dashboard doesn't care which CRM the data came from &mdash; it just shows the numbers.
+  </p>
+
+  <h4>3. Manual-First, Automate Later</h4>
+  <p>
+    Phase 1 is entirely manual: CSV import for the roster, manual KPI entry for performance data.
+    This is deliberate:
+  </p>
+  <ul>
+    <li>You get value in Week 1, not Week 8</li>
+    <li>You learn which KPIs actually matter before we automate the wrong things</li>
+    <li>Data quality is higher with manual entry than rushed integrations</li>
+  </ul>
+
+  <h4>4. Flexible Hierarchy</h4>
+  <p>
+    Since your org chart is partial (some teams have managers, others are flat), the data model
+    treats the manager relationship as <strong>optional</strong>. A person can have a manager
+    assigned or not. Teams can be managed or unmanaged. The system doesn't force a strict hierarchy.
+  </p>
+
+  <h4>5. USD Everywhere</h4>
+  <p>
+    All costs are stored in USD. When importing data from UK (GBP) or Singapore (SGD) teams, the
+    importing user enters the USD equivalent. No exchange rate service, no currency conversion
+    logic, no complexity. If you ever want to add original currency tracking, it's a simple
+    schema extension.
+  </p>
+</div>
+
+<!-- ============================================================ -->
+<!-- 04. DATA MODEL -->
+<!-- ============================================================ -->
+<div class="section" id="data-model">
+  <div class="section-number">Section 04</div>
+  <h2 class="section-title">Data Model</h2>
+
+  <p>
+    The database is PostgreSQL. Below is the core schema &mdash; the tables that power the entire
+    system. This is designed to be extended as we add features in later phases.
+  </p>
+
+  <h3>Core Tables</h3>
+
+  <div class="data-model-box">
+COMPANIES
++----+----------+---------+----------+
+| id | name     | country | currency |
++----+----------+---------+----------+
+  PK   varchar    varchar   "USD"
+
+TEAMS
++----+------------+--------+-----------+
+| id | name       | co_id  | manager_id|
++----+------------+--------+-----------+
+  PK   varchar     FK(co)   FK(person) nullable
+
+PERSONS
++----+-------+-------+--------+------+--------+---------+---------+------+------+
+| id | first | last  | email  | type | co_id  | team_id | mgr_id  | cost | ...  |
++----+-------+-------+--------+------+--------+---------+---------+------+------+
+  PK   varchar varchar UNIQUE  enum   FK(co)  FK(team)  FK(person) USD
+                               employee|contractor        nullable
+
+KPI_TEMPLATES
++----+----------+------+------+--------+----------+-----------+
+| id | name     | unit | role | source | green_at | yellow_at |
++----+----------+------+------+--------+----------+-----------+
+  PK   varchar   str   str    manual    threshold  threshold
+                               |zoho|pipedrive|jira|github
+
+KPI_ASSIGNMENTS
++----+-----------+---------+--------+--------+
+| id | person_id | tmpl_id | target | active |
++----+-----------+---------+--------+--------+
+  PK   FK(person) FK(tmpl)  numeric  boolean
+
+KPI_ENTRIES
++----+--------+---------+-------+--------+------------+--------+
+| id | asn_id | period  | value | status | entered_by | source |
++----+--------+---------+-------+--------+------------+--------+
+  PK  FK(asn)  "2026-02" numeric G/Y/R   FK(user)     manual|api
+
+CONTRACTOR_RETAINERS
++----+-----------+---------+---------+--------+-----------+---------+
+| id | person_id | monthly | start   | end    | scope     | status  |
++----+-----------+---------+---------+--------+-----------+---------+
+  PK   FK(person) USD       date     date|null text       active|ended
+
+CONTRACTOR_DELIVERABLES
++----+-------------+---------+----------+--------+--------+---------+
+| id | retainer_id | desc    | due_date | status | rating | notes   |
++----+-------------+---------+----------+--------+--------+---------+
+  PK   FK(retainer)  text     date      pending  1-5|null  text
+                                        |delivered|overdue|na
+
+PERFORMANCE_ALERTS
++----+-----------+----------+---------+-----------+--------+-------+
+| id | person_id | type     | trigger | consec_   | status | ...   |
++----+-----------+----------+---------+ reds      +--------+-------+
+  PK   FK(person)  flag|     auto|     integer     open|    notes
+                   escalate| manual                 ack|
+                   term_rec                         resolved
+
+USERS (system users / login)
++----+-------+------+------+
+| id | email | role | name |
++----+-------+------+------+
+  PK  UNIQUE  ceo|manager|admin
+
+AUDIT_LOG
++----+---------+--------+-----------+--------+-------+
+| id | user_id | action | target    | detail | ts    |
++----+---------+--------+-----------+--------+-------+
+  PK   FK(user) varchar  varchar     jsonb    timestamp</div>
+
+  <h3>Key Relationships</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Relationship</th>
+        <th>Type</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Company &rarr; Teams</td>
+        <td>1:N</td>
+        <td>Each company has many teams</td>
+      </tr>
+      <tr>
+        <td>Company &rarr; Persons</td>
+        <td>1:N</td>
+        <td>Each person belongs to one company</td>
+      </tr>
+      <tr>
+        <td>Team &rarr; Persons</td>
+        <td>1:N</td>
+        <td>Optional &mdash; person can be unassigned</td>
+      </tr>
+      <tr>
+        <td>Person &rarr; Manager (Person)</td>
+        <td>N:1</td>
+        <td>Optional self-referencing FK &mdash; supports partial hierarchy</td>
+      </tr>
+      <tr>
+        <td>Person &rarr; KPI Assignments</td>
+        <td>1:N</td>
+        <td>1-2 KPIs per person (configurable)</td>
+      </tr>
+      <tr>
+        <td>KPI Assignment &rarr; KPI Entries</td>
+        <td>1:N</td>
+        <td>One entry per period (month/sprint/custom)</td>
+      </tr>
+      <tr>
+        <td>Person (contractor) &rarr; Retainers</td>
+        <td>1:N</td>
+        <td>Ongoing retainer agreements</td>
+      </tr>
+      <tr>
+        <td>Retainer &rarr; Deliverables</td>
+        <td>1:N</td>
+        <td>Expected outputs per retainer</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout insight">
+    <div class="callout-label">Design Decision</div>
+    <p style="margin-bottom:0">
+      <code>email</code> is the universal identifier but <code>id</code> (auto-increment or UUID)
+      is the primary key. This lets us handle email changes without breaking foreign keys. Email
+      is enforced as UNIQUE for matching purposes.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 05. FEATURE BREAKDOWN BY PHASE -->
+<!-- ============================================================ -->
+<div class="section" id="features">
+  <div class="section-number">Section 05</div>
+  <h2 class="section-title">Feature Breakdown by Phase</h2>
+
+  <!-- PHASE 1 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-number">PHASE 1</span>
+      <span class="phase-title">Foundation &mdash; Employee Roster + Manual KPI Entry</span>
+      <span class="phase-timeline">Weeks 1&ndash;2</span>
+    </div>
+    <div class="phase-body">
+      <p class="phase-goal">"I can see everyone, and I can start scoring them."</p>
+
+      <h4>Roster Management</h4>
+      <ul>
+        <li><strong>CSV Import</strong> &mdash; Upload a CSV file with all personnel (employees + contractors). We provide the template. Supports bulk import and incremental updates.</li>
+        <li><strong>Manual Entry</strong> &mdash; Add/edit individual personnel through a web form</li>
+        <li><strong>Master Table View</strong> &mdash; Sortable, filterable table of all 200+ people with columns: Name, Email, Company, Team, Role, Type (Employee/Contractor), Manager, Location, Monthly Cost (USD), Start Date</li>
+        <li><strong>Company Filtering</strong> &mdash; View by company, team, location, type</li>
+        <li><strong>Basic Search</strong> &mdash; Search by name, email, role</li>
+      </ul>
+
+      <h4>Manual KPI Entry</h4>
+      <ul>
+        <li><strong>KPI Templates</strong> &mdash; Pre-populated role-based defaults (e.g., "Deals Closed" for sales, "Story Points Completed" for developers, "Tickets Resolved" for support)</li>
+        <li><strong>Assignment</strong> &mdash; Pick a person, pick a KPI template, set their target number</li>
+        <li><strong>Data Entry</strong> &mdash; Monthly form: enter the actual value for each person's KPIs</li>
+        <li><strong>Traffic Light Calculation</strong> &mdash; Auto-computes <span class="traffic-light green"></span> Green / <span class="traffic-light yellow"></span> Yellow / <span class="traffic-light red"></span> Red based on configurable thresholds</li>
+      </ul>
+
+      <h4>CSV Template (What You'll Fill Out)</h4>
+      <div class="data-model-box" style="font-size:12px">first_name,last_name,email,type,company,team,role,manager_email,location,monthly_cost_usd,start_date
+Carlos,Reyes,carlos@company.com,employee,Acme Corp,Executive,CEO,,US,25000,2018-01-15
+Sarah,Chen,sarah.chen@company.com,employee,Acme Corp,Engineering,VP Engineering,carlos@company.com,US,18000,2019-03-01
+Raj,Patel,raj@company.com,employee,Acme Corp,Engineering,Senior Developer,sarah.chen@company.com,Singapore,8500,2020-06-15
+Maria,Lopez,maria@company.com,contractor,Beta Inc,Marketing,Content Strategist,,US,6000,2023-01-01</div>
+
+      <h4>Deliverables</h4>
+      <ul>
+        <li>Working web application (localhost initially)</li>
+        <li>CSV import working and validated</li>
+        <li>All personnel visible in a master table</li>
+        <li>Manual KPI entry and traffic-light scoring functional</li>
+        <li>Basic auth (CEO-only login)</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 2 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-number">PHASE 2</span>
+      <span class="phase-title">CEO Dashboard + Performance Alerts</span>
+      <span class="phase-timeline">Weeks 3&ndash;4</span>
+    </div>
+    <div class="phase-body">
+      <p class="phase-goal">"I have a command center. I see everything at a glance."</p>
+
+      <h4>Dashboard Views</h4>
+      <ul>
+        <li><strong>Company Overview Cards</strong> &mdash; 4 cards (one per company) showing: headcount, total monthly cost, performance breakdown (<span class="traffic-light green"></span> <span class="traffic-light yellow"></span> <span class="traffic-light red"></span>), and % of KPIs entered</li>
+        <li><strong>Performance Grid</strong> &mdash; All people in a dense grid view, color-coded by status. Sort by worst-performing first.</li>
+        <li><strong>Drill-Down Navigation</strong> &mdash; Company &rarr; Team &rarr; Person. Click through to see details.</li>
+        <li><strong>Person Detail Page</strong> &mdash; Full profile: info, KPI history, trend chart (last 6 months), cost, notes, alert history</li>
+        <li><strong>Action Required View</strong> &mdash; Filtered list of people who need attention (red flags, consecutive reds, missing KPI data)</li>
+      </ul>
+
+      <h4>Performance Alert Engine</h4>
+      <ul>
+        <li><strong>Configurable Thresholds</strong> &mdash; Set per role, per team, or per individual (because "it depends")</li>
+        <li><strong>1-Period Red Flag</strong> &mdash; Immediate notification: person appears in Action Required view</li>
+        <li><strong>Consecutive Red Counter</strong> &mdash; System tracks consecutive red periods automatically</li>
+        <li><strong>Escalation Rules</strong> &mdash; Configurable per threshold profile (details in Section 07)</li>
+        <li><strong>Alert Dashboard</strong> &mdash; All active alerts in one view with status tracking</li>
+      </ul>
+
+      <h4>Cost Analysis</h4>
+      <ul>
+        <li><strong>Cost per Company/Team</strong> &mdash; Total monthly burn by organization unit</li>
+        <li><strong>Cost vs Performance</strong> &mdash; Scatter plot: monthly cost on X-axis, KPI performance on Y-axis. Identifies overpaid underperformers instantly.</li>
+        <li><strong>Red Cost Summary</strong> &mdash; "You're spending $X/month on people flagged red" &mdash; the number that drives decisions</li>
+      </ul>
+
+      <h4>Deployment</h4>
+      <ul>
+        <li>Production deployment (Railway, VPS, or similar)</li>
+        <li>HTTPS + custom domain</li>
+        <li>JWT authentication with role-based access</li>
+        <li>CEO + admin roles live; manager roles ready</li>
+      </ul>
+
+      <h4>Deliverables</h4>
+      <ul>
+        <li>Full CEO dashboard in production</li>
+        <li>Performance alerts active</li>
+        <li>Cost analysis views</li>
+        <li>CEO uses this daily</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 3 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-number">PHASE 3</span>
+      <span class="phase-title">Contractor Tracking + Performance Monitoring</span>
+      <span class="phase-timeline">Weeks 5&ndash;7</span>
+    </div>
+    <div class="phase-body">
+      <p class="phase-goal">"Contractors are visible. I know what I'm paying for."</p>
+
+      <h4>Retainer Management</h4>
+      <ul>
+        <li><strong>Retainer Records</strong> &mdash; Log each contractor's ongoing retainer: monthly cost, scope of work (text description), start date, status</li>
+        <li><strong>Deliverable Tracking</strong> &mdash; For each retainer, define expected monthly deliverables with due dates and descriptions</li>
+        <li><strong>Status Updates</strong> &mdash; Mark deliverables as: Pending, Delivered, Overdue, N/A</li>
+        <li><strong>Delivery Rating</strong> &mdash; Optional 1-5 quality rating per deliverable</li>
+      </ul>
+
+      <h4>Contractor Dashboard</h4>
+      <ul>
+        <li><strong>Contractor Overview</strong> &mdash; All contractors in one view with retainer status, delivery rate, and cost</li>
+        <li><strong>On-Time Delivery Rate</strong> &mdash; Calculated automatically: delivered on-time / total expected deliverables</li>
+        <li><strong>Cost vs Output</strong> &mdash; Monthly spend vs deliverables completed, by contractor</li>
+        <li><strong>Overdue Alerts</strong> &mdash; Automatic flagging when deliverables pass due date without delivery</li>
+      </ul>
+
+      <h4>Communication System (Basic)</h4>
+      <ul>
+        <li><strong>Performance Notes</strong> &mdash; Log notes on any person (employee or contractor)</li>
+        <li><strong>Email Notifications</strong> &mdash; Send performance-related emails directly from ORGCOMMAND (to person or their manager)</li>
+        <li><strong>Action Log</strong> &mdash; Complete audit trail: who communicated what to whom, and when</li>
+      </ul>
+
+      <h4>Deliverables</h4>
+      <ul>
+        <li>Full contractor tracking live</li>
+        <li>Retainer + deliverable management working</li>
+        <li>Contractor performance visible on dashboard</li>
+        <li>Basic communication/logging system</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- PHASE 4 -->
+  <div class="phase-card">
+    <div class="phase-header">
+      <span class="phase-number">PHASE 4</span>
+      <span class="phase-title">Automated Data Pulls + Advanced Analytics</span>
+      <span class="phase-timeline">Weeks 8&ndash;12</span>
+    </div>
+    <div class="phase-body">
+      <p class="phase-goal">"Data flows automatically. I see predictive insights."</p>
+
+      <h4>API Integrations (Priority Order)</h4>
+      <table>
+        <thead>
+          <tr>
+            <th>Priority</th>
+            <th>System</th>
+            <th>Data Pulled</th>
+            <th>Timeline</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>GitHub</strong> (all companies)</td>
+            <td>Commits, PRs merged, review activity, repo contributions</td>
+            <td>Week 8</td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>Jira</strong> (if confirmed)</td>
+            <td>Tickets completed, story points, sprint velocity</td>
+            <td>Week 9</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>Zoho CRM</strong></td>
+            <td>Deals created/closed, pipeline value, activities</td>
+            <td>Week 10</td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>Pipedrive</strong></td>
+            <td>Deals created/closed, pipeline value, activities</td>
+            <td>Week 11</td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>Zenefits</strong> (optional)</td>
+            <td>HR roster sync, if API access available</td>
+            <td>Week 12</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h4>Integration Architecture</h4>
+      <ul>
+        <li>Each integration is a standalone connector module</li>
+        <li>Scheduled daily sync via cron/scheduler</li>
+        <li>Manual trigger button in dashboard ("Sync Now")</li>
+        <li>Error logging and retry logic</li>
+        <li>Email matching: looks up person by email, writes KPI entry automatically</li>
+        <li>Fallback: if auto-import fails, data stays in manual entry queue</li>
+      </ul>
+
+      <h4>Advanced Analytics</h4>
+      <ul>
+        <li><strong>Trend Analysis</strong> &mdash; Performance over time with moving averages</li>
+        <li><strong>Predictive Alerts</strong> &mdash; "This person is trending toward red" based on trajectory</li>
+        <li><strong>Team Comparisons</strong> &mdash; Normalized performance across teams and companies</li>
+        <li><strong>CEO Weekly Digest</strong> &mdash; Automated email summary: top performers, risk list, cost summary, action items</li>
+        <li><strong>Manager Portal</strong> &mdash; Managers can log in, see their team, and submit KPIs</li>
+      </ul>
+
+      <h4>Deliverables</h4>
+      <ul>
+        <li>KPIs auto-import from connected systems daily</li>
+        <li>80%+ of KPI data flows without manual entry</li>
+        <li>Predictive performance alerts</li>
+        <li>Weekly CEO digest email</li>
+        <li>Manager self-service portal</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 06. CONTRACTOR MANAGEMENT -->
+<!-- ============================================================ -->
+<div class="section" id="contractors">
+  <div class="section-number">Section 06</div>
+  <h2 class="section-title">Contractor Management Solution</h2>
+
+  <p>
+    This is where ORGCOMMAND fills the biggest gap. Right now, contractors are on ongoing retainers,
+    their deliverables aren't tracked, and you have no idea if they're delivering on time. Here's
+    how we fix that.
+  </p>
+
+  <div class="callout decision">
+    <div class="callout-label">The Problem</div>
+    <p style="margin-bottom:0">
+      Contractors use company emails (good for matching), have ongoing retainers (not project-based),
+      are "not really tracked," and you have "no idea if they delivered on time." This means
+      you're potentially paying monthly retainers for work that isn't happening.
+    </p>
+  </div>
+
+  <h3>Retainer-Based Tracking Model</h3>
+  <p>
+    Unlike project-based SOWs, your contractors are on ongoing monthly retainers. The tracking
+    model reflects this:
+  </p>
+
+  <h4>1. Retainer Record</h4>
+  <p>For each contractor, capture:</p>
+  <ul>
+    <li><strong>Monthly retainer amount</strong> (USD)</li>
+    <li><strong>Scope of work</strong> &mdash; Free-text description of what they're expected to do each month</li>
+    <li><strong>Start date</strong> and <strong>end date</strong> (null if ongoing)</li>
+    <li><strong>Review frequency</strong> &mdash; Monthly, quarterly, or custom</li>
+  </ul>
+
+  <h4>2. Monthly Deliverable Checklist</h4>
+  <p>For each retainer, define what "delivered" looks like each month:</p>
+  <table>
+    <thead>
+      <tr>
+        <th>Deliverable</th>
+        <th>Due Date</th>
+        <th>Status</th>
+        <th>Rating</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Monthly blog posts (4x)</td>
+        <td>Last day of month</td>
+        <td style="color:#2ecc71; font-weight:600">Delivered</td>
+        <td>4/5</td>
+        <td>Good quality, on time</td>
+      </tr>
+      <tr>
+        <td>Social media calendar</td>
+        <td>5th of month</td>
+        <td style="color:#e74c3c; font-weight:600">Overdue</td>
+        <td>-</td>
+        <td>Not received</td>
+      </tr>
+      <tr>
+        <td>Weekly analytics report</td>
+        <td>Every Monday</td>
+        <td style="color:#f1c40f; font-weight:600">Partial</td>
+        <td>2/5</td>
+        <td>Received 2 of 4 weeks</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>3. Contractor Performance Metrics</h4>
+  <ul>
+    <li><strong>On-Time Delivery Rate</strong> &mdash; % of deliverables marked "Delivered" by due date</li>
+    <li><strong>Average Quality Rating</strong> &mdash; Mean of 1-5 ratings across all deliverables</li>
+    <li><strong>Cost per Deliverable</strong> &mdash; Monthly retainer / number of deliverables = effective cost per output</li>
+    <li><strong>Consecutive Months Below Threshold</strong> &mdash; Ties into the same alert engine as employees</li>
+  </ul>
+
+  <h4>4. Contractor Traffic Light</h4>
+  <table>
+    <thead>
+      <tr>
+        <th>Status</th>
+        <th>Criteria</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="traffic-light green"></span> Green</td>
+        <td>80%+ deliverables on time, avg rating 3.5+</td>
+        <td>No action needed</td>
+      </tr>
+      <tr>
+        <td><span class="traffic-light yellow"></span> Yellow</td>
+        <td>60-79% on time, OR avg rating 2.5-3.4</td>
+        <td>Flagged for review</td>
+      </tr>
+      <tr>
+        <td><span class="traffic-light red"></span> Red</td>
+        <td>&lt;60% on time, OR avg rating &lt;2.5</td>
+        <td>Escalation per threshold rules</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout insight">
+    <div class="callout-label">Initial Setup</div>
+    <p style="margin-bottom:0">
+      Since contractor deliverables aren't tracked anywhere today, Phase 3 starts with you (or a
+      manager) defining what each contractor is <em>supposed</em> to deliver each month. This is a
+      one-time setup per contractor. After that, monthly check-ins just mark things as
+      delivered/not delivered.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 07. PERFORMANCE THRESHOLD SYSTEM -->
+<!-- ============================================================ -->
+<div class="section" id="performance">
+  <div class="section-number">Section 07</div>
+  <h2 class="section-title">Performance Threshold System</h2>
+
+  <p>
+    You said: "I want to know immediately" but also "it depends." This means the system needs
+    <strong>configurable thresholds</strong> &mdash; not a one-size-fits-all rule. Here's how
+    we handle that.
+  </p>
+
+  <h3>Threshold Profiles</h3>
+  <p>
+    Instead of a single global rule, we create <strong>Threshold Profiles</strong> that can be
+    assigned per role, per team, or per individual. This lets you be aggressive with some groups
+    and forgiving with others.
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Profile Name</th>
+        <th>1 Red Period</th>
+        <th>2 Consecutive Reds</th>
+        <th>3 Consecutive Reds</th>
+        <th>Use For</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Standard</strong></td>
+        <td>Flag in dashboard</td>
+        <td>Email alert to CEO</td>
+        <td>Termination recommendation</td>
+        <td>Default for most roles</td>
+      </tr>
+      <tr>
+        <td><strong>Aggressive</strong></td>
+        <td>Email alert to CEO</td>
+        <td>Termination recommendation</td>
+        <td>&mdash;</td>
+        <td>High-cost, critical roles</td>
+      </tr>
+      <tr>
+        <td><strong>Lenient</strong></td>
+        <td>Flag in dashboard</td>
+        <td>Flag in dashboard</td>
+        <td>Email alert to CEO</td>
+        <td>New hires (ramp-up), seasonal roles</td>
+      </tr>
+      <tr>
+        <td><strong>Custom</strong></td>
+        <td>(configurable)</td>
+        <td>(configurable)</td>
+        <td>(configurable)</td>
+        <td>Per-individual exceptions</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>How It Works</h3>
+
+  <h4>Step 1: KPI Entry (Manual or Automated)</h4>
+  <p>
+    A KPI value is entered for a person for a given period. The system computes the traffic-light
+    status based on the KPI template's thresholds:
+  </p>
+  <ul>
+    <li><span class="traffic-light green"></span> <strong>Green:</strong> At or above target (e.g., 100%+ of goal)</li>
+    <li><span class="traffic-light yellow"></span> <strong>Yellow:</strong> Below target but within tolerance (e.g., 70-99% of goal)</li>
+    <li><span class="traffic-light red"></span> <strong>Red:</strong> Significantly below target (e.g., &lt;70% of goal)</li>
+  </ul>
+  <p><em>These percentages are configurable per KPI template.</em></p>
+
+  <h4>Step 2: Alert Generation</h4>
+  <p>When a red status is recorded:</p>
+  <ol>
+    <li>System checks the person's assigned threshold profile</li>
+    <li>Checks how many consecutive red periods this person has</li>
+    <li>Executes the appropriate action from the profile</li>
+  </ol>
+
+  <h4>Step 3: Escalation Path</h4>
+
+  <div class="data-model-box" style="font-size: 13px">
+PERIOD 1 RED:
+  +-- Standard Profile ---> Dashboard flag (Action Required view)
+  +-- Aggressive Profile -> CEO email alert
+  +-- Lenient Profile ----> Dashboard flag
+
+PERIOD 2 RED (consecutive):
+  +-- Standard Profile ---> CEO email alert + "Review Recommended"
+  +-- Aggressive Profile -> Termination recommendation drafted
+  +-- Lenient Profile ----> Dashboard flag (still monitoring)
+
+PERIOD 3 RED (consecutive):
+  +-- Standard Profile ---> Termination recommendation drafted
+  +-- Aggressive Profile -> (already recommended at period 2)
+  +-- Lenient Profile ----> CEO email alert + "Review Recommended"
+
+AT ANY POINT:
+  +-- CEO can override: dismiss alert, extend monitoring, or act
+  +-- Green period resets the consecutive counter
+  +-- Yellow period does NOT reset the counter (it's not green)</div>
+
+  <h3>The "It Depends" Factor</h3>
+  <p>
+    Your instinct is right &mdash; context matters. The system supports this through:
+  </p>
+  <ul>
+    <li><strong>Per-person profile overrides</strong> &mdash; Assign a new hire the "Lenient" profile for their first 3 months, then switch to "Standard"</li>
+    <li><strong>Alert notes</strong> &mdash; When an alert fires, you can add context ("on medical leave", "client delayed project", etc.) and acknowledge it without dismissing</li>
+    <li><strong>Manual override</strong> &mdash; CEO can always override any automated recommendation. The system advises; you decide.</li>
+    <li><strong>Seasonal adjustments</strong> &mdash; Temporarily lower thresholds for known slow periods</li>
+  </ul>
+
+  <div class="callout warning">
+    <div class="callout-label">Important</div>
+    <p style="margin-bottom:0">
+      The system <strong>recommends</strong> termination &mdash; it never auto-terminates.
+      Every recommendation goes through the Action Required view where you review context,
+      history, and make the final call. The goal is to make sure nobody slips through the cracks,
+      not to replace your judgment.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 08. DATA INTEGRATION STRATEGY -->
+<!-- ============================================================ -->
+<div class="section" id="integrations">
+  <div class="section-number">Section 08</div>
+  <h2 class="section-title">Data Integration Strategy</h2>
+
+  <h3>Phase 1: Manual (Weeks 1-7)</h3>
+  <p>
+    Everything starts manual. This is deliberate, not a limitation.
+  </p>
+  <table>
+    <thead>
+      <tr>
+        <th>Data Type</th>
+        <th>Input Method</th>
+        <th>Frequency</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Employee Roster</td>
+        <td>CSV import</td>
+        <td>Initial load + updates as needed</td>
+      </tr>
+      <tr>
+        <td>KPI Values</td>
+        <td>Web form (manual entry)</td>
+        <td>Monthly (or per period)</td>
+      </tr>
+      <tr>
+        <td>Contractor Deliverables</td>
+        <td>Web form (checklist)</td>
+        <td>Monthly</td>
+      </tr>
+      <tr>
+        <td>Cost Data</td>
+        <td>CSV import or manual</td>
+        <td>Monthly or when rates change</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Phase 2: API Integrations (Weeks 8-12)</h3>
+
+  <h4>Integration Architecture</h4>
+  <p>Each integration follows the same pattern:</p>
+
+  <div class="data-model-box" style="font-size: 13px">
+                    +-----------+
+                    |  Scheduler |  (runs daily at 2 AM UTC)
+                    +-----+-----+
+                          |
+                    +-----v-----+
+                    |  Connector |  (e.g., ZohoConnector)
+                    |  Module    |
+                    +-----+-----+
+                          |
+               +----------+----------+
+               |                     |
+        +------v------+     +-------v-------+
+        | External API |     | Error Handler |
+        | (Zoho, etc.) |     | + Retry Logic |
+        +--------------+     +-------+-------+
+               |                     |
+        +------v------+             |
+        | Data Mapper  |  (normalize to common format)
+        +------+------+             |
+               |                     |
+        +------v------+             |
+        | Email Match  |  (find person by email)
+        +------+------+             |
+               |                     |
+        +------v------+     +-------v-------+
+        | KPI Writer   |     | Manual Queue  |
+        | (auto-entry) |     | (if no match) |
+        +--------------+     +---------------+</div>
+
+  <h4>Connector Details</h4>
+
+  <table>
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>API Type</th>
+        <th>Auth Method</th>
+        <th>Data Mapped To</th>
+        <th>Complexity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>GitHub</strong></td>
+        <td>REST + GraphQL</td>
+        <td>Personal Access Token or GitHub App</td>
+        <td>Commits, PRs, reviews per user per month</td>
+        <td>Low</td>
+      </tr>
+      <tr>
+        <td><strong>Jira</strong></td>
+        <td>REST v3</td>
+        <td>API Token + email</td>
+        <td>Issues completed, story points, sprint data</td>
+        <td>Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Zoho CRM</strong></td>
+        <td>REST v2</td>
+        <td>OAuth 2.0</td>
+        <td>Deals, pipeline, activities per user</td>
+        <td>Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Pipedrive</strong></td>
+        <td>REST v1</td>
+        <td>API Token</td>
+        <td>Deals, pipeline, activities per user</td>
+        <td>Low-Medium</td>
+      </tr>
+      <tr>
+        <td><strong>Zenefits</strong></td>
+        <td>REST (if available)</td>
+        <td>OAuth 2.0</td>
+        <td>Roster sync (name, email, title, dept)</td>
+        <td>Low (if API exists)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Email Matching Flow</h3>
+  <p>When a connector pulls data from an external system:</p>
+  <ol>
+    <li>Extract the user's email from the external system record</li>
+    <li>Look up <code>persons.email</code> in ORGCOMMAND</li>
+    <li>If found: auto-create the KPI entry for that person/period</li>
+    <li>If NOT found: add to a "manual review queue" for admin to resolve (typo? new hire? contractor using personal email?)</li>
+  </ol>
+
+  <div class="callout insight">
+    <div class="callout-label">Your Advantage</div>
+    <p style="margin-bottom:0">
+      Because everyone uses the same email across systems, matching is trivial. No alias tables,
+      no fuzzy matching, no ML needed. This is the single biggest simplifier in the entire architecture.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 09. TECH STACK -->
+<!-- ============================================================ -->
+<div class="section" id="tech-stack">
+  <div class="section-number">Section 09</div>
+  <h2 class="section-title">Tech Stack</h2>
+
+  <h3>Recommended Stack</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Layer</th>
+        <th>Technology</th>
+        <th>Why</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Framework</strong></td>
+        <td>Next.js 14+ (App Router)</td>
+        <td>Full-stack: API routes + React frontend in one project. Server-side rendering for fast dashboard loads. Built-in API layer eliminates need for separate backend service.</td>
+      </tr>
+      <tr>
+        <td><strong>Runtime</strong></td>
+        <td>Node.js 20+</td>
+        <td>Excellent ecosystem for API integrations (Zoho, Pipedrive, Jira, GitHub all have Node SDKs). Consistent language across frontend and backend.</td>
+      </tr>
+      <tr>
+        <td><strong>Database</strong></td>
+        <td>PostgreSQL 15+</td>
+        <td>Rock-solid relational database. JSONB for flexible metadata. Handles 200+ people with zero performance concerns. Free.</td>
+      </tr>
+      <tr>
+        <td><strong>ORM</strong></td>
+        <td>Prisma</td>
+        <td>Type-safe database queries, auto-generated migrations, excellent developer experience. Pairs perfectly with Next.js.</td>
+      </tr>
+      <tr>
+        <td><strong>UI Components</strong></td>
+        <td>React + Tailwind CSS + shadcn/ui</td>
+        <td>Production-quality UI components out of the box. Clean, professional look without custom design work. Highly customizable.</td>
+      </tr>
+      <tr>
+        <td><strong>Charts</strong></td>
+        <td>Recharts</td>
+        <td>React-native charting library. Handles trend lines, bar charts, scatter plots, and the cost-vs-performance visualization.</td>
+      </tr>
+      <tr>
+        <td><strong>Auth</strong></td>
+        <td>NextAuth.js (Auth.js)</td>
+        <td>Built-in support for email magic links, JWT sessions, role-based access. No custom auth code needed.</td>
+      </tr>
+      <tr>
+        <td><strong>Email</strong></td>
+        <td>SendGrid (or Resend)</td>
+        <td>Magic link emails, performance alerts, CEO weekly digest. Simple API, high deliverability.</td>
+      </tr>
+      <tr>
+        <td><strong>Scheduler</strong></td>
+        <td>node-cron (in-process) or system cron</td>
+        <td>Daily integration syncs, weekly digest emails, alert checks. No separate job server needed at this scale.</td>
+      </tr>
+      <tr>
+        <td><strong>CSV Parsing</strong></td>
+        <td>Papa Parse</td>
+        <td>Robust CSV parsing with error handling, type detection, and streaming for large files.</td>
+      </tr>
+      <tr>
+        <td><strong>Deployment</strong></td>
+        <td>Railway (recommended) or VPS + Docker</td>
+        <td>Railway: zero-config deployment with PostgreSQL included, auto-scaling, custom domains. VPS: full control if preferred.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Why Next.js Over Python/FastAPI?</h3>
+  <p>
+    The original MASTERPLAN proposed Python + FastAPI. We're recommending Next.js instead for
+    these reasons:
+  </p>
+  <ul>
+    <li><strong>Single codebase</strong> &mdash; No separate frontend and backend repos. API routes live alongside React components. Fewer deployment targets, fewer things to break.</li>
+    <li><strong>Faster iteration</strong> &mdash; Full-stack changes in one PR. No "update the API, then update the frontend" two-step.</li>
+    <li><strong>Better SDK ecosystem</strong> &mdash; Zoho, Pipedrive, Jira, and GitHub all have excellent Node.js libraries. Python equivalents exist but are less maintained.</li>
+    <li><strong>Deployment simplicity</strong> &mdash; Railway deploys Next.js with zero configuration. One <code>railway up</code> and you're live.</li>
+    <li><strong>Claude Code efficiency</strong> &mdash; Claude generates clean, idiomatic Next.js code rapidly. The framework's conventions reduce ambiguity.</li>
+  </ul>
+
+  <div class="callout">
+    <div class="callout-label">Note</div>
+    <p style="margin-bottom:0">
+      This is a recommendation, not a mandate. If you prefer the Python/FastAPI stack from the
+      original MASTERPLAN, everything in this proposal works equally well with that stack. The
+      architecture is tech-agnostic &mdash; only the implementation details change.
+    </p>
+  </div>
+
+  <h3>Infrastructure</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Component</th>
+        <th>Spec</th>
+        <th>Cost Estimate</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Railway (Starter Plan)</td>
+        <td>Next.js app + PostgreSQL</td>
+        <td>~$5-20/month</td>
+      </tr>
+      <tr>
+        <td>SendGrid (Free Tier)</td>
+        <td>100 emails/day</td>
+        <td>$0/month (upgrade to $20/mo if needed)</td>
+      </tr>
+      <tr>
+        <td>Custom Domain</td>
+        <td>e.g., orgcommand.yourcompany.com</td>
+        <td>Already owned or ~$12/year</td>
+      </tr>
+      <tr>
+        <td>GitHub Repo (Private)</td>
+        <td>Source code + CI/CD</td>
+        <td>$0/month (GitHub Free)</td>
+      </tr>
+      <tr>
+        <td><strong>Total Infrastructure</strong></td>
+        <td></td>
+        <td><strong>~$5-25/month</strong></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- 10. TIMELINE -->
+<!-- ============================================================ -->
+<div class="section" id="timeline">
+  <div class="section-number">Section 10</div>
+  <h2 class="section-title">Timeline &amp; Phased Rollout</h2>
+
+  <h3>Overview</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Name</th>
+        <th>Weeks</th>
+        <th>CEO Can Use?</th>
+        <th>Key Milestone</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Foundation</td>
+        <td>1&ndash;2</td>
+        <td>Localhost only</td>
+        <td>All 200+ people visible in one place</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>Dashboard + Alerts</td>
+        <td>3&ndash;4</td>
+        <td style="color:#2ecc71; font-weight:600">YES &mdash; Daily use starts</td>
+        <td>CEO command center live in production</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Contractor Tracking</td>
+        <td>5&ndash;7</td>
+        <td style="color:#2ecc71; font-weight:600">YES</td>
+        <td>Full workforce visibility (employees + contractors)</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Integrations + Analytics</td>
+        <td>8&ndash;12</td>
+        <td style="color:#2ecc71; font-weight:600">YES</td>
+        <td>80% of KPI data auto-imported</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Detailed Week-by-Week</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Week</th>
+        <th>Focus</th>
+        <th>Deliverables</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1</strong></td>
+        <td>Schema + API + CSV Import</td>
+        <td>Database schema created. API endpoints for CRUD. CSV import working. Basic table view rendering.</td>
+      </tr>
+      <tr>
+        <td><strong>2</strong></td>
+        <td>KPI Engine + Auth</td>
+        <td>KPI templates, assignment, manual entry, traffic-light scoring. Basic JWT auth. Person detail pages.</td>
+      </tr>
+      <tr>
+        <td><strong>3</strong></td>
+        <td>Dashboard UI</td>
+        <td>Company overview cards. Performance grid. Drill-down navigation. Action Required view. Cost analysis charts.</td>
+      </tr>
+      <tr>
+        <td><strong>4</strong></td>
+        <td>Alerts + Deploy</td>
+        <td>Threshold profiles. Alert engine. Email notifications. Production deployment. HTTPS + domain.</td>
+      </tr>
+      <tr>
+        <td><strong>5-6</strong></td>
+        <td>Contractor Module</td>
+        <td>Retainer management. Deliverable tracking. Contractor dashboard view. On-time delivery metrics.</td>
+      </tr>
+      <tr>
+        <td><strong>7</strong></td>
+        <td>Communications</td>
+        <td>Performance notes. Email from dashboard. Action log/audit trail. Manager role access.</td>
+      </tr>
+      <tr>
+        <td><strong>8</strong></td>
+        <td>GitHub Integration</td>
+        <td>GitHub connector live. Commits/PRs auto-imported as dev KPIs.</td>
+      </tr>
+      <tr>
+        <td><strong>9</strong></td>
+        <td>Jira Integration</td>
+        <td>Jira connector live. Tickets/story points auto-imported.</td>
+      </tr>
+      <tr>
+        <td><strong>10</strong></td>
+        <td>Zoho CRM Integration</td>
+        <td>Zoho connector live. Sales KPIs auto-imported for Zoho companies.</td>
+      </tr>
+      <tr>
+        <td><strong>11</strong></td>
+        <td>Pipedrive Integration</td>
+        <td>Pipedrive connector live. Sales KPIs auto-imported for Pipedrive companies.</td>
+      </tr>
+      <tr>
+        <td><strong>12</strong></td>
+        <td>Analytics + Polish</td>
+        <td>Trend analysis. Predictive alerts. CEO weekly digest. Manager portal. Final polish and hardening.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">Shipping Strategy</div>
+    <p style="margin-bottom:0">
+      Incremental delivery. You don't wait 12 weeks to see anything. By <strong>Week 4</strong>,
+      you have a production dashboard you use daily. Everything after Week 4 adds capability to a
+      system that's already delivering value.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 11. COST -->
+<!-- ============================================================ -->
+<div class="section" id="cost">
+  <div class="section-number">Section 11</div>
+  <h2 class="section-title">Cost &amp; Resource Requirements</h2>
+
+  <h3>Infrastructure Costs (Ongoing)</h3>
+  <table>
+    <thead>
+      <tr>
+        <th>Item</th>
+        <th>Monthly</th>
+        <th>Annual</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Railway Hosting (App + DB)</td>
+        <td>$5&ndash;20</td>
+        <td>$60&ndash;240</td>
+        <td>Scales with usage; minimal for 200 users</td>
+      </tr>
+      <tr>
+        <td>SendGrid Email</td>
+        <td>$0&ndash;20</td>
+        <td>$0&ndash;240</td>
+        <td>Free tier covers alerts; paid for digest volume</td>
+      </tr>
+      <tr>
+        <td>Domain + SSL</td>
+        <td>~$1</td>
+        <td>~$12</td>
+        <td>If not using existing domain</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td><strong>$6&ndash;41</strong></td>
+        <td><strong>$72&ndash;492</strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Development Resources</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Phase</th>
+        <th>Effort</th>
+        <th>Primary Work</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Phase 1 (Weeks 1-2)</td>
+        <td>~40-60 hours</td>
+        <td>Schema, API, CSV import, table view, KPI engine</td>
+      </tr>
+      <tr>
+        <td>Phase 2 (Weeks 3-4)</td>
+        <td>~50-70 hours</td>
+        <td>Dashboard UI, charts, alerts, deployment</td>
+      </tr>
+      <tr>
+        <td>Phase 3 (Weeks 5-7)</td>
+        <td>~50-70 hours</td>
+        <td>Contractor module, communications, manager portal</td>
+      </tr>
+      <tr>
+        <td>Phase 4 (Weeks 8-12)</td>
+        <td>~80-120 hours</td>
+        <td>5 integrations, analytics, digest, polish</td>
+      </tr>
+      <tr>
+        <td><strong>Total</strong></td>
+        <td><strong>~220-320 hours</strong></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>What You Need to Provide</h3>
+  <ul>
+    <li><strong>Completed CSV roster</strong> &mdash; Using the template we provide (Week 1)</li>
+    <li><strong>API credentials</strong> &mdash; For Zoho, Pipedrive, Jira, GitHub when we reach Phase 4</li>
+    <li><strong>Contractor scopes</strong> &mdash; Written descriptions of what each contractor is expected to deliver monthly (Phase 3)</li>
+    <li><strong>Threshold decisions</strong> &mdash; Confirm which roles get which threshold profiles (Phase 2)</li>
+    <li><strong>30-60 minutes/week</strong> &mdash; For review, feedback, and course corrections during build</li>
+  </ul>
+
+  <div class="callout insight">
+    <div class="callout-label">ROI Context</div>
+    <p style="margin-bottom:0">
+      If your workforce costs $200K+/month across 200+ people, identifying even 2-3 non-productive
+      personnel for termination ($10K-30K/month savings) pays for the entire platform's annual
+      infrastructure cost in a single day. The system pays for itself the first time you use the
+      Action Required view.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 12. RISKS -->
+<!-- ============================================================ -->
+<div class="section" id="risks">
+  <div class="section-number">Section 12</div>
+  <h2 class="section-title">Risks &amp; Mitigations</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">#</th>
+        <th style="width:25%">Risk</th>
+        <th style="width:10%">Severity</th>
+        <th style="width:10%">Likelihood</th>
+        <th style="width:50%">Mitigation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Data quality (garbage in, garbage out)</strong></td>
+        <td style="color:#e74c3c; font-weight:600">High</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>CSV import includes validation rules (email format, required fields, duplicate detection). Dashboard shows "data completeness" score per company. Rejected rows go to review queue, not silently dropped.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Multi-CRM complexity</strong></td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Unified adapter layer normalizes both CRMs to the same data format. If one CRM integration is harder than expected, the other still works. CSV fallback always available.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Jira uncertainty ("not sure")</strong></td>
+        <td style="color:#2ecc71; font-weight:600">Low</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Jira connector is deprioritized until confirmed. If no Jira, dev KPIs come from GitHub (which is confirmed). Manual entry covers the gap.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>Contractor deliverable definition</strong></td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td style="color:#e74c3c; font-weight:600">High</td>
+        <td>Since "not really tracked" today, defining monthly deliverables is a new process. We provide a simple template and work with you to define deliverables for 5-10 contractors first, then expand.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Adoption resistance from managers</strong></td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>CEO uses it first (Phases 1-2). Managers only invited at Phase 3+ after the system has proven its value. Start with willing managers.</td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td><strong>Zenefits API access unclear</strong></td>
+        <td style="color:#2ecc71; font-weight:600">Low</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Zenefits integration is Phase 4 / optional. Manual CSV import handles HR data in Phase 1. If Zenefits has no API, we simply continue with CSV.</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td><strong>Partial org chart</strong></td>
+        <td style="color:#2ecc71; font-weight:600">Low</td>
+        <td style="color:#2ecc71; font-weight:600">Low</td>
+        <td>Manager field is optional in the schema. Teams without managers work fine &mdash; alerts go directly to CEO. Hierarchy can be built incrementally.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout">
+    <div class="callout-label">Biggest Risk, Honestly</div>
+    <p style="margin-bottom:0">
+      Risk #4 &mdash; defining contractor deliverables &mdash; is the hardest part because it's
+      not a technical problem. It requires you (or your managers) to articulate what each
+      contractor is supposed to be doing each month. The system can track it perfectly once defined,
+      but the definition work is on the humans.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 13. NEXT STEPS -->
+<!-- ============================================================ -->
+<div class="section" id="next-steps">
+  <div class="section-number">Section 13</div>
+  <h2 class="section-title">Next Steps</h2>
+
+  <h3>To Start Building, We Need:</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">#</th>
+        <th style="width:35%">Item</th>
+        <th style="width:10%">From</th>
+        <th style="width:10%">Priority</th>
+        <th style="width:40%">Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td><strong>Approval of this proposal</strong></td>
+        <td>Carlos</td>
+        <td style="color:#e74c3c; font-weight:600">Critical</td>
+        <td>Confirm architecture, phasing, and tech stack direction. Flag anything that doesn't feel right.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td><strong>Completed CSV roster</strong></td>
+        <td>Carlos</td>
+        <td style="color:#e74c3c; font-weight:600">Critical</td>
+        <td>Using the template from this proposal. Even 20-30 rows to start. This is our Week 1 data.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td><strong>Confirm Jira usage</strong></td>
+        <td>Carlos</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Is it Jira? Something else? Or nothing? Affects Phase 4 integration planning.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td><strong>List of 5-10 contractors</strong></td>
+        <td>Carlos</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Names + what they're supposed to deliver. Needed for Phase 3 design.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td><strong>Tech stack decision</strong></td>
+        <td>Carlos</td>
+        <td style="color:#f1c40f; font-weight:600">Medium</td>
+        <td>Next.js (recommended) or Python/FastAPI (original plan)? Both work. Your preference.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Once Approved, the Build Sequence Is:</h3>
+  <ol>
+    <li><strong>Day 1:</strong> Initialize project, database schema, and API scaffolding</li>
+    <li><strong>Day 2-3:</strong> CSV import + validation + master table view</li>
+    <li><strong>Day 4-5:</strong> KPI templates + assignment + manual entry</li>
+    <li><strong>Week 2:</strong> Traffic-light scoring + person detail pages + auth</li>
+    <li><strong>Week 3:</strong> CEO dashboard UI + charts + Action Required view</li>
+    <li><strong>Week 4:</strong> Alerts, email notifications, production deployment</li>
+    <li><strong>Week 4 end: You're live.</strong></li>
+  </ol>
+
+  <div class="callout insight">
+    <div class="callout-label">The Goal</div>
+    <p style="margin-bottom:0">
+      In 4 weeks, you go from "I can't see what anyone is doing" to "I have a production
+      dashboard that shows every person, their cost, their performance, and who needs to go."
+      That's the transformation. Everything after Week 4 makes it better &mdash; but Week 4 is
+      where the value starts.
+    </p>
+  </div>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- APPENDIX: DECISION LOG -->
+<!-- ============================================================ -->
+<div class="section">
+  <h3>Appendix: Open Decisions for Carlos</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">#</th>
+        <th style="width:40%">Decision</th>
+        <th style="width:30%">Options</th>
+        <th style="width:25%">Recommendation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>A</td>
+        <td>Tech stack: Next.js or Python/FastAPI?</td>
+        <td>Next.js (full-stack JS) vs. FastAPI + React (Python backend)</td>
+        <td><strong>Next.js</strong> &mdash; faster iteration, simpler deployment</td>
+      </tr>
+      <tr>
+        <td>B</td>
+        <td>Deployment platform?</td>
+        <td>Railway (managed) vs. VPS (self-hosted Docker)</td>
+        <td><strong>Railway</strong> &mdash; zero-ops, start fast, migrate later if needed</td>
+      </tr>
+      <tr>
+        <td>C</td>
+        <td>Default threshold profile for contractors?</td>
+        <td>Standard (3 reds) vs. Aggressive (2 reds)</td>
+        <td><strong>Aggressive</strong> &mdash; contractors should deliver or leave</td>
+      </tr>
+      <tr>
+        <td>D</td>
+        <td>KPI period length?</td>
+        <td>Monthly vs. Bi-weekly vs. Sprint-based</td>
+        <td><strong>Monthly</strong> &mdash; simpler, matches retainer cycles</td>
+      </tr>
+      <tr>
+        <td>E</td>
+        <td>Who enters KPI data initially?</td>
+        <td>CEO only vs. CEO + 2-3 trusted managers</td>
+        <td><strong>CEO first</strong>, invite managers in Phase 3</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ============================================================ -->
+<!-- FOOTER -->
+<!-- ============================================================ -->
+<div class="doc-footer">
+  ORGCOMMAND PROPOSAL v1.0 &nbsp;&middot;&nbsp; CONFIDENTIAL &nbsp;&middot;&nbsp; February 2026
+  <br>
+  Prepared by Atlas &nbsp;&middot;&nbsp; For Carlos, CEO
+</div>
+
+</div><!-- end page-container -->
+
+</body>
+</html>

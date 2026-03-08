@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND — Lean Playbook</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','Inter',Roboto,sans-serif;background:#fff;color:#1a1a1a;font-size:15px;line-height:1.6}
+.page{max-width:800px;margin:0 auto;padding:40px 44px}
+
+/* Cover */
+.cover{padding:40px 0 32px;border-bottom:3px solid #111;margin-bottom:36px}
+.cover h1{font-size:28px;font-weight:800;letter-spacing:1px}
+.cover p{font-size:14px;color:#666;margin-top:4px}
+
+/* Dept */
+.dept{margin-bottom:40px;page-break-inside:avoid}
+.dept-head{display:flex;align-items:center;gap:12px;padding-bottom:10px;border-bottom:2px solid #111;margin-bottom:16px}
+.dept-head h2{font-size:20px;font-weight:800}
+.dept-head .num{font-size:12px;color:#999;letter-spacing:2px;font-weight:600}
+
+h3{font-size:14px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:#666;margin:20px 0 8px}
+p{margin-bottom:10px;color:#333}
+ul{margin:0 0 12px 18px}
+li{margin-bottom:4px;color:#333}
+strong{color:#111}
+
+/* Metric box */
+.metrics{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin:10px 0 16px}
+.m{border:1px solid #e5e5e5;border-radius:8px;padding:12px 14px}
+.m .label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999}
+.m .val{font-size:18px;font-weight:800;margin-top:2px}
+.m .note{font-size:11px;color:#888;margin-top:2px}
+
+/* Traffic light inline */
+.tl{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px}
+.tl.g{background:#10b981}.tl.y{background:#f59e0b}.tl.r{background:#ef4444}
+
+/* Simple table */
+.st{width:100%;border-collapse:collapse;margin:10px 0 16px;font-size:13px}
+.st th{text-align:left;font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;color:#999;padding:6px 10px;border-bottom:2px solid #e5e5e5}
+.st td{padding:8px 10px;border-bottom:1px solid #f0f0f0}
+.st tr:last-child td{border-bottom:none}
+.g{color:#10b981}.y{color:#d97706}.r{color:#ef4444}
+
+/* Callout */
+.rule{background:#f8f8f8;border-left:3px solid #111;padding:12px 16px;margin:12px 0;font-size:13px;border-radius:0 6px 6px 0}
+.rule strong{display:block;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:#666;margin-bottom:2px}
+
+/* Two col */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:10px 0 16px}
+.two>div{border:1px solid #e5e5e5;border-radius:8px;padding:14px 16px}
+.two h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.two ul{margin-left:14px;font-size:13px}
+.two li{margin-bottom:3px}
+
+.footer{text-align:center;padding:24px 0;border-top:2px solid #111;margin-top:40px;font-size:11px;color:#999;letter-spacing:1px}
+
+@media(max-width:600px){
+  .page{padding:24px 20px}
+  .metrics{grid-template-columns:1fr}
+  .two{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+<div class="cover">
+  <h1>THE LEAN PLAYBOOK</h1>
+  <p>How to Track Performance &amp; Distribute Work — 6 Departments, Zero Fluff</p>
+  <p style="margin-top:12px;font-size:13px;color:#999">For distributed teams under 50 people &nbsp;&middot;&nbsp; March 4, 2026 &nbsp;&middot;&nbsp; Atlas for Carlos</p>
+</div>
+
+<!-- ============================================================ -->
+<!-- DEVELOPMENT -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">01</span><h2>Development</h2></div>
+  </div>
+
+  <h3>Track These 3 Metrics (Ignore Everything Else)</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Ship Speed</div><div class="val">PRs Merged / Week</div><div class="note">Per dev. Aim for 3-5.</div></div>
+    <div class="m"><div class="label">Quality</div><div class="val">Bugs Escaped</div><div class="note">Bugs found in prod per release</div></div>
+    <div class="m"><div class="label">Responsiveness</div><div class="val">Review Turnaround</div><div class="note">Time to first review. Target: &lt;4h.</div></div>
+  </div>
+
+  <p>That's it. At your scale, these three tell you everything: who's shipping, who's shipping clean, and who's unblocking others. Pull all three automatically from <strong>GitHub</strong> — zero manual entry.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> 3+ PRs/week, &lt;2 bugs/month, reviews &lt;4h &nbsp;&nbsp;
+    <span class="tl y"></span> 1-2 PRs/week or reviews &gt;8h &nbsp;&nbsp;
+    <span class="tl r"></span> 0 PRs/week or 5+ bugs escaped
+  </div>
+
+  <h3>Distribute Work</h3>
+  <div class="two">
+    <div>
+      <h4>What Works</h4>
+      <ul>
+        <li>Weekly sprint with a single prioritized backlog</li>
+        <li>Each dev picks from top of backlog — no assignment needed</li>
+        <li>If blocked &gt;2 hours, escalate immediately</li>
+        <li>Async standup (Slack/written) — skip the meeting</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Minimize Downtime</h4>
+      <ul>
+        <li>Keep backlog 2 weeks ahead — nobody runs out of work</li>
+        <li>One dev per feature (no splitting), pair on complex ones</li>
+        <li>Ship small PRs (&lt;400 lines) — faster review, faster merge</li>
+        <li>"You build it, you fix it" — no handoff to QA</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SALES -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">02</span><h2>Sales</h2></div>
+  </div>
+
+  <h3>Track These 4 Metrics</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Output</div><div class="val">Quota Attainment</div><div class="note">The only metric that pays the bills</div></div>
+    <div class="m"><div class="label">Leading Indicator</div><div class="val">Pipeline Coverage</div><div class="note">3x weighted pipeline = safe</div></div>
+    <div class="m"><div class="label">Activity</div><div class="val">Calls + Demos / Week</div><div class="note">Input that predicts output</div></div>
+  </div>
+
+  <p><strong>Quota attainment</strong> is the scoreboard. <strong>Pipeline coverage</strong> tells you if next month is safe. <strong>Activity</strong> tells you if the rep is actually working. Everything else (win rate, cycle length, etc.) is a diagnostic you look at only when something's wrong.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> &ge;100% quota, 3x+ pipeline &nbsp;&nbsp;
+    <span class="tl y"></span> 70-99% quota or &lt;2x pipeline &nbsp;&nbsp;
+    <span class="tl r"></span> &lt;70% quota. Two consecutive reds = have the conversation.
+  </div>
+
+  <h3>Distribute Work</h3>
+  <div class="two">
+    <div>
+      <h4>What Works</h4>
+      <ul>
+        <li>Assign territories (geo, vertical, or named accounts) — no overlap</li>
+        <li>Round-robin inbound leads by availability</li>
+        <li>Weekly pipeline review: what's closing this week, what's stuck</li>
+        <li>Daily activity targets, not daily check-ins</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Minimize Downtime</h4>
+      <ul>
+        <li>When a deal closes, next lead should already be in pipeline</li>
+        <li>SDR books meetings directly on AE calendar — no lag</li>
+        <li>Set ramp targets: month 1 = 25%, month 2 = 50%, month 3 = 75%</li>
+        <li>If pipeline &lt;2x, shift to outbound immediately</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SALES OPS -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">03</span><h2>Sales Ops</h2></div>
+  </div>
+
+  <h3>Track These 3 Metrics</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Core Job</div><div class="val">Forecast Accuracy</div><div class="note">How close was last month's call? Target: &plusmn;10%</div></div>
+    <div class="m"><div class="label">Enablement</div><div class="val">Rep Selling Time</div><div class="note">% of time reps actually sell (target: 60%+, reality: 35%)</div></div>
+    <div class="m"><div class="label">Speed</div><div class="val">Request Turnaround</div><div class="note">Urgent: 4h. Standard: 24h. Low: 48h.</div></div>
+  </div>
+
+  <p>Sales ops exists to make sales reps faster and the forecast reliable. If the forecast is accurate and reps aren't wasting time on admin, ops is doing its job.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> Forecast within 10%, SLAs met &nbsp;&nbsp;
+    <span class="tl y"></span> Forecast off by 10-20% or SLAs slipping &nbsp;&nbsp;
+    <span class="tl r"></span> Forecast off &gt;20% or chronic SLA misses
+  </div>
+
+  <h3>Distribute Work</h3>
+  <ul>
+    <li><strong>60/40 rule:</strong> 60% planned work (dashboards, automation, process), 40% reserved for ad-hoc requests from sales leadership</li>
+    <li><strong>Ticket queue:</strong> All requests go through one intake (Slack channel or form) — not DMs. Tag priority. First in, first out within priority.</li>
+    <li><strong>2-week sprints:</strong> Plan the 60% at sprint start. Ad-hoc fills the 40% as it comes.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- MARKETING -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">04</span><h2>Marketing</h2></div>
+  </div>
+
+  <h3>Track These 4 Metrics</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Revenue Impact</div><div class="val">Pipeline Generated</div><div class="note">$ in pipeline from marketing efforts</div></div>
+    <div class="m"><div class="label">Efficiency</div><div class="val">Cost Per Lead</div><div class="note">Total spend / leads generated</div></div>
+    <div class="m"><div class="label">Conversion</div><div class="val">MQL &rarr; SQL Rate</div><div class="note">Are we generating quality or garbage?</div></div>
+    <div class="m"><div class="label">Output</div><div class="val">Content Velocity</div><div class="note">Pieces shipped vs. committed. On schedule?</div></div>
+  </div>
+
+  <p><strong>Pipeline generated</strong> is the only metric the CEO should care about. CPL tells you if spend is efficient. MQL&rarr;SQL tells you if quality is there. Content velocity tells you if the team is executing.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> On pipeline target, CPL stable/declining &nbsp;&nbsp;
+    <span class="tl y"></span> Pipeline &lt;80% of target or CPL rising &gt;20% &nbsp;&nbsp;
+    <span class="tl r"></span> Pipeline &lt;50% of target or MQL&rarr;SQL &lt;5%
+  </div>
+
+  <h3>Distribute Work</h3>
+  <div class="two">
+    <div>
+      <h4>What Works</h4>
+      <ul>
+        <li>Monthly campaign calendar — everyone sees the plan</li>
+        <li>2-week sprints for execution (same as dev)</li>
+        <li>Each campaign has one owner, clear deliverables, clear deadline</li>
+        <li>Retro after every major campaign (what worked, what didn't, 15 min max)</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Minimize Downtime</h4>
+      <ul>
+        <li>Keep a "ready to launch" queue of 2-3 campaigns</li>
+        <li>Approval SLAs: 24h for content, 48h for legal/brand review</li>
+        <li>Templates for everything: briefs, emails, landing pages</li>
+        <li>No one waits for approvals — escalate after SLA expires</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- FINANCE -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">05</span><h2>Finance</h2></div>
+  </div>
+
+  <h3>Track These 3 Metrics</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Speed</div><div class="val">Close Time</div><div class="note">Days to close the books. Target: 5 days.</div></div>
+    <div class="m"><div class="label">Accuracy</div><div class="val">Forecast Variance</div><div class="note">Actual vs. budget. Target: &lt;5%.</div></div>
+    <div class="m"><div class="label">Cash Health</div><div class="val">AR Aging</div><div class="note">% of receivables &gt;60 days. Target: &lt;10%.</div></div>
+  </div>
+
+  <p>Finance is about <strong>speed + accuracy</strong>. Close fast, close clean, collect cash. If those three are green, the finance team is doing its job.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> Close &le;5 days, variance &lt;5%, AR &gt;60d under 10% &nbsp;&nbsp;
+    <span class="tl y"></span> Close 6-8 days, variance 5-10% &nbsp;&nbsp;
+    <span class="tl r"></span> Close &gt;8 days, variance &gt;10%, or AR &gt;60d above 20%
+  </div>
+
+  <h3>Distribute Work</h3>
+  <ul>
+    <li><strong>Close calendar is the Bible:</strong> Every task, every owner, every deadline. Published on day 1 of the month. No ambiguity.</li>
+    <li><strong>Pre-close (days -5 to 0):</strong> Reconcile high-volume accounts before the period ends. Don't wait for month-end.</li>
+    <li><strong>FP&A cycles:</strong> Monthly variance analysis (mandatory), quarterly reforecast, annual plan. Keep it simple — one model, one source of truth.</li>
+    <li><strong>Ad-hoc requests:</strong> Business units get self-service dashboards for common questions. Only custom analysis goes through the finance queue.</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- LEGAL -->
+<!-- ============================================================ -->
+<div class="dept">
+  <div class="dept-head">
+    <div><span class="num">06</span><h2>Legal</h2></div>
+  </div>
+
+  <h3>Track These 3 Metrics</h3>
+  <div class="metrics">
+    <div class="m"><div class="label">Speed</div><div class="val">Contract Turnaround</div><div class="note">NDA: 1-2 days. Standard: 3-5 days. Complex: 2 weeks.</div></div>
+    <div class="m"><div class="label">Volume</div><div class="val">Open Matters</div><div class="note">Per attorney. Are we overloaded or underutilized?</div></div>
+    <div class="m"><div class="label">Satisfaction</div><div class="val">Internal NPS</div><div class="note">Quarterly 3-question survey from business teams</div></div>
+  </div>
+
+  <p>Legal is a service team. Track how fast they serve (turnaround), how much they can handle (volume), and whether the business is happy with the service (NPS). That's the whole picture.</p>
+
+  <div class="rule">
+    <strong>Traffic Light</strong>
+    <span class="tl g"></span> All SLAs met, NPS &gt;8/10 &nbsp;&nbsp;
+    <span class="tl y"></span> 1-2 SLA misses/month or NPS 6-8 &nbsp;&nbsp;
+    <span class="tl r"></span> Chronic SLA misses or NPS &lt;6
+  </div>
+
+  <h3>Distribute Work</h3>
+  <div class="two">
+    <div>
+      <h4>What Works</h4>
+      <ul>
+        <li>Single intake form — not DMs, not emails, one channel</li>
+        <li>Auto-route: NDAs go to junior, litigation to senior</li>
+        <li>Self-service for standard contracts (templates + playbook)</li>
+        <li>Weekly triage meeting (15 min): what's open, what's stuck, what's urgent</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Minimize Downtime</h4>
+      <ul>
+        <li>Template library kills 60% of routine requests</li>
+        <li>Escalation rule: if no response in SLA, it auto-escalates</li>
+        <li>Batch similar matters (all NDAs on Tuesday, all vendor reviews Thursday)</li>
+        <li>Clear priority tiers: urgent (litigation), important (deals), routine (policies)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- SUMMARY -->
+<!-- ============================================================ -->
+<div class="dept" style="border-top:3px solid #111;padding-top:32px">
+  <div class="dept-head">
+    <div><span class="num">SUMMARY</span><h2>The CEO View</h2></div>
+  </div>
+
+  <p>What you see when you open ORGCOMMAND:</p>
+
+  <table class="st">
+    <thead><tr><th>Department</th><th>North Star Metric</th><th>Leading Indicator</th><th>Traffic Light Rule</th></tr></thead>
+    <tbody>
+      <tr><td><strong>Development</strong></td><td>PRs Merged / Week</td><td>Review Turnaround</td><td class="g">3+/wk</td></tr>
+      <tr><td><strong>Sales</strong></td><td>Quota Attainment</td><td>Pipeline Coverage</td><td class="g">&ge;100%</td></tr>
+      <tr><td><strong>Sales Ops</strong></td><td>Forecast Accuracy</td><td>Request SLA Compliance</td><td class="g">&plusmn;10%</td></tr>
+      <tr><td><strong>Marketing</strong></td><td>Pipeline Generated ($)</td><td>MQL&rarr;SQL Conversion</td><td class="g">On target</td></tr>
+      <tr><td><strong>Finance</strong></td><td>Close Time (days)</td><td>Forecast Variance</td><td class="g">&le;5 days</td></tr>
+      <tr><td><strong>Legal</strong></td><td>Contract Turnaround</td><td>Internal NPS</td><td class="g">Within SLA</td></tr>
+    </tbody>
+  </table>
+
+  <div class="rule">
+    <strong>How Task Distribution Works Across All Departments</strong>
+    Every department follows the same pattern: <strong>(1)</strong> One prioritized queue of work. <strong>(2)</strong> Clear ownership — every task has one name on it. <strong>(3)</strong> Defined SLAs — everyone knows "fast enough." <strong>(4)</strong> Escalation rules — blocked work surfaces automatically, not when someone remembers to mention it. The queue format varies (sprint backlog, deal pipeline, close calendar, intake form) but the principle is identical.
+  </div>
+
+  <div class="rule">
+    <strong>Carlos's Red Rule</strong>
+    Two consecutive reds in any department = mandatory conversation. Three reds = action plan or separation. This applies to every department equally — whether it's a sales rep missing quota, a developer not shipping, or a finance analyst missing close deadlines. One standard, one system.
+  </div>
+</div>
+
+<div class="footer">
+  THE LEAN PLAYBOOK &nbsp;&middot;&nbsp; ORGCOMMAND &nbsp;&middot;&nbsp; Atlas for Carlos &nbsp;&middot;&nbsp; March 4, 2026
+</div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,1494 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - Security Architecture</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f8fa;
+    --border: #e2e5ea;
+    --border-light: #eef0f3;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --yellow: #f59e0b;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #fde68a;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 50px;
+  }
+
+  /* Cover */
+  .cover {
+    text-align: center;
+    padding: 50px 0 36px;
+    border-bottom: 3px solid var(--text-primary);
+    margin-bottom: 40px;
+  }
+
+  .cover .shield {
+    width: 72px; height: 72px; margin: 0 auto 16px;
+    background: var(--text-primary); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .cover .shield svg { width: 36px; height: 36px; color: #fff; }
+
+  .cover h1 {
+    font-size: 36px; font-weight: 800; letter-spacing: 4px; margin-bottom: 4px;
+  }
+
+  .cover .sub { font-size: 16px; color: var(--text-secondary); letter-spacing: 1px; margin-bottom: 20px; }
+
+  .cover .meta { font-size: 13px; color: var(--text-muted); }
+  .cover .meta strong { color: var(--text-secondary); }
+
+  .conf-badge {
+    display: inline-block; background: var(--red); color: #fff;
+    font-size: 11px; letter-spacing: 2px; padding: 5px 16px;
+    border-radius: 2px; margin-top: 16px; text-transform: uppercase; font-weight: 700;
+  }
+
+  /* TOC */
+  .toc {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 44px;
+  }
+
+  .toc h2 {
+    font-size: 12px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 14px;
+  }
+
+  .toc ol { list-style: none; counter-reset: toc; }
+
+  .toc li {
+    counter-increment: toc; padding: 5px 0;
+    border-bottom: 1px solid var(--border-light); font-size: 14px;
+  }
+
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before { content: counter(toc, decimal-leading-zero) "."; font-weight: 700; margin-right: 10px; font-size: 13px; }
+  .toc li a { color: var(--text-primary); text-decoration: none; }
+  .toc li a:hover { text-decoration: underline; }
+
+  /* Sections */
+  .section { margin-bottom: 48px; }
+
+  .section-num {
+    font-size: 12px; letter-spacing: 3px; text-transform: uppercase;
+    color: var(--text-muted); margin-bottom: 4px;
+  }
+
+  h2.section-title {
+    font-size: 24px; font-weight: 700; padding-bottom: 10px;
+    border-bottom: 2px solid var(--text-primary); margin-bottom: 20px;
+  }
+
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 15px; font-weight: 600; color: #333; margin: 18px 0 8px; }
+
+  p { margin-bottom: 12px; color: #333; }
+
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { margin-bottom: 5px; color: #333; }
+
+  /* Callouts */
+  .callout {
+    border-left: 4px solid var(--text-primary);
+    background: var(--bg-subtle); padding: 16px 20px;
+    margin: 18px 0; border-radius: 0 var(--radius) var(--radius) 0;
+  }
+
+  .callout.critical { border-left-color: var(--red); background: var(--red-bg); }
+  .callout.safe { border-left-color: var(--green); background: var(--green-bg); }
+  .callout.info { border-left-color: var(--blue); background: var(--blue-bg); }
+  .callout.warn { border-left-color: var(--yellow); background: var(--yellow-bg); }
+
+  .callout-label {
+    font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
+    text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .callout.critical .callout-label { color: var(--red); }
+  .callout.safe .callout-label { color: var(--green); }
+  .callout.info .callout-label { color: var(--blue); }
+  .callout.warn .callout-label { color: var(--yellow); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+
+  thead th {
+    background: var(--text-primary); color: #fff; padding: 9px 14px;
+    text-align: left; font-weight: 600; font-size: 12px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+  }
+
+  tbody td {
+    padding: 10px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top;
+  }
+
+  tbody tr:nth-child(even) { background: var(--bg-subtle); }
+
+  /* Code blocks */
+  .code-block {
+    background: #0f172a; color: #e2e8f0; padding: 18px 22px;
+    border-radius: var(--radius); font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 13px; line-height: 1.6; overflow-x: auto; margin: 14px 0;
+    white-space: pre;
+  }
+
+  .code-block .comment { color: #64748b; }
+  .code-block .keyword { color: #c084fc; }
+  .code-block .string { color: #86efac; }
+  .code-block .value { color: #fbbf24; }
+  .code-block .func { color: #67e8f9; }
+
+  code {
+    background: #f0f2f5; padding: 2px 6px; border-radius: 3px;
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 13px; color: #c0392b;
+  }
+
+  /* Diagrams */
+  .diagram {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 20px;
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 13px; line-height: 1.5; overflow-x: auto;
+    white-space: pre; margin: 16px 0;
+  }
+
+  /* Checklist */
+  .checklist { list-style: none; margin-left: 0; }
+
+  .checklist li {
+    padding: 8px 0; border-bottom: 1px solid var(--border-light);
+    display: flex; align-items: flex-start; gap: 10px;
+  }
+
+  .checklist li:last-child { border-bottom: none; }
+
+  .check-icon {
+    width: 22px; height: 22px; border-radius: 50%; flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; margin-top: 1px;
+  }
+
+  .check-icon.yes { background: var(--green-bg); color: var(--green); }
+  .check-icon.no { background: var(--red-bg); color: var(--red); }
+
+  /* Guarantee box */
+  .guarantee-box {
+    border: 2px solid var(--green); border-radius: var(--radius-lg);
+    padding: 24px 28px; margin: 24px 0; text-align: center;
+  }
+
+  .guarantee-title {
+    font-size: 16px; font-weight: 700; color: var(--green); margin-bottom: 8px;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  .guarantee-text { font-size: 14px; color: var(--text-secondary); max-width: 600px; margin: 0 auto; }
+
+  /* Layer diagram */
+  .layer-stack {
+    display: flex; flex-direction: column; gap: 4px; margin: 16px 0;
+  }
+
+  .layer {
+    padding: 14px 20px; border-radius: var(--radius);
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 14px;
+  }
+
+  .layer-name { font-weight: 600; }
+  .layer-detail { font-size: 12px; color: var(--text-secondary); }
+
+  .layer.l1 { background: #fef2f2; border: 1px solid #fecaca; }
+  .layer.l2 { background: #fffbeb; border: 1px solid #fde68a; }
+  .layer.l3 { background: #eff6ff; border: 1px solid #bfdbfe; }
+  .layer.l4 { background: #ecfdf5; border: 1px solid #a7f3d0; }
+  .layer.l5 { background: #f5f3ff; border: 1px solid #ddd6fe; }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+
+  .footer {
+    text-align: center; padding: 28px 0; border-top: 2px solid var(--text-primary);
+    margin-top: 48px; font-size: 12px; color: var(--text-muted); letter-spacing: 1px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <div class="shield">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  </div>
+  <h1>SECURITY ARCHITECTURE</h1>
+  <div class="sub">ORGCOMMAND &mdash; CEO Master Management System</div>
+  <p class="meta">
+    <strong>Prepared for:</strong> Carlos &nbsp;&middot;&nbsp;
+    <strong>Date:</strong> February 28, 2026 &nbsp;&middot;&nbsp;
+    <strong>Version:</strong> 1.0
+  </p>
+  <div class="conf-badge">Highly Confidential</div>
+</div>
+
+<!-- EXECUTIVE PROMISE -->
+<div class="guarantee-box">
+  <div class="guarantee-title">
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    The Core Security Promise
+  </div>
+  <div class="guarantee-text">
+    Once ORGCOMMAND goes to production, <strong>only you (Carlos) control access to the database</strong>.
+    Atlas, OpenClaw, Claude Code, and any other development resource will have
+    <strong>zero access</strong> to production data. You hold the only keys.
+    The system is architected from day one to make this separation airtight.
+  </div>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#s1">Carlos's Concern &mdash; Directly Addressed</a></li>
+    <li><a href="#s2">Access Isolation Model</a></li>
+    <li><a href="#s3">Database Security</a></li>
+    <li><a href="#s4">Deployment Security</a></li>
+    <li><a href="#s5">Application-Level Security</a></li>
+    <li><a href="#s6">Development Workflow &mdash; Zero Production Access</a></li>
+    <li><a href="#s7">Compliance &amp; Privacy</a></li>
+    <li><a href="#s8">Security Checklist &mdash; Pre-Launch</a></li>
+    <li><a href="#s9">Ongoing Security Operations</a></li>
+  </ol>
+</div>
+
+<!-- ============================================================ -->
+<!-- 01. CARLOS'S CONCERN -->
+<!-- ============================================================ -->
+<div class="section" id="s1">
+  <div class="section-num">Section 01</div>
+  <h2 class="section-title">Carlos's Concern &mdash; Directly Addressed</h2>
+
+  <p>Your question: <em>"How can we ensure that this data isn't accessible even to Atlas/OpenClaw, only to Claude Code during development?"</em></p>
+
+  <p>This is the right question. Here's the direct answer:</p>
+
+  <div class="callout critical">
+    <div class="callout-label">The Hard Truth</div>
+    <p style="margin-bottom:0">
+      During <strong>development</strong>, Claude Code needs access to a database to build and test features.
+      But that database will contain <strong>only fake/synthetic data</strong>. Your real employee data
+      never touches the development environment. Here's how:
+    </p>
+  </div>
+
+  <h3>Three Separate Environments, Three Separate Databases</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Environment</th>
+        <th>Database Contents</th>
+        <th>Who Has Access</th>
+        <th>Purpose</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Development</strong></td>
+        <td>100% synthetic/fake data (auto-generated names, emails, salaries)</td>
+        <td>Claude Code, Atlas</td>
+        <td>Build and test features</td>
+      </tr>
+      <tr>
+        <td><strong>Staging</strong></td>
+        <td>Synthetic data (larger volume, stress testing)</td>
+        <td>Claude Code, Atlas</td>
+        <td>Pre-production validation</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--green)">Production</strong></td>
+        <td><strong style="color:var(--red)">Real employee data</strong></td>
+        <td><strong style="color:var(--green)">Carlos ONLY</strong></td>
+        <td>Live system with real data</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout safe">
+    <div class="callout-label">Key Guarantee</div>
+    <p style="margin-bottom:0">
+      <strong>Atlas and OpenClaw never see the production database credentials.</strong>
+      Carlos creates the production database himself, sets his own password, and enters
+      the credentials directly into the production environment variables. The developers
+      never receive, see, or handle these credentials. The code deploys. The credentials
+      are Carlos's alone.
+    </p>
+  </div>
+
+  <h3>How This Works in Practice</h3>
+
+  <div class="diagram">
+DEVELOPMENT (Claude Code + Atlas have access)
+  +-- Database: dev-orgcommand
+  +-- Data: 200 fake people (John Doe, Jane Smith, etc.)
+  +-- Salaries: Random numbers ($3K-$20K)
+  +-- Passwords: test/test
+  +-- Location: local machine or dev server
+
+STAGING (Claude Code + Atlas have access)
+  +-- Database: staging-orgcommand
+  +-- Data: 500 fake people (stress test volume)
+  +-- Salaries: Random numbers
+  +-- Location: staging server (Railway free tier or similar)
+
+PRODUCTION (Carlos ONLY)                                    <-- THE WALL
+  +-- Database: prod-orgcommand
+  +-- Data: REAL employees, REAL salaries, REAL reviews
+  +-- Credentials: Carlos creates these himself
+  +-- Location: Railway private network (or Carlos's VPS)
+  +-- Access: Carlos's login only
+  +-- No SSH access for developers
+  +-- No database credentials shared with anyone</div>
+
+  <h3>The Handoff Moment</h3>
+  <p>
+    When the application code is ready for production deployment, here's exactly what happens:
+  </p>
+  <ol>
+    <li><strong>Code is pushed to a GitHub repository</strong> (Carlos owns this repo)</li>
+    <li><strong>Carlos creates a Railway project</strong> (or provisions a VPS) using his own account</li>
+    <li><strong>Carlos creates the production PostgreSQL database</strong> using Railway's dashboard (or installs it on his VPS)</li>
+    <li><strong>Carlos enters environment variables himself</strong> &mdash; database URL, JWT secret, email API key &mdash; directly in Railway's dashboard. These values are never in the code, never in chat, never shared.</li>
+    <li><strong>Carlos deploys the code</strong> from GitHub to Railway with one click</li>
+    <li><strong>Carlos uploads his real CSV</strong> through the ORGCOMMAND web interface</li>
+    <li><strong>Done.</strong> The developers never had access to production credentials at any point.</li>
+  </ol>
+
+  <div class="callout info">
+    <div class="callout-label">About Claude Code Specifically</div>
+    <p style="margin-bottom:0">
+      Claude Code is an AI assistant that runs locally in your terminal. It doesn't have persistent
+      memory between sessions, doesn't phone home with your data, and doesn't store database
+      credentials after a session ends. During development, it only interacts with the synthetic
+      dev database. It has no mechanism to reach a production database it was never given credentials for.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 02. ACCESS ISOLATION -->
+<!-- ============================================================ -->
+<div class="section" id="s2">
+  <div class="section-num">Section 02</div>
+  <h2 class="section-title">Access Isolation Model</h2>
+
+  <h3>Access Matrix</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Resource</th>
+        <th>Carlos (CEO)</th>
+        <th>Atlas / OpenClaw</th>
+        <th>Claude Code</th>
+        <th>Managers</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Source code</strong> (GitHub)</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+      <tr>
+        <td><strong>Dev database</strong> (fake data)</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+      <tr>
+        <td><strong>Production database</strong></td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+      <tr>
+        <td><strong>Production env vars</strong> (secrets)</td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+      <tr>
+        <td><strong>Railway/VPS dashboard</strong></td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+      <tr>
+        <td><strong>Production app</strong> (web UI)</td>
+        <td style="color:var(--green); font-weight:600">CEO role</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--yellow);">Manager role (limited)</td>
+      </tr>
+      <tr>
+        <td><strong>Database backups</strong></td>
+        <td style="color:var(--green); font-weight:600">Full access</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red); font-weight:700">NO ACCESS</td>
+        <td style="color:var(--red);">None</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Why This Isolation Is Airtight</h3>
+
+  <div class="layer-stack">
+    <div class="layer l1">
+      <span class="layer-name">Layer 1: Credential Separation</span>
+      <span class="layer-detail">Production credentials are never in source code, never in chat, never shared</span>
+    </div>
+    <div class="layer l2">
+      <span class="layer-name">Layer 2: Infrastructure Ownership</span>
+      <span class="layer-detail">Carlos owns the Railway/VPS account &mdash; no shared login</span>
+    </div>
+    <div class="layer l3">
+      <span class="layer-name">Layer 3: Network Isolation</span>
+      <span class="layer-detail">Production database is on a private network, no public endpoint</span>
+    </div>
+    <div class="layer l4">
+      <span class="layer-name">Layer 4: Application Auth</span>
+      <span class="layer-detail">Even with the app URL, access requires login with Carlos's credentials</span>
+    </div>
+    <div class="layer l5">
+      <span class="layer-name">Layer 5: Audit Trail</span>
+      <span class="layer-detail">Every data access is logged &mdash; who viewed what, when</span>
+    </div>
+  </div>
+
+  <div class="callout safe">
+    <div class="callout-label">The Analogy</div>
+    <p style="margin-bottom:0">
+      Think of it like hiring a contractor to build a house. They build the house, hand you the keys,
+      and leave. They designed the locks, but they don't have copies of your keys. You change the
+      locks on move-in day (set your own production credentials), and they can't get in.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 03. DATABASE SECURITY -->
+<!-- ============================================================ -->
+<div class="section" id="s3">
+  <div class="section-num">Section 03</div>
+  <h2 class="section-title">Database Security</h2>
+
+  <h3>Encryption at Rest</h3>
+  <p>All data stored on disk is encrypted, meaning even if someone stole the physical hard drive, they couldn't read the data.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Deployment Option</th>
+        <th>Encryption at Rest</th>
+        <th>How It Works</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Railway</strong> (recommended)</td>
+        <td style="color:var(--green); font-weight:600">Enabled by default</td>
+        <td>Railway runs PostgreSQL on encrypted volumes (AES-256). Zero configuration needed. All data, indexes, and WAL files are encrypted on disk.</td>
+      </tr>
+      <tr>
+        <td><strong>VPS (self-hosted)</strong></td>
+        <td style="color:var(--yellow);">Manual setup</td>
+        <td>Enable LUKS full-disk encryption on the VPS, or use PostgreSQL's <code>pgcrypto</code> extension for column-level encryption of sensitive fields.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h4>Application-Level Encryption (Extra Layer)</h4>
+  <p>
+    Beyond database-level encryption, we encrypt the most sensitive columns at the application level
+    before they're written to the database. This means even a database administrator (if one ever existed)
+    couldn't read the values without the application's encryption key.
+  </p>
+
+  <div class="code-block"><span class="comment">// Fields encrypted at the application layer before database storage</span>
+<span class="comment">// Uses AES-256-GCM with a key derived from an environment variable</span>
+
+<span class="keyword">Encrypted fields:</span>
+  persons.monthly_cost_usd     <span class="comment">// Salary data</span>
+  persons.notes                <span class="comment">// Private performance notes</span>
+  performance_alerts.detail    <span class="comment">// Termination recommendations</span>
+  communications.body          <span class="comment">// Manager/CEO messages</span>
+  audit_log.detail             <span class="comment">// Detailed action data</span>
+
+<span class="keyword">NOT encrypted</span> <span class="comment">(needed for queries/filtering):</span>
+  persons.first_name           <span class="comment">// Needed for search</span>
+  persons.last_name            <span class="comment">// Needed for search</span>
+  persons.email                <span class="comment">// Primary key for matching</span>
+  persons.company              <span class="comment">// Needed for filtering</span>
+  kpi_entries.status           <span class="comment">// Needed for traffic-light queries</span></div>
+
+  <div class="callout info">
+    <div class="callout-label">How Application-Level Encryption Works</div>
+    <p style="margin-bottom:0">
+      The encryption key (<code>ENCRYPTION_KEY</code>) is stored as an environment variable that only Carlos
+      sets in production. The code uses this key to encrypt data before writing to PostgreSQL and decrypt
+      when reading. Without this key, the encrypted columns are unreadable gibberish &mdash; even with
+      full database access.
+    </p>
+  </div>
+
+  <h3>Encryption in Transit</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Connection</th>
+        <th>Encryption</th>
+        <th>Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Browser &rarr; App</td>
+        <td>TLS 1.3 (HTTPS)</td>
+        <td>Railway provides automatic SSL certificates. VPS: Let's Encrypt + nginx.</td>
+      </tr>
+      <tr>
+        <td>App &rarr; Database</td>
+        <td>TLS/SSL</td>
+        <td>PostgreSQL connection string includes <code>?sslmode=require</code>. Railway enforces this by default.</td>
+      </tr>
+      <tr>
+        <td>App &rarr; External APIs</td>
+        <td>TLS 1.2+</td>
+        <td>All API calls (Zoho, Pipedrive, GitHub, Jira) use HTTPS. No HTTP fallback.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="code-block"><span class="comment">// PostgreSQL connection string (production)</span>
+<span class="comment">// Carlos sets this in Railway's environment variables dashboard</span>
+
+DATABASE_URL=<span class="string">"postgresql://orgcommand:&lt;CARLOS_SETS_THIS&gt;@&lt;PRIVATE_HOST&gt;:5432/orgcommand_prod?sslmode=require"</span>
+
+<span class="comment">// The password is generated by Carlos or Railway</span>
+<span class="comment">// It is NEVER shared with developers</span>
+<span class="comment">// It is NEVER committed to source code</span></div>
+
+  <h3>Database Access Controls</h3>
+
+  <div class="code-block"><span class="comment">-- PostgreSQL role configuration (applied during production setup by Carlos)</span>
+
+<span class="comment">-- 1. Application role: can read/write app tables only</span>
+<span class="keyword">CREATE ROLE</span> orgcommand_app <span class="keyword">WITH</span> LOGIN PASSWORD <span class="string">'&lt;GENERATED&gt;'</span>;
+<span class="keyword">GRANT</span> SELECT, INSERT, UPDATE, DELETE <span class="keyword">ON ALL TABLES IN SCHEMA</span> public <span class="keyword">TO</span> orgcommand_app;
+<span class="keyword">REVOKE</span> DROP, TRUNCATE <span class="keyword">ON ALL TABLES IN SCHEMA</span> public <span class="keyword">FROM</span> orgcommand_app;
+
+<span class="comment">-- 2. No superuser access for the app &mdash; can't drop tables, modify roles, etc.</span>
+<span class="comment">-- 3. No public access &mdash; database is on private network only</span>
+<span class="comment">-- 4. No remote connections except from the application server</span></div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 04. DEPLOYMENT SECURITY -->
+<!-- ============================================================ -->
+<div class="section" id="s4">
+  <div class="section-num">Section 04</div>
+  <h2 class="section-title">Deployment Security</h2>
+
+  <h3>Railway Deployment (Recommended)</h3>
+
+  <div class="diagram">
+INTERNET
+    |
+    | HTTPS (TLS 1.3)
+    v
++-------------------+
+| Railway Edge      |  &lt;-- Automatic SSL certificate
+| (Public Endpoint) |  &lt;-- DDoS protection
++-------------------+
+    |
+    | Internal network (encrypted)
+    v
++-------------------+
+| Next.js App       |  &lt;-- Application container
+| (Private Service) |  &lt;-- No direct public access to app internals
++-------------------+
+    |
+    | Private networking (never exposed to internet)
+    v
++-------------------+
+| PostgreSQL        |  &lt;-- NO PUBLIC ENDPOINT
+| (Private DB)      |  &lt;-- Only reachable from app container
++-------------------+  &lt;-- Encrypted at rest (AES-256)
+                       &lt;-- Credentials known ONLY to Carlos</div>
+
+  <h4>Railway Security Features Used</h4>
+  <ul>
+    <li><strong>Private Networking</strong> &mdash; Database has no public hostname. It's only reachable from within Railway's private network. You cannot connect to it from the internet, a laptop, or any external tool.</li>
+    <li><strong>No Public Database Endpoint</strong> &mdash; Railway allows disabling the public database URL entirely. We do this for production. The database is only reachable by the application.</li>
+    <li><strong>Automatic SSL</strong> &mdash; HTTPS is automatic and enforced. HTTP requests redirect to HTTPS.</li>
+    <li><strong>Environment Variables</strong> &mdash; Stored encrypted in Railway's vault. Not visible in logs. Not accessible via API without Railway account login (Carlos's account).</li>
+    <li><strong>Deploy Previews</strong> &mdash; We disable deploy previews for production to prevent accidental exposure of the production environment.</li>
+  </ul>
+
+  <h3>VPS Deployment (Alternative)</h3>
+  <p>If Carlos prefers a self-hosted VPS instead of Railway:</p>
+
+  <div class="code-block"><span class="comment"># Firewall rules (UFW on Ubuntu)</span>
+
+<span class="comment"># Allow HTTPS only</span>
+<span class="func">ufw allow</span> <span class="value">443/tcp</span>
+
+<span class="comment"># Allow SSH only from Carlos's IP (for server management)</span>
+<span class="func">ufw allow from</span> <span class="value">&lt;CARLOS_IP&gt;</span> to any port <span class="value">22</span>
+
+<span class="comment"># BLOCK all PostgreSQL external access</span>
+<span class="func">ufw deny</span> <span class="value">5432/tcp</span>
+
+<span class="comment"># PostgreSQL listens on localhost ONLY</span>
+<span class="comment"># In postgresql.conf:</span>
+listen_addresses = <span class="string">'127.0.0.1'</span>  <span class="comment"># NOT '*' or '0.0.0.0'</span>
+
+<span class="comment"># SSH key authentication ONLY (no passwords)</span>
+<span class="comment"># In sshd_config:</span>
+PasswordAuthentication <span class="value">no</span>
+PermitRootLogin <span class="value">no</span></div>
+
+  <h3>Environment Variable Security</h3>
+  <p>All secrets are stored as environment variables, never in code:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Variable</th>
+        <th>Contains</th>
+        <th>Set By</th>
+        <th>Visible To Developers?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>DATABASE_URL</code></td>
+        <td>PostgreSQL connection string with password</td>
+        <td>Carlos</td>
+        <td style="color:var(--red); font-weight:600">NO</td>
+      </tr>
+      <tr>
+        <td><code>JWT_SECRET</code></td>
+        <td>256-bit random secret for signing auth tokens</td>
+        <td>Carlos</td>
+        <td style="color:var(--red); font-weight:600">NO</td>
+      </tr>
+      <tr>
+        <td><code>ENCRYPTION_KEY</code></td>
+        <td>AES-256 key for application-level column encryption</td>
+        <td>Carlos</td>
+        <td style="color:var(--red); font-weight:600">NO</td>
+      </tr>
+      <tr>
+        <td><code>SENDGRID_API_KEY</code></td>
+        <td>Email service API key</td>
+        <td>Carlos</td>
+        <td style="color:var(--red); font-weight:600">NO</td>
+      </tr>
+      <tr>
+        <td><code>NEXTAUTH_SECRET</code></td>
+        <td>NextAuth.js session encryption key</td>
+        <td>Carlos</td>
+        <td style="color:var(--red); font-weight:600">NO</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout warn">
+    <div class="callout-label">Critical Rule</div>
+    <p style="margin-bottom:0">
+      <strong>There is a <code>.env.example</code> file in the code</strong> with placeholder values
+      (e.g., <code>DATABASE_URL=postgresql://user:password@localhost/dev</code>). This file
+      shows what variables are needed but contains no real credentials. The real <code>.env</code>
+      file is in <code>.gitignore</code> and is never committed. Carlos creates his own production
+      <code>.env</code> or enters values directly in Railway's dashboard.
+    </p>
+  </div>
+
+  <h3>Database Backup Security</h3>
+  <ul>
+    <li><strong>Automated backups</strong> &mdash; Railway: automatic daily snapshots, encrypted, retained for 7 days. VPS: cron + <code>pg_dump</code> + GPG encryption.</li>
+    <li><strong>Backup encryption</strong> &mdash; All backups are encrypted before storage. Railway handles this automatically. VPS backups use Carlos's GPG key.</li>
+    <li><strong>Backup access</strong> &mdash; Only accessible through Carlos's Railway dashboard or VPS SSH key. Developers have no access.</li>
+    <li><strong>Backup restoration</strong> &mdash; Only Carlos can restore a backup. The app has no self-restore functionality exposed in the UI.</li>
+  </ul>
+
+  <div class="code-block"><span class="comment"># VPS backup script (if self-hosted) &mdash; encrypted backup</span>
+
+<span class="comment"># Dump database</span>
+<span class="func">pg_dump</span> orgcommand_prod > /tmp/backup.sql
+
+<span class="comment"># Encrypt with Carlos's GPG key</span>
+<span class="func">gpg --encrypt --recipient</span> <span class="string">carlos@company.com</span> /tmp/backup.sql
+
+<span class="comment"># Upload to private S3 bucket (Carlos's AWS account)</span>
+<span class="func">aws s3 cp</span> /tmp/backup.sql.gpg s3://orgcommand-backups/$(date +%Y%m%d).sql.gpg
+
+<span class="comment"># Clean up unencrypted file</span>
+<span class="func">shred -u</span> /tmp/backup.sql</div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 05. APPLICATION-LEVEL SECURITY -->
+<!-- ============================================================ -->
+<div class="section" id="s5">
+  <div class="section-num">Section 05</div>
+  <h2 class="section-title">Application-Level Security</h2>
+
+  <h3>Authentication</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Feature</th>
+        <th>Implementation</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>CEO Login</strong></td>
+        <td>Email + Password + TOTP 2FA</td>
+        <td>Password hashed with bcrypt (cost factor 12). TOTP via authenticator app (Google Authenticator, Authy, etc.)</td>
+      </tr>
+      <tr>
+        <td><strong>Manager Login</strong></td>
+        <td>Magic Link (passwordless)</td>
+        <td>Time-limited link sent to verified email. Expires in 15 minutes. Single-use.</td>
+      </tr>
+      <tr>
+        <td><strong>Session Tokens</strong></td>
+        <td>JWT (signed with HS256)</td>
+        <td>Short-lived access tokens (15 min). Refresh tokens (7 days) with rotation. Stored in httpOnly secure cookies.</td>
+      </tr>
+      <tr>
+        <td><strong>Token Storage</strong></td>
+        <td>httpOnly + Secure + SameSite cookies</td>
+        <td>Tokens are NOT stored in localStorage (prevents XSS theft). SameSite=Strict prevents CSRF.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="code-block"><span class="comment">// JWT configuration</span>
+
+{
+  <span class="string">"algorithm"</span>: <span class="string">"HS256"</span>,
+  <span class="string">"accessTokenExpiry"</span>: <span class="string">"15m"</span>,         <span class="comment">// Short-lived</span>
+  <span class="string">"refreshTokenExpiry"</span>: <span class="string">"7d"</span>,          <span class="comment">// With rotation</span>
+  <span class="string">"issuer"</span>: <span class="string">"orgcommand"</span>,
+  <span class="string">"audience"</span>: <span class="string">"orgcommand-web"</span>,
+  <span class="string">"secret"</span>: <span class="string">"&lt;256-bit random, set by Carlos&gt;"</span>
+}
+
+<span class="comment">// Cookie settings</span>
+
+{
+  <span class="string">"httpOnly"</span>: <span class="value">true</span>,       <span class="comment">// JavaScript can't access the token</span>
+  <span class="string">"secure"</span>: <span class="value">true</span>,         <span class="comment">// HTTPS only</span>
+  <span class="string">"sameSite"</span>: <span class="string">"strict"</span>,   <span class="comment">// No cross-site requests</span>
+  <span class="string">"path"</span>: <span class="string">"/"</span>,
+  <span class="string">"maxAge"</span>: <span class="value">900</span>           <span class="comment">// 15 minutes (access token)</span>
+}</div>
+
+  <h3>Role-Based Access Control (RBAC)</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Permission</th>
+        <th>CEO</th>
+        <th>Admin</th>
+        <th>Manager</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>View all personnel across all companies</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>View own team's personnel</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+      </tr>
+      <tr>
+        <td>View salary/cost data</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>View KPI data (all)</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>View KPI data (own team)</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+      </tr>
+      <tr>
+        <td>Enter KPI values</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003; (own team)</td>
+      </tr>
+      <tr>
+        <td>CSV import</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>View termination recommendations</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>Configure threshold profiles</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>View audit log</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>Manage users / invite managers</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+      <tr>
+        <td>Delete personnel records</td>
+        <td style="color:var(--green)">&#10003;</td>
+        <td style="color:var(--red)">&#10007;</td>
+        <td style="color:var(--red)">&#10007;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Audit Logging</h3>
+  <p>
+    Every action in the system is logged to an immutable audit trail. This answers
+    "who accessed what, when?" at any point in time.
+  </p>
+
+  <div class="code-block"><span class="comment">// Sample audit log entries</span>
+
+{ <span class="string">"ts"</span>: <span class="string">"2026-03-15T09:23:14Z"</span>, <span class="string">"user"</span>: <span class="string">"carlos@acme.com"</span>, <span class="string">"role"</span>: <span class="string">"ceo"</span>,
+  <span class="string">"action"</span>: <span class="string">"VIEW_PERSON"</span>, <span class="string">"target"</span>: <span class="string">"d.morrison@acme.com"</span>,
+  <span class="string">"detail"</span>: <span class="string">"Viewed person detail page including salary"</span> }
+
+{ <span class="string">"ts"</span>: <span class="string">"2026-03-15T09:24:02Z"</span>, <span class="string">"user"</span>: <span class="string">"carlos@acme.com"</span>, <span class="string">"role"</span>: <span class="string">"ceo"</span>,
+  <span class="string">"action"</span>: <span class="string">"EXPORT_CSV"</span>, <span class="string">"target"</span>: <span class="string">"all_personnel"</span>,
+  <span class="string">"detail"</span>: <span class="string">"Exported full roster to CSV (214 records)"</span> }
+
+{ <span class="string">"ts"</span>: <span class="string">"2026-03-15T10:15:30Z"</span>, <span class="string">"user"</span>: <span class="string">"m.stevens@acme.com"</span>, <span class="string">"role"</span>: <span class="string">"manager"</span>,
+  <span class="string">"action"</span>: <span class="string">"ENTER_KPI"</span>, <span class="string">"target"</span>: <span class="string">"j.smith@acme.com"</span>,
+  <span class="string">"detail"</span>: <span class="string">"KPI entry: Deals Closed = 3 for Feb 2026"</span> }
+
+{ <span class="string">"ts"</span>: <span class="string">"2026-03-15T10:16:01Z"</span>, <span class="string">"user"</span>: <span class="string">"m.stevens@acme.com"</span>, <span class="string">"role"</span>: <span class="string">"manager"</span>,
+  <span class="string">"action"</span>: <span class="string">"ACCESS_DENIED"</span>, <span class="string">"target"</span>: <span class="string">"salary_data"</span>,
+  <span class="string">"detail"</span>: <span class="string">"Attempted to access salary data. Permission denied."</span> }</div>
+
+  <p><strong>Logged actions include:</strong></p>
+  <ul>
+    <li>Every login attempt (success and failure)</li>
+    <li>Every page/record viewed</li>
+    <li>Every data modification (create, update, delete)</li>
+    <li>Every CSV import</li>
+    <li>Every export/download</li>
+    <li>Every email sent from the system</li>
+    <li>Every permission denial</li>
+    <li>Every alert acknowledgment or dismissal</li>
+  </ul>
+
+  <h3>Session Security</h3>
+  <ul>
+    <li><strong>Auto-logout after 30 minutes of inactivity</strong> &mdash; Configurable by Carlos</li>
+    <li><strong>Single-session enforcement</strong> &mdash; CEO account can only be logged in from one device at a time. New login invalidates previous session.</li>
+    <li><strong>Login notifications</strong> &mdash; Email sent to Carlos on every CEO login with IP address and device info</li>
+    <li><strong>Failed login lockout</strong> &mdash; 5 failed attempts = 15-minute lockout + email alert to Carlos</li>
+    <li><strong>IP logging</strong> &mdash; All logins record IP address for review</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- 06. DEVELOPMENT WORKFLOW -->
+<!-- ============================================================ -->
+<div class="section" id="s6">
+  <div class="section-num">Section 06</div>
+  <h2 class="section-title">Development Workflow &mdash; Zero Production Access</h2>
+
+  <h3>Synthetic Data Generator</h3>
+  <p>
+    The codebase includes a <code>seed</code> script that generates realistic but completely
+    fake data for development and testing:
+  </p>
+
+  <div class="code-block"><span class="comment">// npm run seed &mdash; generates synthetic dev data</span>
+
+<span class="func">Generated:</span>
+  <span class="value">4</span> companies (Acme Corp, Beta Inc, Gamma Systems, Delta Digital)
+  <span class="value">12</span> teams
+  <span class="value">200</span> fake employees with:
+    - Random first/last names (Faker.js)
+    - Unique fake emails (john.doe.dev@test.orgcommand.fake)
+    - Random roles from a realistic pool
+    - Random salaries ($3,000 - $20,000)
+    - Random start dates (2018-2025)
+    - Random manager assignments
+  <span class="value">36</span> fake contractors with retainers
+  <span class="value">6</span> months of fake KPI history (mix of green/yellow/red)
+  <span class="value">15</span> fake performance alerts
+  <span class="value">50</span> fake communication log entries
+
+<span class="comment">// All data uses *.fake email domains</span>
+<span class="comment">// All names are randomly generated</span>
+<span class="comment">// All salaries are random numbers</span>
+<span class="comment">// ZERO real employee data at any point</span></div>
+
+  <h3>Development vs Production Separation</h3>
+
+  <div class="diagram">
+DEVELOPER MACHINE / CLAUDE CODE SESSION
+  |
+  +-- Source Code (GitHub)
+  |     +-- Application code
+  |     +-- Database migrations (schema only, NO data)
+  |     +-- Seed script (generates fake data)
+  |     +-- .env.example (placeholder values only)
+  |     +-- .gitignore includes: .env, *.pem, *.key, backups/
+  |
+  +-- Dev Database (localhost or Railway dev)
+  |     +-- 200 fake people
+  |     +-- Random salaries
+  |     +-- Fake emails (@test.orgcommand.fake)
+  |
+  +-- CANNOT REACH:
+        +-- Production database (no credentials)
+        +-- Production server (no SSH key)
+        +-- Railway dashboard (no account access)
+        +-- Real employee CSV files (never shared)
+
+================================================================
+
+CARLOS'S PRODUCTION (Carlos's hands only)
+  |
+  +-- Railway Dashboard (Carlos's account)
+  |     +-- Production database (private network)
+  |     +-- Environment variables (Carlos sets these)
+  |     +-- Deploy from GitHub (one-click)
+  |
+  +-- Production Database
+  |     +-- Real 200+ employees
+  |     +-- Real salaries
+  |     +-- Real performance data
+  |     +-- Encrypted at rest + application-level encryption
+  |
+  +-- Carlos's Computer
+        +-- Real CSV file (never uploaded to dev/staging)
+        +-- Uploaded ONLY through production web UI</div>
+
+  <h3>The Handoff Process (Step by Step)</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width:5%">#</th>
+        <th style="width:25%">Step</th>
+        <th style="width:15%">Done By</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>1</td>
+        <td>Development complete</td>
+        <td>Atlas / Claude Code</td>
+        <td>Code is finished and tested against synthetic data. All features working.</td>
+      </tr>
+      <tr>
+        <td>2</td>
+        <td>Code pushed to GitHub</td>
+        <td>Atlas</td>
+        <td>Final code in the <code>main</code> branch. Carlos can review every line.</td>
+      </tr>
+      <tr>
+        <td>3</td>
+        <td>Carlos creates Railway account</td>
+        <td><strong>Carlos</strong></td>
+        <td>Signs up at railway.app with his email. His account, his payment method, his ownership.</td>
+      </tr>
+      <tr>
+        <td>4</td>
+        <td>Carlos creates production database</td>
+        <td><strong>Carlos</strong></td>
+        <td>One click in Railway dashboard. Railway generates a private database URL. Carlos copies it.</td>
+      </tr>
+      <tr>
+        <td>5</td>
+        <td>Carlos generates secrets</td>
+        <td><strong>Carlos</strong></td>
+        <td>
+          We provide a one-liner script Carlos runs locally:<br>
+          <code style="font-size:12px">openssl rand -base64 32</code><br>
+          He runs it 3 times to generate JWT_SECRET, ENCRYPTION_KEY, NEXTAUTH_SECRET.
+        </td>
+      </tr>
+      <tr>
+        <td>6</td>
+        <td>Carlos sets environment variables</td>
+        <td><strong>Carlos</strong></td>
+        <td>Enters DATABASE_URL, JWT_SECRET, ENCRYPTION_KEY, etc. into Railway's dashboard. These are encrypted and never visible again (even in Railway's UI, they show as dots).</td>
+      </tr>
+      <tr>
+        <td>7</td>
+        <td>Carlos connects GitHub repo</td>
+        <td><strong>Carlos</strong></td>
+        <td>Links the GitHub repo to Railway. Railway auto-deploys on every push to main.</td>
+      </tr>
+      <tr>
+        <td>8</td>
+        <td>Carlos runs database migrations</td>
+        <td><strong>Carlos</strong></td>
+        <td>One command in Railway's terminal: <code>npx prisma migrate deploy</code>. Creates empty tables (no data).</td>
+      </tr>
+      <tr>
+        <td>9</td>
+        <td>Carlos creates his CEO account</td>
+        <td><strong>Carlos</strong></td>
+        <td>First-run setup screen: enter email, password, set up 2FA. This becomes the only CEO account.</td>
+      </tr>
+      <tr>
+        <td>10</td>
+        <td>Carlos uploads real CSV</td>
+        <td><strong>Carlos</strong></td>
+        <td>Through the ORGCOMMAND web UI (the CSV import screen). Real data enters production for the first time.</td>
+      </tr>
+      <tr>
+        <td>11</td>
+        <td><strong>Handoff complete</strong></td>
+        <td><strong>Carlos</strong></td>
+        <td>The system is live. Developers have zero access to production data, production credentials, or the production server. Carlos owns everything.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="callout safe">
+    <div class="callout-label">Post-Handoff Development</div>
+    <p style="margin-bottom:0">
+      After handoff, if Carlos requests new features or bug fixes, we work on the code using
+      the dev environment with synthetic data. We push code changes to GitHub. Carlos reviews
+      the code changes (if desired), and Railway auto-deploys the new code to production. We
+      never need or request production database access.
+    </p>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- 07. COMPLIANCE -->
+<!-- ============================================================ -->
+<div class="section" id="s7">
+  <div class="section-num">Section 07</div>
+  <h2 class="section-title">Compliance &amp; Privacy</h2>
+
+  <p>
+    ORGCOMMAND stores personal data for employees across US, UK, and Singapore. While you're not
+    legally required to comply with all regulations in a private internal tool, building to these
+    standards is best practice and protects you if your data handling is ever questioned.
+  </p>
+
+  <h3>GDPR / UK GDPR Compliance Patterns</h3>
+  <p>Applicable to your UK employees at Beta Inc:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>GDPR Principle</th>
+        <th>ORGCOMMAND Implementation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Lawful Basis</strong></td>
+        <td>Legitimate interest (employer managing workforce performance). Documented in a brief privacy notice for employees.</td>
+      </tr>
+      <tr>
+        <td><strong>Data Minimization</strong></td>
+        <td>Only collect what's needed: name, email, role, cost, KPIs. No unnecessary personal data (no date of birth, no home address, no national ID).</td>
+      </tr>
+      <tr>
+        <td><strong>Purpose Limitation</strong></td>
+        <td>Data is used exclusively for workforce management and performance evaluation. No secondary uses.</td>
+      </tr>
+      <tr>
+        <td><strong>Storage Limitation</strong></td>
+        <td>Configurable retention policy. Terminated employee data can be auto-archived after X months.</td>
+      </tr>
+      <tr>
+        <td><strong>Security</strong></td>
+        <td>Encryption at rest, in transit, application-level encryption, access controls, audit logging &mdash; all detailed in this document.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Right to Access / Right to Deletion</h3>
+
+  <h4>Data Subject Access Request (DSAR)</h4>
+  <p>If an employee requests a copy of their data (their legal right under GDPR):</p>
+  <ul>
+    <li>ORGCOMMAND includes an <strong>Export Person Data</strong> button on each person's detail page</li>
+    <li>Exports all stored data for that person as a JSON or CSV file</li>
+    <li>Includes: personal info, KPI history, performance notes, communications, alert history</li>
+    <li>CEO-only function &mdash; only Carlos can trigger this export</li>
+  </ul>
+
+  <h4>Right to Erasure ("Right to be Forgotten")</h4>
+  <p>If an employee or ex-employee requests deletion:</p>
+  <ul>
+    <li><strong>Delete Person</strong> function permanently removes all personal data</li>
+    <li>Anonymizes audit log entries (replaces name/email with "DELETED_USER_[hash]")</li>
+    <li>Preserves aggregate statistics (team performance averages) without identifying individuals</li>
+    <li>CEO-only function with confirmation prompt</li>
+    <li>Logged in audit trail: "Person data deleted per DSAR/GDPR request"</li>
+  </ul>
+
+  <h3>Data Retention Policy</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Data Type</th>
+        <th>Default Retention</th>
+        <th>After Retention</th>
+        <th>Configurable?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Active employee records</td>
+        <td>Indefinite (while employed)</td>
+        <td>N/A</td>
+        <td>N/A</td>
+      </tr>
+      <tr>
+        <td>Terminated employee records</td>
+        <td>12 months post-termination</td>
+        <td>Auto-archived (anonymized)</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>KPI history</td>
+        <td>24 months</td>
+        <td>Aggregated (individual entries deleted)</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>Audit logs</td>
+        <td>36 months</td>
+        <td>Archived to encrypted cold storage</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td>Communication logs</td>
+        <td>12 months</td>
+        <td>Deleted</td>
+        <td>Yes</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Singapore PDPA Compliance</h3>
+  <p>For Gamma Systems employees in Singapore:</p>
+  <ul>
+    <li>Similar principles to GDPR: consent, purpose limitation, access, correction</li>
+    <li>ORGCOMMAND covers these through the same mechanisms: export, delete, minimal data collection</li>
+    <li>No cross-border data transfer concerns if hosted in a US/EU data center (standard contractual clauses apply under PDPA Section 26)</li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- 08. PRE-LAUNCH CHECKLIST -->
+<!-- ============================================================ -->
+<div class="section" id="s8">
+  <div class="section-num">Section 08</div>
+  <h2 class="section-title">Security Checklist &mdash; Pre-Launch</h2>
+
+  <p>Before going live with real data, every item on this checklist must be verified:</p>
+
+  <h3>Infrastructure</h3>
+  <ul class="checklist">
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Database has no public endpoint</strong> &mdash; Only reachable from the application via private networking</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>HTTPS enforced</strong> &mdash; HTTP redirects to HTTPS. HSTS header enabled.</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Environment variables set by Carlos</strong> &mdash; No credentials in source code, no credentials shared with developers</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Automated backups enabled</strong> &mdash; Daily encrypted backups with 7-day retention</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Deploy previews disabled</strong> &mdash; No accidental exposure of production environment</div>
+    </li>
+  </ul>
+
+  <h3>Application</h3>
+  <ul class="checklist">
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>2FA enabled for CEO account</strong> &mdash; TOTP authenticator configured</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>RBAC enforced</strong> &mdash; Managers cannot view salary data or termination recommendations</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Audit logging active</strong> &mdash; All actions recorded with user, timestamp, and detail</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Session timeouts configured</strong> &mdash; 30 min inactivity auto-logout</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Failed login protection</strong> &mdash; Lockout after 5 failed attempts</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Application-level encryption active</strong> &mdash; Salary, notes, and alerts encrypted in database</div>
+    </li>
+  </ul>
+
+  <h3>Code Security</h3>
+  <ul class="checklist">
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>No secrets in source code</strong> &mdash; Verified with git-secrets or truffleHog scan</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>SQL injection prevention</strong> &mdash; Prisma ORM parameterizes all queries (no raw SQL)</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>XSS prevention</strong> &mdash; React auto-escapes output. No <code>dangerouslySetInnerHTML</code> usage.</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>CSRF prevention</strong> &mdash; SameSite=Strict cookies + CSRF tokens on mutations</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Dependency audit clean</strong> &mdash; <code>npm audit</code> shows no high/critical vulnerabilities</div>
+    </li>
+    <li>
+      <div class="check-icon yes">&#10003;</div>
+      <div><strong>Security headers configured</strong> &mdash; CSP, X-Frame-Options, X-Content-Type-Options, Referrer-Policy</div>
+    </li>
+  </ul>
+</div>
+
+<!-- ============================================================ -->
+<!-- 09. ONGOING SECURITY -->
+<!-- ============================================================ -->
+<div class="section" id="s9">
+  <div class="section-num">Section 09</div>
+  <h2 class="section-title">Ongoing Security Operations</h2>
+
+  <h3>Regular Maintenance</h3>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Cadence</th>
+        <th>Action</th>
+        <th>Done By</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Daily</td>
+        <td>Automated database backup runs (verify it's working)</td>
+        <td>System (automated)</td>
+      </tr>
+      <tr>
+        <td>Weekly</td>
+        <td>Review audit log for unusual access patterns</td>
+        <td>Carlos</td>
+      </tr>
+      <tr>
+        <td>Monthly</td>
+        <td>Run <code>npm audit</code> on dependencies, update if needed</td>
+        <td>Carlos / Developer</td>
+      </tr>
+      <tr>
+        <td>Quarterly</td>
+        <td>Rotate JWT_SECRET and ENCRYPTION_KEY (re-encrypt data)</td>
+        <td>Carlos</td>
+      </tr>
+      <tr>
+        <td>Quarterly</td>
+        <td>Review manager access list (remove departed managers)</td>
+        <td>Carlos</td>
+      </tr>
+      <tr>
+        <td>Annually</td>
+        <td>Change database password</td>
+        <td>Carlos</td>
+      </tr>
+      <tr>
+        <td>Annually</td>
+        <td>Review data retention &mdash; archive/delete old records per policy</td>
+        <td>Carlos</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h3>Incident Response</h3>
+  <p>If Carlos suspects unauthorized access:</p>
+  <ol>
+    <li><strong>Immediately:</strong> Change database password in Railway dashboard</li>
+    <li><strong>Immediately:</strong> Rotate JWT_SECRET (invalidates all active sessions)</li>
+    <li><strong>Within 1 hour:</strong> Review audit log for unauthorized access</li>
+    <li><strong>Within 24 hours:</strong> Change all environment variable secrets</li>
+    <li><strong>If confirmed breach:</strong> Enable Railway's "private networking only" mode (disables public access entirely while investigating)</li>
+  </ol>
+
+  <div class="callout info">
+    <div class="callout-label">Nuclear Option</div>
+    <p style="margin-bottom:0">
+      Railway allows you to instantly disable public access to the entire application with one
+      toggle. If something feels wrong, flip that switch first, investigate second. Your data
+      stays safe behind the private network while you figure out what happened.
+    </p>
+  </div>
+</div>
+
+<hr>
+
+<!-- FINAL SUMMARY -->
+<div class="section">
+  <h3>Summary of Security Guarantees</h3>
+
+  <div class="layer-stack">
+    <div class="layer l4" style="padding:18px 22px;">
+      <div>
+        <div class="layer-name" style="color:var(--green); font-size:15px;">Carlos has exclusive control of production data</div>
+        <div class="layer-detail">Credentials, database, backups, server access &mdash; all owned by Carlos alone</div>
+      </div>
+    </div>
+    <div class="layer l3" style="padding:18px 22px;">
+      <div>
+        <div class="layer-name" style="color:var(--blue); font-size:15px;">Developers never see real employee data</div>
+        <div class="layer-detail">100% synthetic data in dev/staging. Real CSV uploaded by Carlos only in production.</div>
+      </div>
+    </div>
+    <div class="layer l2" style="padding:18px 22px;">
+      <div>
+        <div class="layer-name" style="color:#b45309; font-size:15px;">Data encrypted at rest, in transit, and at the application level</div>
+        <div class="layer-detail">Salaries, notes, and termination data encrypted with Carlos's key even inside the database</div>
+      </div>
+    </div>
+    <div class="layer l1" style="padding:18px 22px;">
+      <div>
+        <div class="layer-name" style="color:var(--red); font-size:15px;">Full audit trail of every action</div>
+        <div class="layer-detail">Who viewed what, when, from where. Immutable log. CEO-only access.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="guarantee-box" style="margin-top:32px;">
+    <div class="guarantee-title">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10b981" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      The Bottom Line for Carlos
+    </div>
+    <div class="guarantee-text">
+      We build the house. We hand you the keys. We don't keep copies.<br>
+      Your employee data is <strong>yours alone</strong> &mdash; encrypted, access-controlled, audited,
+      and completely inaccessible to us the moment you deploy to production.
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  ORGCOMMAND SECURITY ARCHITECTURE v1.0 &nbsp;&middot;&nbsp; HIGHLY CONFIDENTIAL &nbsp;&middot;&nbsp; February 2026
+  <br>
+  Prepared by Atlas &nbsp;&middot;&nbsp; For Carlos, CEO
+</div>
+
+</div>
+</body>
+</html>

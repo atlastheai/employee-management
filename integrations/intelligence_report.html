@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sales Intelligence Report - OrgCommand</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 40px; max-width: 1400px; margin: 0 auto; }
+  
+  .header { text-align: center; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 3px solid #111; }
+  .header h1 { font-size: 32px; margin-bottom: 8px; }
+  .header .subtitle { font-size: 16px; color: #666; }
+  
+  .insight-banner { background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%); color: white; padding: 24px 32px; border-radius: 12px; margin-bottom: 40px; }
+  .insight-banner h2 { font-size: 20px; margin-bottom: 12px; }
+  .insight-banner p { font-size: 16px; line-height: 1.6; }
+  .insight-banner strong { background: rgba(255,255,255,0.2); padding: 2px 6px; border-radius: 3px; }
+  
+  .section { margin-bottom: 40px; }
+  .section-title { font-size: 24px; margin-bottom: 20px; color: #111; display: flex; align-items: center; gap: 12px; }
+  .section-title .emoji { font-size: 28px; }
+  
+  table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+  thead { background: #f3f4f6; }
+  th { padding: 14px 16px; text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; border-bottom: 2px solid #e5e7eb; }
+  td { padding: 12px 16px; border-bottom: 1px solid #f3f4f6; font-size: 14px; }
+  tbody tr:hover { background: #f9fafb; }
+  
+  .rank { font-weight: 700; color: #9ca3af; width: 40px; }
+  .name { font-weight: 600; }
+  .number { text-align: right; font-family: monospace; }
+  .currency { text-align: right; font-weight: 600; }
+  
+  .flag { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+  .flag.top { background: #d1fae5; color: #065f46; }
+  .flag.efficient { background: #dbeafe; color: #1e40af; }
+  .flag.average { background: #fef3c7; color: #92400e; }
+  .flag.poor { background: #fee2e2; color: #991b1b; }
+  
+  .highlight { background: #fef3c7; }
+  .danger { background: #fee2e2; }
+  
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 40px; }
+  .stat-card { background: #f9fafb; border: 2px solid #e5e7eb; border-radius: 8px; padding: 20px; text-align: center; }
+  .stat-card .value { font-size: 36px; font-weight: 700; color: #111; margin-bottom: 8px; }
+  .stat-card .label { font-size: 14px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+  .stat-card.red .value { color: #dc2626; }
+  .stat-card.green .value { color: #059669; }
+  .stat-card.blue .value { color: #2563eb; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>🧠 Sales Intelligence Report</h1>
+  <div class="subtitle">Full Analysis: Calls + Activity + Revenue | Generated March 7, 2026</div>
+</div>
+
+<div class="insight-banner">
+  <h2>🚨 CRITICAL FINDINGS</h2>
+  <p>
+    Your <strong>highest call volume reps are your worst performers</strong>. robert.ca made <strong>4,200 calls over 2.5 months</strong> and closed $35K. 
+    Morgan.Q made <strong>107 calls</strong> and closed <strong>$3.1M</strong>. That's <strong>40x more calls for 1% of the revenue</strong>.
+    <br><br>
+    <strong>Timeline Update:</strong> robert.ca and jonah.go started Dec 22, 2025 (2.5 months ago). They're <strong>past the 90-day ramp period</strong> and still underperforming with 20-30% ghost calls. No improvement trajectory visible.
+    <br><br>
+    <strong>Recommendation:</strong> Immediately terminate robert.ca and jonah.go (past ramp, no improvement). Performance plan for john.t (higher volume, slightly better conversion).
+  </p>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card green">
+    <div class="value">$28,598</div>
+    <div class="label">Best Revenue/Call</div>
+  </div>
+  <div class="stat-card red">
+    <div class="value">$7</div>
+    <div class="label">Worst Revenue/Call</div>
+  </div>
+  <div class="stat-card blue">
+    <div class="value">13</div>
+    <div class="label">Reps with Full Data</div>
+  </div>
+  <div class="stat-card red">
+    <div class="value">2.5</div>
+    <div class="label">Months Past Ramp</div>
+  </div>
+</div>
+
+<div class="stats-grid" style="margin-top: -20px;">
+  <div class="stat-card">
+    <div class="value">4,097x</div>
+    <div class="label">Performance Gap</div>
+  </div>
+  <div class="stat-card red">
+    <div class="value">20-30%</div>
+    <div class="label">Ghost Call Rate (Bottom 2)</div>
+  </div>
+  <div class="stat-card blue">
+    <div class="value">Dec 22</div>
+    <div class="label">robert.ca/jonah.go Start</div>
+  </div>
+  <div class="stat-card green">
+    <div class="value">~$150K</div>
+    <div class="label">Annual Savings</div>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="emoji">⭐</span> TOP PERFORMERS (Hire More Like These)</div>
+  <table>
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Rep</th>
+        <th class="number">Calls</th>
+        <th class="currency">Revenue per Call</th>
+        <th class="currency">Total Revenue</th>
+        <th>Efficiency</th>
+        <th>Notes</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rank">1</td>
+        <td class="name">Morgan.Q</td>
+        <td class="number">107</td>
+        <td class="currency">$28,598</td>
+        <td class="currency">$3,059,995</td>
+        <td><span class="flag top">TOP PERFORMER</span></td>
+        <td>Elite closer - extremely efficient</td>
+      </tr>
+      <tr>
+        <td class="rank">2</td>
+        <td class="name">daniel.l</td>
+        <td class="number">176</td>
+        <td class="currency">$4,680</td>
+        <td class="currency">$823,714</td>
+        <td><span class="flag efficient">EFFICIENT CLOSER</span></td>
+        <td>High conversion rate</td>
+      </tr>
+      <tr>
+        <td class="rank">3</td>
+        <td class="name">philip.k</td>
+        <td class="number">254</td>
+        <td class="currency">$3,248</td>
+        <td class="currency">$824,980</td>
+        <td><span class="flag efficient">EFFICIENT CLOSER</span></td>
+        <td>Excellent closer</td>
+      </tr>
+      <tr>
+        <td class="rank">4</td>
+        <td class="name">russell.w</td>
+        <td class="number">726</td>
+        <td class="currency">$2,036</td>
+        <td class="currency">$1,478,070</td>
+        <td><span class="flag top">TOP PERFORMER</span></td>
+        <td>Great balance of volume + efficiency</td>
+      </tr>
+      <tr>
+        <td class="rank">5</td>
+        <td class="name">dominic.w</td>
+        <td class="number">592</td>
+        <td class="currency">$1,115</td>
+        <td class="currency">$660,039</td>
+        <td><span class="flag efficient">EFFICIENT CLOSER</span></td>
+        <td>Solid performer despite some ghost calls</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="emoji">🚨</span> BOTTOM PERFORMERS (Terminate Immediately)</div>
+  <table>
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Rep</th>
+        <th class="number">Calls</th>
+        <th class="currency">Revenue per Call</th>
+        <th class="currency">Total Revenue</th>
+        <th>Performance Flag</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr class="danger">
+        <td class="rank">13</td>
+        <td class="name">jonah.go</td>
+        <td class="number">3,007</td>
+        <td class="currency">$7</td>
+        <td class="currency">$21,880</td>
+        <td><span class="flag poor">HIGH ACTIVITY LOW REVENUE</span></td>
+        <td><strong>TERMINATE</strong> - 2.5 months tenure, 29.5% ghost calls, past ramp period</td>
+      </tr>
+      <tr class="danger">
+        <td class="rank">12</td>
+        <td class="name">robert.ca</td>
+        <td class="number">4,200</td>
+        <td class="currency">$8</td>
+        <td class="currency">$35,245</td>
+        <td><span class="flag poor">HIGH ACTIVITY LOW REVENUE</span></td>
+        <td><strong>TERMINATE</strong> - 2.5 months tenure, 19.5% ghost calls, no improvement</td>
+      </tr>
+      <tr class="highlight">
+        <td class="rank">11</td>
+        <td class="name">john.t</td>
+        <td class="number">4,258</td>
+        <td class="currency">$15</td>
+        <td class="currency">$64,534</td>
+        <td><span class="flag average">AVERAGE</span></td>
+        <td><strong>PERFORMANCE PLAN</strong> - Highest call volume, poor conversion</td>
+      </tr>
+      <tr class="highlight">
+        <td class="rank">10</td>
+        <td class="name">james.k</td>
+        <td class="number">3,139</td>
+        <td class="currency">$65</td>
+        <td class="currency">$202,725</td>
+        <td><span class="flag average">AVERAGE</span></td>
+        <td><strong>WARNING</strong> - High volume but low efficiency</td>
+      </tr>
+      <tr class="highlight">
+        <td class="rank">9</td>
+        <td class="name">Brady D</td>
+        <td class="number">1,751</td>
+        <td class="currency">$133</td>
+        <td class="currency">$232,895</td>
+        <td><span class="flag average">AVERAGE</span></td>
+        <td>Monitor - 23.5% ghost calls</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="emoji">📊</span> Complete Performance Ranking</div>
+  <table>
+    <thead>
+      <tr>
+        <th class="rank">#</th>
+        <th>Rep</th>
+        <th class="number">Kixie Calls</th>
+        <th class="number">Ghost %</th>
+        <th class="number">Meaningful %</th>
+        <th class="currency">Revenue per Call</th>
+        <th class="currency">Total Revenue</th>
+        <th>Rating</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="rank">1</td>
+        <td class="name">Morgan.Q</td>
+        <td class="number">107</td>
+        <td class="number">1.9%</td>
+        <td class="number">58.9%</td>
+        <td class="currency">$28,598</td>
+        <td class="currency">$3,059,995</td>
+        <td><span class="flag top">TOP</span></td>
+      </tr>
+      <tr>
+        <td class="rank">2</td>
+        <td class="name">daniel.l</td>
+        <td class="number">176</td>
+        <td class="number">6.8%</td>
+        <td class="number">36.9%</td>
+        <td class="currency">$4,680</td>
+        <td class="currency">$823,714</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">3</td>
+        <td class="name">philip.k</td>
+        <td class="number">254</td>
+        <td class="number">9.4%</td>
+        <td class="number">54.3%</td>
+        <td class="currency">$3,248</td>
+        <td class="currency">$824,980</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">4</td>
+        <td class="name">russell.w</td>
+        <td class="number">726</td>
+        <td class="number">5.9%</td>
+        <td class="number">58.8%</td>
+        <td class="currency">$2,036</td>
+        <td class="currency">$1,478,070</td>
+        <td><span class="flag top">TOP</span></td>
+      </tr>
+      <tr>
+        <td class="rank">5</td>
+        <td class="name">dominic.w</td>
+        <td class="number">592</td>
+        <td class="number">22.6%</td>
+        <td class="number">47.5%</td>
+        <td class="currency">$1,115</td>
+        <td class="currency">$660,039</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">6</td>
+        <td class="name">Alex Cruz</td>
+        <td class="number">346</td>
+        <td class="number">5.5%</td>
+        <td class="number">37.6%</td>
+        <td class="currency">$841</td>
+        <td class="currency">$291,135</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">7</td>
+        <td class="name">george.f</td>
+        <td class="number">791</td>
+        <td class="number">6.6%</td>
+        <td class="number">51.3%</td>
+        <td class="currency">$544</td>
+        <td class="currency">$430,195</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">8</td>
+        <td class="name">Adam F</td>
+        <td class="number">984</td>
+        <td class="number">33.7%</td>
+        <td class="number">23.0%</td>
+        <td class="currency">$305</td>
+        <td class="currency">$300,015</td>
+        <td><span class="flag efficient">EFFICIENT</span></td>
+      </tr>
+      <tr>
+        <td class="rank">9</td>
+        <td class="name">Brady D</td>
+        <td class="number">1,751</td>
+        <td class="number">23.5%</td>
+        <td class="number">38.4%</td>
+        <td class="currency">$133</td>
+        <td class="currency">$232,895</td>
+        <td><span class="flag average">AVERAGE</span></td>
+      </tr>
+      <tr>
+        <td class="rank">10</td>
+        <td class="name">james.k</td>
+        <td class="number">3,139</td>
+        <td class="number">6.4%</td>
+        <td class="number">36.8%</td>
+        <td class="currency">$65</td>
+        <td class="currency">$202,725</td>
+        <td><span class="flag average">AVERAGE</span></td>
+      </tr>
+      <tr class="highlight">
+        <td class="rank">11</td>
+        <td class="name">john.t</td>
+        <td class="number">4,258</td>
+        <td class="number">6.8%</td>
+        <td class="number">35.4%</td>
+        <td class="currency">$15</td>
+        <td class="currency">$64,534</td>
+        <td><span class="flag average">AVERAGE</span></td>
+      </tr>
+      <tr class="danger">
+        <td class="rank">12</td>
+        <td class="name">robert.ca</td>
+        <td class="number">4,200</td>
+        <td class="number">19.5%</td>
+        <td class="number">32.0%</td>
+        <td class="currency">$8</td>
+        <td class="currency">$35,245</td>
+        <td><span class="flag poor">POOR</span></td>
+      </tr>
+      <tr class="danger">
+        <td class="rank">13</td>
+        <td class="name">jonah.go</td>
+        <td class="number">3,007</td>
+        <td class="number">29.5%</td>
+        <td class="number">26.8%</td>
+        <td class="currency">$7</td>
+        <td class="currency">$21,880</td>
+        <td><span class="flag poor">POOR</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="section">
+  <div class="section-title"><span class="emoji">💡</span> Key Insights & Recommendations</div>
+  
+  <div style="background: #f9fafb; border-left: 4px solid #2563eb; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+    <h3 style="margin-bottom: 12px; color: #1e40af;">1. Immediate Terminations (Save ~$150K+/year)</h3>
+    <p style="line-height: 1.6;">
+      <strong>robert.ca</strong> and <strong>jonah.go</strong> have been with the company for <strong>2.5 months</strong> (started Dec 22, 2025).
+      They're <strong>past the standard 90-day ramp period</strong> and still showing terrible efficiency with high ghost call rates.
+      Combined: 7,207 calls → $57K revenue over 2.5 months. No improvement trajectory visible. Terminate immediately to stop lead database burn.
+    </p>
+  </div>
+  
+  <div style="background: #f9fafb; border-left: 4px solid #d97706; padding: 20px; border-radius: 4px; margin-bottom: 20px;">
+    <h3 style="margin-bottom: 12px; color: #92400e;">2. Performance Plans (30-day warning)</h3>
+    <p style="line-height: 1.6;">
+      <strong>john.t</strong>, <strong>james.k</strong>, and <strong>Brady D</strong> have high call volume but terrible conversion. 
+      Give them 30 days to improve or terminate. Focus on quality over quantity.
+    </p>
+  </div>
+  
+  <div style="background: #f9fafb; border-left: 4px solid #059669; padding: 20px; border-radius: 4px;">
+    <h3 style="margin-bottom: 12px; color: #065f46;">3. Clone Your Winners</h3>
+    <p style="line-height: 1.6;">
+      <strong>Morgan.Q</strong> is producing 100x more revenue per call than your worst performers. 
+      Study their process, record their calls, create training materials. Hire more like them.
+    </p>
+  </div>
+</div>
+
+<div style="text-align: center; margin-top: 60px; padding-top: 40px; border-top: 2px solid #e5e7eb; color: #6b7280;">
+  <p>ORGCOMMAND Intelligence Report | Generated March 7, 2026</p>
+  <p style="margin-top: 8px;">Data Sources: Kixie (24,641 calls) + Zoho CRM + Revenue ($35.6M)</p>
+</div>
+
+</body>
+</html>

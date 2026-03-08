@@ -1,0 +1,1426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - CSV Import</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f8fa;
+    --bg-hover: #f0f2f5;
+    --border: #e2e5ea;
+    --border-light: #eef0f3;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --yellow: #f59e0b;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #fde68a;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --purple: #8b5cf6;
+    --sidebar-w: 240px;
+    --header-h: 56px;
+    --radius: 8px;
+    --radius-lg: 12px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  /* =========== SIDEBAR =========== */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: #0f172a;
+    color: #fff;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sidebar-brand {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sidebar-brand h1 { font-size: 18px; font-weight: 800; letter-spacing: 3px; }
+  .sidebar-brand span { font-size: 11px; color: rgba(255,255,255,0.4); letter-spacing: 1px; text-transform: uppercase; }
+
+  .sidebar-nav { flex: 1; padding: 16px 12px; }
+
+  .nav-section-label {
+    font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); padding: 12px 10px 6px;
+  }
+
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px; border-radius: 6px;
+    color: rgba(255,255,255,0.65); cursor: pointer;
+    font-size: 13.5px; transition: all 0.15s; margin-bottom: 2px;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-item.active { background: rgba(59,130,246,0.2); color: #fff; }
+  .nav-item svg { width: 18px; height: 18px; opacity: 0.7; flex-shrink: 0; }
+
+  .nav-badge {
+    margin-left: auto; background: var(--red); color: #fff;
+    font-size: 11px; font-weight: 600; padding: 1px 7px; border-radius: 10px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 22px; border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .sidebar-footer .avatar {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700;
+  }
+
+  .sidebar-footer .user-info { font-size: 12px; }
+  .sidebar-footer .user-info strong { display: block; font-size: 13px; }
+  .sidebar-footer .user-info span { color: rgba(255,255,255,0.4); }
+
+  /* =========== MAIN =========== */
+  .main { margin-left: var(--sidebar-w); min-height: 100vh; }
+
+  .top-header {
+    height: var(--header-h); border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 28px; background: var(--bg); position: sticky; top: 0; z-index: 50;
+  }
+
+  .breadcrumb { display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-muted); }
+  .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+  .breadcrumb .sep { margin: 0 2px; }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+
+  .page-content { padding: 28px; max-width: 960px; margin: 0 auto; }
+
+  .page-title { font-size: 22px; font-weight: 700; margin-bottom: 4px; }
+  .page-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 28px; }
+
+  /* =========== BUTTONS =========== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 8px 16px; border-radius: 7px; font-size: 13px; font-weight: 500;
+    cursor: pointer; border: 1px solid var(--border); background: var(--bg);
+    color: var(--text-primary); transition: all 0.15s; font-family: inherit;
+  }
+  .btn:hover { background: var(--bg-subtle); }
+  .btn svg { width: 16px; height: 16px; }
+  .btn-primary { background: #0f172a; color: #fff; border-color: #0f172a; }
+  .btn-primary:hover { background: #1e293b; }
+  .btn-primary:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn-green { background: var(--green); color: #fff; border-color: var(--green); }
+  .btn-green:hover { background: #059669; }
+  .btn-sm { padding: 5px 10px; font-size: 12px; }
+  .btn-ghost { border: none; background: transparent; color: var(--text-secondary); }
+  .btn-ghost:hover { color: var(--text-primary); background: var(--bg-subtle); }
+
+  /* =========== STEPPER =========== */
+  .stepper {
+    display: flex; align-items: center; gap: 0;
+    margin-bottom: 32px; padding: 0 20px;
+  }
+
+  .step {
+    display: flex; align-items: center; gap: 10px;
+    cursor: pointer; position: relative;
+  }
+
+  .step-circle {
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 2px solid var(--border); background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--text-muted);
+    transition: all 0.2s; flex-shrink: 0;
+  }
+
+  .step.active .step-circle {
+    border-color: #0f172a; background: #0f172a; color: #fff;
+  }
+
+  .step.completed .step-circle {
+    border-color: var(--green); background: var(--green); color: #fff;
+  }
+
+  .step-label { font-size: 13px; color: var(--text-muted); font-weight: 500; white-space: nowrap; }
+  .step.active .step-label { color: var(--text-primary); font-weight: 600; }
+  .step.completed .step-label { color: var(--green); }
+
+  .step-line {
+    flex: 1; height: 2px; background: var(--border);
+    margin: 0 16px; min-width: 40px;
+  }
+
+  .step-line.completed { background: var(--green); }
+
+  /* =========== STEP PANELS =========== */
+  .step-panel { display: none; }
+  .step-panel.active { display: block; }
+
+  /* =========== UPLOAD ZONE =========== */
+  .upload-zone {
+    border: 2px dashed var(--border);
+    border-radius: var(--radius-lg);
+    padding: 48px 40px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    background: var(--bg);
+    position: relative;
+  }
+
+  .upload-zone:hover, .upload-zone.drag-over {
+    border-color: var(--blue);
+    background: var(--blue-bg);
+  }
+
+  .upload-zone.drag-over {
+    border-style: solid;
+    box-shadow: 0 0 0 4px rgba(59,130,246,0.1);
+  }
+
+  .upload-zone.has-file {
+    border-color: var(--green);
+    background: var(--green-bg);
+    border-style: solid;
+  }
+
+  .upload-icon {
+    width: 56px; height: 56px; margin: 0 auto 16px;
+    background: var(--bg-subtle); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .upload-zone.has-file .upload-icon { background: var(--green-bg); }
+
+  .upload-icon svg { width: 28px; height: 28px; color: var(--text-muted); }
+  .upload-zone.has-file .upload-icon svg { color: var(--green); }
+
+  .upload-title { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+  .upload-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+
+  .upload-or {
+    font-size: 12px; color: var(--text-muted); margin: 12px 0;
+    display: flex; align-items: center; gap: 12px;
+  }
+
+  .upload-or::before, .upload-or::after {
+    content: ''; flex: 1; height: 1px; background: var(--border);
+  }
+
+  .upload-formats {
+    font-size: 12px; color: var(--text-muted); margin-top: 12px;
+  }
+
+  .file-info {
+    display: none; align-items: center; gap: 12px;
+    background: var(--bg); border: 1px solid var(--green-border);
+    border-radius: var(--radius); padding: 12px 16px;
+    margin-top: 16px; text-align: left;
+  }
+
+  .upload-zone.has-file .file-info { display: flex; }
+
+  .file-icon {
+    width: 40px; height: 40px; border-radius: 8px;
+    background: var(--green-bg); display: flex;
+    align-items: center; justify-content: center; flex-shrink: 0;
+  }
+
+  .file-icon svg { width: 20px; height: 20px; color: var(--green); }
+  .file-name { font-weight: 600; font-size: 13px; }
+  .file-meta { font-size: 12px; color: var(--text-secondary); }
+
+  .file-remove {
+    margin-left: auto; width: 28px; height: 28px; border-radius: 6px;
+    border: none; background: transparent; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-muted);
+  }
+
+  .file-remove:hover { background: var(--red-bg); color: var(--red); }
+
+  /* =========== TEMPLATE SECTION =========== */
+  .template-section {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 24px; margin-top: 24px;
+  }
+
+  .template-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .template-title { font-size: 15px; font-weight: 700; }
+
+  .fields-grid {
+    display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 16px;
+  }
+
+  .field-item {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px; background: var(--bg);
+    border: 1px solid var(--border-light); border-radius: 6px; font-size: 13px;
+  }
+
+  .field-req {
+    font-size: 10px; font-weight: 700; letter-spacing: 0.5px;
+    padding: 1px 6px; border-radius: 3px; text-transform: uppercase; flex-shrink: 0;
+  }
+
+  .field-req.required { background: var(--red-bg); color: var(--red); }
+  .field-req.optional { background: var(--bg-subtle); color: var(--text-muted); }
+
+  .field-name { font-weight: 600; }
+  .field-type { color: var(--text-muted); font-size: 12px; margin-left: auto; }
+
+  .sample-preview {
+    border: 1px solid var(--border); border-radius: var(--radius);
+    overflow-x: auto; margin-top: 16px; background: var(--bg);
+  }
+
+  .sample-label {
+    font-size: 12px; font-weight: 600; color: var(--text-muted);
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 8px;
+  }
+
+  .sample-preview table { width: 100%; border-collapse: collapse; font-size: 12px; }
+
+  .sample-preview thead th {
+    padding: 8px 12px; text-align: left; font-size: 11px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted); background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border); white-space: nowrap;
+  }
+
+  .sample-preview tbody td {
+    padding: 7px 12px; border-bottom: 1px solid var(--border-light);
+    font-family: 'SF Mono', 'Fira Code', Consolas, monospace;
+    font-size: 12px; white-space: nowrap;
+  }
+
+  .sample-preview tbody tr:last-child td { border-bottom: none; }
+
+  /* =========== VALIDATION TABLE =========== */
+  .validation-summary {
+    display: flex; gap: 16px; margin-bottom: 20px;
+  }
+
+  .val-stat {
+    flex: 1; padding: 16px; border-radius: var(--radius);
+    border: 1px solid var(--border); text-align: center;
+  }
+
+  .val-stat-value { font-size: 28px; font-weight: 800; }
+  .val-stat-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text-muted); margin-top: 2px; }
+
+  .val-stat.valid { border-color: var(--green-border); background: var(--green-bg); }
+  .val-stat.valid .val-stat-value { color: var(--green); }
+
+  .val-stat.warnings { border-color: var(--yellow-border); background: var(--yellow-bg); }
+  .val-stat.warnings .val-stat-value { color: var(--yellow); }
+
+  .val-stat.errors { border-color: var(--red-border); background: var(--red-bg); }
+  .val-stat.errors .val-stat-value { color: var(--red); }
+
+  .val-stat.total { }
+  .val-stat.total .val-stat-value { color: var(--text-primary); }
+
+  .preview-table-wrap {
+    border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+  }
+
+  .preview-table-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px; border-bottom: 1px solid var(--border); background: var(--bg-subtle);
+  }
+
+  .preview-table-title { font-size: 14px; font-weight: 700; }
+  .preview-table-meta { font-size: 12px; color: var(--text-muted); }
+
+  .preview-table { width: 100%; border-collapse: collapse; }
+
+  .preview-table thead th {
+    padding: 8px 14px; text-align: left; font-size: 11px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;
+    color: var(--text-muted); background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border); white-space: nowrap; position: sticky; top: 0;
+  }
+
+  .preview-table tbody td {
+    padding: 9px 14px; border-bottom: 1px solid var(--border-light);
+    font-size: 13px; white-space: nowrap;
+  }
+
+  .preview-table tbody tr:last-child td { border-bottom: none; }
+  .preview-table tbody tr:hover { background: var(--bg-hover); }
+
+  .row-status { display: flex; align-items: center; gap: 6px; }
+
+  .row-status-icon {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-weight: 700; flex-shrink: 0;
+  }
+
+  .row-status-icon.valid { background: var(--green-bg); color: var(--green); }
+  .row-status-icon.warning { background: var(--yellow-bg); color: var(--yellow); }
+  .row-status-icon.error { background: var(--red-bg); color: var(--red); }
+
+  .row-status-text { font-size: 12px; }
+  .row-status-text.valid { color: var(--green); }
+  .row-status-text.warning { color: #b45309; }
+  .row-status-text.error { color: var(--red); }
+
+  .cell-error {
+    background: var(--red-bg); border-radius: 4px; padding: 1px 6px;
+    color: var(--red); font-weight: 600;
+  }
+
+  .cell-warning {
+    background: var(--yellow-bg); border-radius: 4px; padding: 1px 6px;
+    color: #b45309;
+  }
+
+  .cell-empty {
+    color: var(--red); font-style: italic; font-size: 12px;
+  }
+
+  .error-detail-row td {
+    padding: 0 14px 10px 14px !important;
+    border-bottom: 1px solid var(--border-light) !important;
+  }
+
+  .error-detail-row:hover { background: transparent !important; }
+
+  .error-detail-box {
+    display: flex; align-items: flex-start; gap: 8px;
+    padding: 8px 12px; border-radius: 6px; font-size: 12px;
+    margin-left: 36px;
+  }
+
+  .error-detail-box.err { background: var(--red-bg); color: var(--red); }
+  .error-detail-box.warn { background: var(--yellow-bg); color: #b45309; }
+
+  .error-detail-box svg { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+
+  .field-mapping-section {
+    background: var(--blue-bg); border: 1px solid var(--blue-border);
+    border-radius: var(--radius-lg); padding: 20px; margin-bottom: 20px;
+  }
+
+  .mapping-title { font-size: 14px; font-weight: 700; color: var(--blue); margin-bottom: 4px; }
+  .mapping-subtitle { font-size: 13px; color: var(--text-secondary); margin-bottom: 14px; }
+
+  .mapping-grid { display: grid; grid-template-columns: 1fr auto 1fr; gap: 8px; align-items: center; }
+
+  .mapping-col {
+    padding: 8px 14px; border-radius: 6px; font-size: 13px;
+    font-weight: 500; background: var(--bg); border: 1px solid var(--border);
+  }
+
+  .mapping-col.csv { font-family: 'SF Mono', Consolas, monospace; font-size: 12px; }
+  .mapping-col.system { font-weight: 600; }
+  .mapping-col.matched { border-color: var(--green-border); background: var(--green-bg); }
+  .mapping-arrow { text-align: center; color: var(--text-muted); font-size: 18px; }
+
+  /* =========== REVIEW PANEL =========== */
+  .review-card {
+    border: 1px solid var(--border); border-radius: var(--radius-lg);
+    padding: 24px; margin-bottom: 20px;
+  }
+
+  .review-title { font-size: 15px; font-weight: 700; margin-bottom: 16px; }
+
+  .review-stats {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 20px;
+  }
+
+  .review-stat {
+    text-align: center; padding: 20px; border-radius: var(--radius);
+    border: 1px solid var(--border);
+  }
+
+  .review-stat-value { font-size: 36px; font-weight: 800; }
+  .review-stat-label { font-size: 12px; color: var(--text-secondary); margin-top: 4px; }
+
+  .review-option {
+    display: flex; align-items: center; gap: 12px;
+    padding: 14px 18px; border: 1px solid var(--border);
+    border-radius: var(--radius); margin-bottom: 10px; cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .review-option:hover { border-color: #aaa; background: var(--bg-subtle); }
+  .review-option.selected { border-color: var(--blue); background: var(--blue-bg); }
+
+  .radio-circle {
+    width: 20px; height: 20px; border-radius: 50%;
+    border: 2px solid var(--border); flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .review-option.selected .radio-circle {
+    border-color: var(--blue);
+  }
+
+  .radio-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--blue); display: none;
+  }
+
+  .review-option.selected .radio-dot { display: block; }
+
+  .review-option-label { font-weight: 600; font-size: 14px; }
+  .review-option-desc { font-size: 12px; color: var(--text-secondary); }
+
+  .review-breakdown {
+    display: flex; flex-direction: column; gap: 6px; margin-top: 16px;
+    padding-top: 16px; border-top: 1px solid var(--border-light);
+  }
+
+  .breakdown-row {
+    display: flex; align-items: center; justify-content: space-between;
+    font-size: 13px; padding: 4px 0;
+  }
+
+  .breakdown-label { color: var(--text-secondary); display: flex; align-items: center; gap: 6px; }
+  .breakdown-value { font-weight: 600; }
+
+  /* =========== SUCCESS STATE =========== */
+  .success-panel { text-align: center; padding: 40px 0; }
+
+  .success-icon {
+    width: 72px; height: 72px; border-radius: 50%; margin: 0 auto 20px;
+    background: var(--green-bg); border: 2px solid var(--green-border);
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .success-icon svg { width: 36px; height: 36px; color: var(--green); }
+
+  .success-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; }
+  .success-subtitle { font-size: 14px; color: var(--text-secondary); margin-bottom: 28px; }
+
+  .success-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;
+    max-width: 600px; margin: 0 auto 28px;
+  }
+
+  .success-stat {
+    padding: 16px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--bg);
+  }
+
+  .success-stat-value { font-size: 26px; font-weight: 800; }
+  .success-stat-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  .success-actions { display: flex; gap: 10px; justify-content: center; }
+
+  .import-log {
+    max-width: 600px; margin: 24px auto 0; text-align: left;
+    border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden;
+  }
+
+  .import-log-header {
+    padding: 10px 16px; background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+    font-size: 12px; font-weight: 600; color: var(--text-secondary);
+  }
+
+  .import-log-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 8px 16px; border-bottom: 1px solid var(--border-light); font-size: 13px;
+  }
+
+  .import-log-item:last-child { border-bottom: none; }
+
+  .log-check { color: var(--green); font-weight: 700; }
+  .log-skip { color: var(--yellow); font-weight: 700; }
+
+  /* =========== BOTTOM BAR =========== */
+  .bottom-bar {
+    position: sticky; bottom: 0; background: var(--bg);
+    border-top: 1px solid var(--border); padding: 14px 28px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-top: 32px;
+  }
+
+  .bottom-bar-left { font-size: 13px; color: var(--text-secondary); }
+  .bottom-bar-right { display: flex; gap: 10px; }
+
+  /* =========== PROGRESS BAR =========== */
+  .import-progress {
+    display: none; margin-top: 20px;
+  }
+
+  .import-progress.active { display: block; }
+
+  .progress-track {
+    width: 100%; height: 8px; background: var(--bg-subtle);
+    border-radius: 4px; overflow: hidden; margin-bottom: 8px;
+  }
+
+  .progress-fill {
+    height: 100%; background: var(--green);
+    border-radius: 4px; transition: width 0.3s;
+  }
+
+  .progress-text { font-size: 12px; color: var(--text-secondary); text-align: center; }
+
+  /* =========== SCROLLABLE TABLE =========== */
+  .table-scroll { max-height: 420px; overflow-y: auto; overflow-x: auto; }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR (same as dashboard wireframe) -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <h1>ORGCOMMAND</h1>
+    <span>CEO Dashboard</span>
+  </div>
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      All Personnel
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Performance
+    </div>
+    <div class="nav-section-label">Management</div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Contractors
+      <span class="nav-badge">4</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Action Required
+      <span class="nav-badge">7</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Communications
+    </div>
+    <div class="nav-section-label">System</div>
+    <div class="nav-item active">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      CSV Import
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="avatar">CR</div>
+    <div class="user-info">
+      <strong>Carlos Reyes</strong>
+      <span>CEO</span>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN CONTENT -->
+<div class="main">
+  <div class="top-header">
+    <div class="breadcrumb">
+      <a href="#">Dashboard</a>
+      <span class="sep">/</span>
+      <span class="current" id="breadcrumb-text">Import Personnel</span>
+    </div>
+    <div style="display:flex; align-items:center; gap:10px;">
+      <span style="font-size:12px; color:var(--text-muted);">Current roster: 214 people</span>
+    </div>
+  </div>
+
+  <div class="page-content">
+    <div class="page-title">Import Personnel</div>
+    <div class="page-subtitle">Upload a CSV file to add or update people in your roster. New entries are added; existing emails are updated.</div>
+
+    <!-- STEPPER -->
+    <div class="stepper">
+      <div class="step active" data-step="1" id="step-1">
+        <div class="step-circle">1</div>
+        <div class="step-label">Upload File</div>
+      </div>
+      <div class="step-line" id="line-1"></div>
+      <div class="step" data-step="2" id="step-2">
+        <div class="step-circle">2</div>
+        <div class="step-label">Preview &amp; Validate</div>
+      </div>
+      <div class="step-line" id="line-2"></div>
+      <div class="step" data-step="3" id="step-3">
+        <div class="step-circle">3</div>
+        <div class="step-label">Review &amp; Confirm</div>
+      </div>
+      <div class="step-line" id="line-3"></div>
+      <div class="step" data-step="4" id="step-4">
+        <div class="step-circle">4</div>
+        <div class="step-label">Complete</div>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- STEP 1: UPLOAD -->
+    <!-- ========================================= -->
+    <div class="step-panel active" id="panel-1">
+
+      <div class="upload-zone" id="upload-zone">
+        <div class="upload-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="17 8 12 3 7 8"/>
+            <line x1="12" y1="3" x2="12" y2="15"/>
+          </svg>
+        </div>
+        <div class="upload-title" id="upload-title">Drag &amp; drop your CSV file here</div>
+        <div class="upload-subtitle" id="upload-subtitle">or click to browse your files</div>
+        <button class="btn" id="browse-btn" style="margin-top:4px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Choose File
+        </button>
+        <div class="upload-or">or</div>
+        <div class="upload-formats">Accepted format: <strong>.csv</strong> &middot; Max file size: 10MB &middot; UTF-8 encoding</div>
+
+        <div class="file-info">
+          <div class="file-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div>
+            <div class="file-name">acme-roster-feb2026.csv</div>
+            <div class="file-meta">42.3 KB &middot; 47 rows detected &middot; 10 columns</div>
+          </div>
+          <button class="file-remove" title="Remove file" onclick="removeFile(event)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- TEMPLATE SECTION -->
+      <div class="template-section">
+        <div class="template-header">
+          <div class="template-title">CSV Template &amp; Field Reference</div>
+          <button class="btn btn-sm btn-primary">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Template (.csv)
+          </button>
+        </div>
+
+        <div class="fields-grid">
+          <div class="field-item">
+            <span class="field-req required">Required</span>
+            <span class="field-name">first_name</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req required">Required</span>
+            <span class="field-name">last_name</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req required">Required</span>
+            <span class="field-name">email</span>
+            <span class="field-type">email (unique key)</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req required">Required</span>
+            <span class="field-name">type</span>
+            <span class="field-type">employee | contractor</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req required">Required</span>
+            <span class="field-name">company</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">team</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">role</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">manager_email</span>
+            <span class="field-type">email</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">location</span>
+            <span class="field-type">text</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">monthly_cost_usd</span>
+            <span class="field-type">number</span>
+          </div>
+          <div class="field-item">
+            <span class="field-req optional">Optional</span>
+            <span class="field-name">start_date</span>
+            <span class="field-type">YYYY-MM-DD</span>
+          </div>
+        </div>
+
+        <div class="sample-label">Sample Data (3 rows)</div>
+        <div class="sample-preview">
+          <table>
+            <thead>
+              <tr>
+                <th>first_name</th><th>last_name</th><th>email</th><th>type</th><th>company</th><th>team</th><th>role</th><th>manager_email</th><th>location</th><th>monthly_cost_usd</th><th>start_date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Sarah</td><td>Chen</td><td>s.chen@acme.com</td><td>employee</td><td>Acme Corp</td><td>Engineering</td><td>VP Engineering</td><td>carlos@acme.com</td><td>US</td><td>18000</td><td>2019-03-01</td>
+              </tr>
+              <tr>
+                <td>Raj</td><td>Patel</td><td>r.patel@acme.com</td><td>employee</td><td>Acme Corp</td><td>Engineering</td><td>Senior Developer</td><td>s.chen@acme.com</td><td>Singapore</td><td>8500</td><td>2020-06-15</td>
+              </tr>
+              <tr>
+                <td>Tom</td><td>Hartley</td><td>t.hartley@beta.co.uk</td><td>contractor</td><td>Beta Inc</td><td>Marketing</td><td>Content Writer</td><td></td><td>UK</td><td>5000</td><td>2023-01-01</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BOTTOM BAR -->
+      <div class="bottom-bar">
+        <div class="bottom-bar-left">Step 1 of 4</div>
+        <div class="bottom-bar-right">
+          <button class="btn" onclick="goToStep(1)">Cancel</button>
+          <button class="btn btn-primary" id="next-btn-1" onclick="goToStep(2)">
+            Continue to Preview
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- STEP 2: PREVIEW & VALIDATE -->
+    <!-- ========================================= -->
+    <div class="step-panel" id="panel-2">
+
+      <!-- Field Mapping -->
+      <div class="field-mapping-section">
+        <div class="mapping-title">Column Mapping</div>
+        <div class="mapping-subtitle">All 10 columns matched automatically. Review the mapping below.</div>
+        <div class="mapping-grid">
+          <div class="mapping-col csv matched">first_name</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">First Name</div>
+
+          <div class="mapping-col csv matched">last_name</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">Last Name</div>
+
+          <div class="mapping-col csv matched">email</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">Email (Primary Key)</div>
+
+          <div class="mapping-col csv matched">type</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">Type (Employee/Contractor)</div>
+
+          <div class="mapping-col csv matched">company</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">Company</div>
+
+          <div class="mapping-col csv matched">monthly_cost_usd</div>
+          <div class="mapping-arrow">&rarr;</div>
+          <div class="mapping-col system matched">Monthly Cost (USD)</div>
+        </div>
+        <div style="margin-top:8px; font-size:12px; color:var(--text-muted);">+ 4 more columns matched (team, role, manager_email, location, start_date)</div>
+      </div>
+
+      <!-- Validation Summary -->
+      <div class="validation-summary">
+        <div class="val-stat total">
+          <div class="val-stat-value">47</div>
+          <div class="val-stat-label">Total Rows</div>
+        </div>
+        <div class="val-stat valid">
+          <div class="val-stat-value">41</div>
+          <div class="val-stat-label">Valid</div>
+        </div>
+        <div class="val-stat warnings">
+          <div class="val-stat-value">3</div>
+          <div class="val-stat-label">Warnings</div>
+        </div>
+        <div class="val-stat errors">
+          <div class="val-stat-value">3</div>
+          <div class="val-stat-label">Errors</div>
+        </div>
+      </div>
+
+      <!-- Preview Table -->
+      <div class="preview-table-wrap">
+        <div class="preview-table-header">
+          <div class="preview-table-title">Data Preview</div>
+          <div style="display:flex; align-items:center; gap:10px;">
+            <button class="btn btn-sm btn-ghost" style="color:var(--red);">Show errors only</button>
+            <div class="preview-table-meta">Showing 10 of 47 rows</div>
+          </div>
+        </div>
+        <div class="table-scroll">
+          <table class="preview-table">
+            <thead>
+              <tr>
+                <th style="width:40px">#</th>
+                <th style="width:90px">Status</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Type</th>
+                <th>Company</th>
+                <th>Team</th>
+                <th>Role</th>
+                <th>Cost/mo</th>
+                <th>Start Date</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Row 1: Valid -->
+              <tr>
+                <td style="color:var(--text-muted)">1</td>
+                <td><div class="row-status"><div class="row-status-icon valid">&#10003;</div><span class="row-status-text valid">Valid</span></div></td>
+                <td>Sarah</td>
+                <td>Chen</td>
+                <td>s.chen@acme.com</td>
+                <td>employee</td>
+                <td>Acme Corp</td>
+                <td>Engineering</td>
+                <td>VP Engineering</td>
+                <td>$18,000</td>
+                <td>2019-03-01</td>
+              </tr>
+              <!-- Row 2: Valid -->
+              <tr>
+                <td style="color:var(--text-muted)">2</td>
+                <td><div class="row-status"><div class="row-status-icon valid">&#10003;</div><span class="row-status-text valid">Valid</span></div></td>
+                <td>Raj</td>
+                <td>Patel</td>
+                <td>r.patel@acme.com</td>
+                <td>employee</td>
+                <td>Acme Corp</td>
+                <td>Engineering</td>
+                <td>Senior Developer</td>
+                <td>$8,500</td>
+                <td>2020-06-15</td>
+              </tr>
+              <!-- Row 3: ERROR - Missing email -->
+              <tr style="background: var(--red-bg);">
+                <td style="color:var(--text-muted)">3</td>
+                <td><div class="row-status"><div class="row-status-icon error">&#10007;</div><span class="row-status-text error">Error</span></div></td>
+                <td>Michael</td>
+                <td>Torres</td>
+                <td><span class="cell-empty">(empty)</span></td>
+                <td>employee</td>
+                <td>Acme Corp</td>
+                <td>Sales</td>
+                <td>Account Exec</td>
+                <td>$7,200</td>
+                <td>2021-01-10</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--red-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box err">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <div><strong>Missing required field: email</strong> &mdash; Every person must have a unique email address. This is the primary identifier used to match across all systems.</div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 4: Valid -->
+              <tr>
+                <td style="color:var(--text-muted)">4</td>
+                <td><div class="row-status"><div class="row-status-icon valid">&#10003;</div><span class="row-status-text valid">Valid</span></div></td>
+                <td>Lisa</td>
+                <td>Tan</td>
+                <td>l.tan@gamma.sg</td>
+                <td>employee</td>
+                <td>Gamma Systems</td>
+                <td>Sales</td>
+                <td>Account Manager</td>
+                <td>$5,800</td>
+                <td>2022-04-20</td>
+              </tr>
+              <!-- Row 5: WARNING - missing cost -->
+              <tr style="background: var(--yellow-bg);">
+                <td style="color:var(--text-muted)">5</td>
+                <td><div class="row-status"><div class="row-status-icon warning">!</div><span class="row-status-text warning">Warning</span></div></td>
+                <td>Emma</td>
+                <td>Nakamura</td>
+                <td>e.nakamura@beta.co.uk</td>
+                <td>employee</td>
+                <td>Beta Inc</td>
+                <td>Support</td>
+                <td>Support Agent</td>
+                <td><span class="cell-warning">(empty)</span></td>
+                <td>2023-07-01</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--yellow-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <div><strong>Missing optional field: monthly_cost_usd</strong> &mdash; Person will be imported but cost analysis will be incomplete. You can add cost later from the person detail page.</div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 6: ERROR - Invalid cost format -->
+              <tr style="background: var(--red-bg);">
+                <td style="color:var(--text-muted)">6</td>
+                <td><div class="row-status"><div class="row-status-icon error">&#10007;</div><span class="row-status-text error">Error</span></div></td>
+                <td>James</td>
+                <td>Okafor</td>
+                <td>j.okafor@delta.com</td>
+                <td>employee</td>
+                <td>Delta Digital</td>
+                <td>Engineering</td>
+                <td>Full-Stack Dev</td>
+                <td><span class="cell-error">$6,200USD</span></td>
+                <td>2021-09-15</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--red-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box err">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <div><strong>Invalid format: monthly_cost_usd</strong> &mdash; Expected a number (e.g., <code style="background:rgba(0,0,0,0.06); padding:1px 4px; border-radius:3px;">6200</code>). Got <code style="background:rgba(0,0,0,0.06); padding:1px 4px; border-radius:3px;">$6,200USD</code>. Remove currency symbols, commas, and text. Use numbers only.</div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 7: WARNING - duplicate -->
+              <tr style="background: var(--yellow-bg);">
+                <td style="color:var(--text-muted)">7</td>
+                <td><div class="row-status"><div class="row-status-icon warning">!</div><span class="row-status-text warning">Update</span></div></td>
+                <td>Maria</td>
+                <td>Kowalski</td>
+                <td>m.kowalski@beta.co.uk</td>
+                <td>employee</td>
+                <td>Beta Inc</td>
+                <td>Sales</td>
+                <td>Senior Account Exec</td>
+                <td>$7,800</td>
+                <td>2020-11-01</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--yellow-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <div><strong>Existing person: m.kowalski@beta.co.uk</strong> &mdash; This email already exists in the roster. Importing will <strong>update</strong> her record: role changes from "Account Executive" &rarr; "Senior Account Exec", cost changes from $7,400 &rarr; $7,800.</div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 8: Valid -->
+              <tr>
+                <td style="color:var(--text-muted)">8</td>
+                <td><div class="row-status"><div class="row-status-icon valid">&#10003;</div><span class="row-status-text valid">Valid</span></div></td>
+                <td>Andre</td>
+                <td>Liu</td>
+                <td>a.liu@gamma.sg</td>
+                <td>employee</td>
+                <td>Gamma Systems</td>
+                <td>Engineering</td>
+                <td>Senior Developer</td>
+                <td>$7,200</td>
+                <td>2021-03-15</td>
+              </tr>
+              <!-- Row 9: ERROR - Duplicate in file -->
+              <tr style="background: var(--red-bg);">
+                <td style="color:var(--text-muted)">9</td>
+                <td><div class="row-status"><div class="row-status-icon error">&#10007;</div><span class="row-status-text error">Error</span></div></td>
+                <td>Andre</td>
+                <td>Liu</td>
+                <td><span class="cell-error">a.liu@gamma.sg</span></td>
+                <td>employee</td>
+                <td>Gamma Systems</td>
+                <td>Engineering</td>
+                <td>Senior Developer</td>
+                <td>$7,200</td>
+                <td>2021-03-15</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--red-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box err">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>
+                    <div><strong>Duplicate email in file: a.liu@gamma.sg</strong> &mdash; This email appears on row 8 and row 9. Each person must have a unique email. Remove the duplicate row from your CSV.</div>
+                  </div>
+                </td>
+              </tr>
+              <!-- Row 10: WARNING - missing team -->
+              <tr style="background: var(--yellow-bg);">
+                <td style="color:var(--text-muted)">10</td>
+                <td><div class="row-status"><div class="row-status-icon warning">!</div><span class="row-status-text warning">Warning</span></div></td>
+                <td>Tom</td>
+                <td>Hartley</td>
+                <td>t.hartley@beta.co.uk</td>
+                <td>contractor</td>
+                <td>Beta Inc</td>
+                <td><span class="cell-warning">(empty)</span></td>
+                <td>Content Writer</td>
+                <td>$5,000</td>
+                <td>2023-01-01</td>
+              </tr>
+              <tr class="error-detail-row" style="background: var(--yellow-bg);">
+                <td colspan="11">
+                  <div class="error-detail-box warn">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    <div><strong>Missing optional field: team</strong> &mdash; Person will be imported without a team assignment. You can assign them to a team later.</div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- BOTTOM BAR -->
+      <div class="bottom-bar">
+        <div class="bottom-bar-left">
+          <span style="color:var(--red); font-weight:600;">3 errors</span> must be fixed or skipped before importing &middot;
+          <span style="color:#b45309; font-weight:500;">3 warnings</span> will be imported with missing data
+        </div>
+        <div class="bottom-bar-right">
+          <button class="btn" onclick="goToStep(1)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <button class="btn btn-primary" onclick="goToStep(3)">
+            Continue to Review
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- STEP 3: REVIEW & CONFIRM -->
+    <!-- ========================================= -->
+    <div class="step-panel" id="panel-3">
+
+      <div class="review-card">
+        <div class="review-title">Import Summary</div>
+
+        <div class="review-stats">
+          <div class="review-stat" style="border-color:var(--green-border); background:var(--green-bg);">
+            <div class="review-stat-value" style="color:var(--green);">41</div>
+            <div class="review-stat-label">New people to add</div>
+          </div>
+          <div class="review-stat" style="border-color:var(--yellow-border); background:var(--yellow-bg);">
+            <div class="review-stat-value" style="color:#b45309;">1</div>
+            <div class="review-stat-label">Existing records to update</div>
+          </div>
+          <div class="review-stat" style="border-color:var(--red-border); background:var(--red-bg);">
+            <div class="review-stat-value" style="color:var(--red);">3</div>
+            <div class="review-stat-label">Rows to skip (errors)</div>
+          </div>
+        </div>
+
+        <div class="review-breakdown">
+          <div style="font-size:13px; font-weight:600; margin-bottom:4px; color:var(--text-secondary);">Breakdown</div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:var(--green);">&#10003;</span> Valid new entries
+            </span>
+            <span class="breakdown-value">41 people</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:#b45309;">&#8635;</span> Existing record updates
+            </span>
+            <span class="breakdown-value">1 person (Maria Kowalski)</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:#b45309;">&#9888;</span> Imported with warnings (missing optional fields)
+            </span>
+            <span class="breakdown-value">2 people</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:var(--red);">&#10007;</span> Skipped: missing email
+            </span>
+            <span class="breakdown-value">1 row (Michael Torres)</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:var(--red);">&#10007;</span> Skipped: invalid cost format
+            </span>
+            <span class="breakdown-value">1 row (James Okafor)</span>
+          </div>
+          <div class="breakdown-row">
+            <span class="breakdown-label">
+              <span style="color:var(--red);">&#10007;</span> Skipped: duplicate email in file
+            </span>
+            <span class="breakdown-value">1 row (Andre Liu, row 9)</span>
+          </div>
+          <div class="breakdown-row" style="border-top:1px solid var(--border); padding-top:8px; margin-top:4px;">
+            <span class="breakdown-label" style="font-weight:600; color:var(--text-primary);">Total to import</span>
+            <span class="breakdown-value" style="font-size:16px;">44 rows (41 new + 1 update + 2 with warnings)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Error handling options -->
+      <div class="review-card">
+        <div class="review-title">How should we handle the 3 error rows?</div>
+
+        <div class="review-option selected" onclick="selectOption(this)">
+          <div class="radio-circle"><div class="radio-dot"></div></div>
+          <div>
+            <div class="review-option-label">Skip invalid rows, import the rest (Recommended)</div>
+            <div class="review-option-desc">44 valid rows will be imported. 3 error rows will be skipped. You can fix and re-upload them later.</div>
+          </div>
+        </div>
+
+        <div class="review-option" onclick="selectOption(this)">
+          <div class="radio-circle"><div class="radio-dot"></div></div>
+          <div>
+            <div class="review-option-label">Go back and fix the CSV file first</div>
+            <div class="review-option-desc">Return to your CSV editor, fix the 3 errors, and re-upload the corrected file.</div>
+          </div>
+        </div>
+
+        <div class="review-option" onclick="selectOption(this)">
+          <div class="radio-circle"><div class="radio-dot"></div></div>
+          <div>
+            <div class="review-option-label">Cancel import entirely</div>
+            <div class="review-option-desc">No changes will be made to the roster. Start over when ready.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- After import notice -->
+      <div style="background:var(--blue-bg); border:1px solid var(--blue-border); border-radius:var(--radius-lg); padding:16px 20px; display:flex; align-items:flex-start; gap:10px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--blue)" stroke-width="2" style="flex-shrink:0; margin-top:1px;"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        <div style="font-size:13px; color:var(--text-secondary);">
+          <strong style="color:var(--text-primary);">What happens next:</strong> Imported people will appear in your roster immediately.
+          You'll want to assign KPI templates and set targets for them. People with missing optional fields (cost, team, role) can be completed from their detail page.
+        </div>
+      </div>
+
+      <!-- BOTTOM BAR -->
+      <div class="bottom-bar">
+        <div class="bottom-bar-left">Ready to import 44 of 47 rows</div>
+        <div class="bottom-bar-right">
+          <button class="btn" onclick="goToStep(2)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+            Back
+          </button>
+          <button class="btn btn-green" onclick="goToStep(4)" style="font-weight:600; padding: 10px 24px;">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Import 44 People
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ========================================= -->
+    <!-- STEP 4: SUCCESS -->
+    <!-- ========================================= -->
+    <div class="step-panel" id="panel-4">
+
+      <div class="success-panel">
+        <div class="success-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        <div class="success-title">Import Complete</div>
+        <div class="success-subtitle">44 people have been successfully imported into your roster.</div>
+
+        <div class="success-stats">
+          <div class="success-stat">
+            <div class="success-stat-value" style="color:var(--green);">41</div>
+            <div class="success-stat-label">New Added</div>
+          </div>
+          <div class="success-stat">
+            <div class="success-stat-value" style="color:var(--blue);">1</div>
+            <div class="success-stat-label">Updated</div>
+          </div>
+          <div class="success-stat">
+            <div class="success-stat-value" style="color:var(--red);">3</div>
+            <div class="success-stat-label">Skipped</div>
+          </div>
+          <div class="success-stat">
+            <div class="success-stat-value">258</div>
+            <div class="success-stat-label">Total Roster</div>
+          </div>
+        </div>
+
+        <!-- Import Log -->
+        <div class="import-log">
+          <div class="import-log-header">Import Log</div>
+          <div class="import-log-item">
+            <span class="log-check">&#10003;</span>
+            <span>Added 41 new personnel across 4 companies</span>
+          </div>
+          <div class="import-log-item">
+            <span class="log-check">&#10003;</span>
+            <span>Updated Maria Kowalski: role &rarr; Senior Account Exec, cost &rarr; $7,800/mo</span>
+          </div>
+          <div class="import-log-item">
+            <span class="log-check">&#10003;</span>
+            <span>Imported 2 people with warnings (missing optional fields)</span>
+          </div>
+          <div class="import-log-item">
+            <span class="log-skip">&#8212;</span>
+            <span>Skipped row 3: Michael Torres (missing email)</span>
+          </div>
+          <div class="import-log-item">
+            <span class="log-skip">&#8212;</span>
+            <span>Skipped row 6: James Okafor (invalid cost format "$6,200USD")</span>
+          </div>
+          <div class="import-log-item">
+            <span class="log-skip">&#8212;</span>
+            <span>Skipped row 9: Andre Liu (duplicate email a.liu@gamma.sg)</span>
+          </div>
+        </div>
+
+        <div style="margin-top:28px; display:flex; gap:10px; justify-content:center;">
+          <button class="btn btn-primary" onclick="goToStep(1)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            View Roster
+          </button>
+          <button class="btn" onclick="goToStep(1)">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Upload Another File
+          </button>
+          <button class="btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Download Error Report
+          </button>
+        </div>
+
+        <div style="margin-top:24px; padding:16px 20px; background:var(--bg-subtle); border:1px solid var(--border); border-radius:var(--radius); font-size:13px; color:var(--text-secondary); max-width:500px; margin-left:auto; margin-right:auto;">
+          <strong style="color:var(--text-primary);">Next step:</strong> Go to the <strong>Performance</strong> page to assign KPI templates and targets to your new roster members.
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================= -->
+<script>
+  let currentStep = 1;
+
+  function goToStep(step) {
+    currentStep = step;
+
+    // Update panels
+    document.querySelectorAll('.step-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + step).classList.add('active');
+
+    // Update stepper
+    for (let i = 1; i <= 4; i++) {
+      const stepEl = document.getElementById('step-' + i);
+      const lineEl = document.getElementById('line-' + (i - 1));
+      stepEl.classList.remove('active', 'completed');
+      if (i < step) {
+        stepEl.classList.add('completed');
+        stepEl.querySelector('.step-circle').innerHTML = '&#10003;';
+      } else if (i === step) {
+        stepEl.classList.add('active');
+        stepEl.querySelector('.step-circle').textContent = i;
+      } else {
+        stepEl.querySelector('.step-circle').textContent = i;
+      }
+      if (lineEl) {
+        lineEl.classList.toggle('completed', i < step);
+      }
+    }
+
+    // Update breadcrumb
+    const labels = { 1: 'Upload File', 2: 'Preview & Validate', 3: 'Review & Confirm', 4: 'Import Complete' };
+    document.getElementById('breadcrumb-text').textContent = labels[step];
+
+    // If going to step 2, simulate file being uploaded
+    if (step === 2) {
+      const zone = document.getElementById('upload-zone');
+      zone.classList.add('has-file');
+    }
+
+    window.scrollTo(0, 0);
+  }
+
+  // Upload zone interactions
+  const uploadZone = document.getElementById('upload-zone');
+
+  uploadZone.addEventListener('dragover', function(e) {
+    e.preventDefault();
+    this.classList.add('drag-over');
+  });
+
+  uploadZone.addEventListener('dragleave', function() {
+    this.classList.remove('drag-over');
+  });
+
+  uploadZone.addEventListener('drop', function(e) {
+    e.preventDefault();
+    this.classList.remove('drag-over');
+    this.classList.add('has-file');
+    document.getElementById('upload-title').textContent = 'File ready for upload';
+    document.getElementById('upload-subtitle').textContent = 'Click "Continue to Preview" to validate your data';
+  });
+
+  uploadZone.addEventListener('click', function(e) {
+    if (e.target.closest('.file-remove')) return;
+    // Simulate file selection
+    this.classList.add('has-file');
+    document.getElementById('upload-title').textContent = 'File ready for upload';
+    document.getElementById('upload-subtitle').textContent = 'Click "Continue to Preview" to validate your data';
+  });
+
+  function removeFile(e) {
+    e.stopPropagation();
+    const zone = document.getElementById('upload-zone');
+    zone.classList.remove('has-file');
+    document.getElementById('upload-title').textContent = 'Drag & drop your CSV file here';
+    document.getElementById('upload-subtitle').textContent = 'or click to browse your files';
+  }
+
+  // Review option selection
+  function selectOption(el) {
+    document.querySelectorAll('.review-option').forEach(o => o.classList.remove('selected'));
+    el.classList.add('selected');
+  }
+</script>
+
+</body>
+</html>

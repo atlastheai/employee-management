@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zoho CRM Data Inventory</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 40px; max-width: 900px; margin: 0 auto; line-height: 1.6; }
+  
+  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; padding: 32px; border-radius: 12px; margin-bottom: 32px; }
+  .header h1 { font-size: 28px; margin-bottom: 8px; }
+  .header .meta { font-size: 14px; opacity: 0.9; }
+  
+  .section { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 8px; padding: 24px; margin-bottom: 24px; }
+  .section h2 { font-size: 18px; margin-bottom: 16px; color: #1f2937; display: flex; align-items: center; gap: 8px; }
+  .section h2 .emoji { font-size: 24px; }
+  
+  .stats-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-bottom: 20px; }
+  .stat-box { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; }
+  .stat-box .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #6b7280; margin-bottom: 4px; }
+  .stat-box .value { font-size: 32px; font-weight: 700; color: #111827; }
+  .stat-box .note { font-size: 12px; color: #9ca3af; margin-top: 4px; }
+  
+  .metric-list { list-style: none; }
+  .metric-list li { padding: 12px; background: white; border: 1px solid #e5e7eb; border-radius: 6px; margin-bottom: 8px; display: flex; justify-content: space-between; align-items: center; }
+  .metric-list li .name { font-weight: 600; }
+  .metric-list li .desc { font-size: 13px; color: #6b7280; }
+  
+  .badge { display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; text-transform: uppercase; }
+  .badge.red { background: #fee2e2; color: #991b1b; }
+  .badge.yellow { background: #fef3c7; color: #92400e; }
+  .badge.green { background: #d1fae5; color: #065f46; }
+  
+  .flag-summary { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin-top: 16px; }
+  .flag-item { background: white; border-left: 3px solid #dc2626; padding: 12px; border-radius: 4px; }
+  .flag-item .flag-name { font-weight: 600; font-size: 13px; color: #dc2626; }
+  .flag-item .flag-count { font-size: 11px; color: #6b7280; }
+  
+  .data-category { background: white; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; margin-bottom: 12px; }
+  .data-category h3 { font-size: 15px; margin-bottom: 8px; color: #374151; }
+  .data-category ul { list-style: none; padding-left: 0; }
+  .data-category ul li { padding: 6px 0; font-size: 14px; color: #4b5563; padding-left: 20px; position: relative; }
+  .data-category ul li:before { content: "✓"; position: absolute; left: 0; color: #10b981; font-weight: bold; }
+  
+  .highlight-box { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 16px; border-radius: 4px; margin-top: 16px; }
+  .highlight-box .title { font-weight: 600; margin-bottom: 8px; color: #92400e; }
+  .highlight-box .text { font-size: 14px; color: #78350f; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Zoho CRM Data Inventory</h1>
+  <div class="meta">Complete breakdown of available data for your sales dashboard<br>Generated: March 7, 2026 | Period: Last 90 Days</div>
+</div>
+
+<div class="section">
+  <h2><span class="emoji">📊</span> Data Collection Summary</h2>
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="label">Sales Reps Analyzed</div>
+      <div class="value">43</div>
+      <div class="note">Across all teams</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Time Period</div>
+      <div class="value">90</div>
+      <div class="note">Days analyzed</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Call Logs</div>
+      <div class="value">2,000</div>
+      <div class="note">Individual call records</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Activities</div>
+      <div class="value">4,000+</div>
+      <div class="note">Tasks + Events logged</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="emoji">📈</span> Per-Rep Metrics Available</h2>
+  
+  <div class="data-category">
+    <h3>1. Output Rating (0-10 Scale)</h3>
+    <ul>
+      <li><strong>Overall Output Rating</strong> - Composite score of performance</li>
+      <li><strong>Color Status</strong> - RED/YELLOW/GREEN classification</li>
+      <li><strong>Velocity Score</strong> - How fast they move deals</li>
+      <li><strong>Quality Score</strong> - Win rate and deal quality</li>
+      <li><strong>Responsiveness Score</strong> - Lead response time</li>
+    </ul>
+  </div>
+
+  <div class="data-category">
+    <h3>2. Deal Metrics</h3>
+    <ul>
+      <li><strong>Deals Won</strong> - Number of closed deals</li>
+      <li><strong>Deals Lost</strong> - Opportunities that didn't close</li>
+      <li><strong>Win Rate</strong> - Percentage of deals closed</li>
+      <li><strong>Deal Values</strong> - Revenue per deal</li>
+      <li><strong>Pipeline Status</strong> - Active opportunities</li>
+    </ul>
+  </div>
+
+  <div class="data-category">
+    <h3>3. Call Quality Metrics</h3>
+    <ul>
+      <li><strong>Total Calls</strong> - Number of calls made</li>
+      <li><strong>Call Duration</strong> - Time spent on calls</li>
+      <li><strong>Ghost Call %</strong> - Calls under 5 seconds (gaming indicator)</li>
+      <li><strong>Meaningful Call %</strong> - Calls over 30 seconds</li>
+      <li><strong>Talk Time Distribution</strong> - Quality vs quantity analysis</li>
+    </ul>
+  </div>
+
+  <div class="data-category">
+    <h3>4. Activity Metrics</h3>
+    <ul>
+      <li><strong>Total Tasks</strong> - Tasks created by rep</li>
+      <li><strong>Completed Tasks</strong> - Tasks finished</li>
+      <li><strong>Task Completion %</strong> - Follow-through rate</li>
+      <li><strong>Total Events</strong> - Meetings, demos scheduled</li>
+      <li><strong>Activity Volume</strong> - Overall activity count</li>
+    </ul>
+  </div>
+
+  <div class="data-category">
+    <h3>5. Gaming Detection Flags</h3>
+    <ul>
+      <li><strong>Ghost Dialer</strong> - >40% calls under 5 seconds</li>
+      <li><strong>VM Rambler</strong> - High talk time, low meaningful calls</li>
+      <li><strong>Volume No Outcome</strong> - Many calls, zero deals</li>
+      <li><strong>Fake Busy</strong> - High activity, zero pipeline</li>
+      <li><strong>Low Follow Through</strong> - Tasks created but never completed</li>
+    </ul>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="emoji">🚨</span> Current Team Status</h2>
+  
+  <div class="stats-grid">
+    <div class="stat-box">
+      <div class="label">RED - Failing</div>
+      <div class="value" style="color: #dc2626;">36</div>
+      <div class="note">84% of team</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">YELLOW - Warning</div>
+      <div class="value" style="color: #d97706;">7</div>
+      <div class="note">16% of team</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">GREEN - Performing</div>
+      <div class="value" style="color: #059669;">0</div>
+      <div class="note">0% of team</div>
+    </div>
+    <div class="stat-box">
+      <div class="label">Gaming Flags</div>
+      <div class="value" style="color: #dc2626;">45</div>
+      <div class="note">26 reps flagged</div>
+    </div>
+  </div>
+
+  <div class="flag-summary">
+    <div class="flag-item">
+      <div class="flag-name">FAKE BUSY</div>
+      <div class="flag-count">25 reps - High activity, zero pipeline</div>
+    </div>
+    <div class="flag-item">
+      <div class="flag-name">VOLUME NO OUTCOME</div>
+      <div class="flag-count">14 reps - Many calls, no deals</div>
+    </div>
+    <div class="flag-item">
+      <div class="flag-name">VM RAMBLER</div>
+      <div class="flag-count">3 reps - High talk time, low quality</div>
+    </div>
+    <div class="flag-item">
+      <div class="flag-name">GHOST DIALER</div>
+      <div class="flag-count">2 reps - Majority calls under 5 sec</div>
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="emoji">🎯</span> What You Can Build</h2>
+  
+  <div class="data-category">
+    <h3>Dashboard Features</h3>
+    <ul>
+      <li>Executive summary with team-wide metrics</li>
+      <li>Sortable leaderboard (by rating, calls, deals, flags)</li>
+      <li>Individual rep detail pages</li>
+      <li>Gaming flag highlighting and explanations</li>
+      <li>Call quality breakdowns (ghost %, meaningful %)</li>
+      <li>Activity vs outcomes correlation</li>
+      <li>Color-coded performance indicators</li>
+      <li>Worst offenders shortlist</li>
+      <li>Gaming pattern explanations</li>
+      <li>Trend analysis over time</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="title">⚡ Key Insight</div>
+    <div class="text">
+      All data is <strong>cross-validated</strong> to catch gaming. No single metric stands alone. 
+      High calls without deals = flagged. High talk time without meaningful conversations = flagged. 
+      High activity without pipeline movement = flagged. The system catches the games your team is playing.
+    </div>
+  </div>
+</div>
+
+<div class="section">
+  <h2><span class="emoji">📋</span> Next Steps</h2>
+  
+  <div class="data-category">
+    <h3>Ready to Build</h3>
+    <ul>
+      <li>All data collected and validated from your Zoho CRM</li>
+      <li>43 sales reps analyzed with complete metrics</li>
+      <li>Gaming detection algorithms running and flagging patterns</li>
+      <li>Wireframes ready (you've seen all 4 options)</li>
+      <li>Choose your preferred dashboard layout</li>
+      <li>Claude Code will build it with REAL data in ~15-30 minutes</li>
+    </ul>
+  </div>
+
+  <div class="highlight-box">
+    <div class="title">🚀 Ready When You Are</div>
+    <div class="text">
+      Pick which wireframe layout you like best, and I'll have Claude Code build the real dashboard 
+      with all this data. You'll be able to open it in your browser and see exactly who's gaming the system, 
+      who's underperforming, and who needs to be terminated.
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

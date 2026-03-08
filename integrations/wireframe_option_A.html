@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - Option A: Triage Board</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 32px; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid #e5e5e5; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { color: #888; font-weight: 400; }
+  .header .meta { font-size: 13px; color: #888; text-align: right; line-height: 1.6; }
+  .stats-bar { display: flex; gap: 24px; margin-bottom: 32px; }
+  .stat-box { flex: 1; background: #fafafa; border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; text-align: center; }
+  .stat-box .number { font-size: 36px; font-weight: 700; }
+  .stat-box .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+  .stat-box.critical .number { color: #dc2626; }
+  .stat-box.warning .number { color: #d97706; }
+  .stat-box.ok .number { color: #16a34a; }
+
+  .swimlanes { display: flex; flex-direction: column; gap: 28px; }
+  .lane { border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden; }
+  .lane-header { padding: 14px 20px; font-size: 14px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px; display: flex; justify-content: space-between; align-items: center; }
+  .lane-header .count { font-size: 13px; font-weight: 400; opacity: 0.7; }
+  .lane.critical .lane-header { background: #fef2f2; color: #991b1b; border-bottom: 2px solid #fecaca; }
+  .lane.watch .lane-header { background: #fffbeb; color: #92400e; border-bottom: 2px solid #fde68a; }
+  .lane.performing .lane-header { background: #f0fdf4; color: #166534; border-bottom: 2px solid #bbf7d0; }
+
+  .lane-body { padding: 16px; display: flex; flex-wrap: wrap; gap: 12px; min-height: 80px; }
+  .rep-card { width: 220px; border: 1px solid #e5e5e5; border-radius: 6px; padding: 14px; background: #fff; }
+  .rep-card .name { font-size: 14px; font-weight: 600; margin-bottom: 6px; }
+  .rep-card .or-score { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .rep-card .or-score.red { color: #dc2626; }
+  .rep-card .or-score.yellow { color: #d97706; }
+  .rep-card .or-score.green { color: #16a34a; }
+  .rep-card .sub-scores { font-size: 11px; color: #666; margin-bottom: 8px; line-height: 1.5; }
+  .flag-badge { display: inline-block; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; margin: 2px 2px 2px 0; }
+  .flag-badge.high { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .flag-badge.medium { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .flag-badge.low { background: #f9fafb; color: #6b7280; border: 1px solid #e5e7eb; }
+
+  .wireframe-note { background: #f0f4ff; border: 1px dashed #93b4ff; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #3b5998; line-height: 1.6; }
+  .wireframe-note strong { font-weight: 600; }
+  .empty-note { color: #aaa; font-size: 13px; font-style: italic; padding: 20px; }
+</style>
+</head>
+<body>
+
+<div class="wireframe-note">
+  <strong>WIREFRAME: Option A - Triage Board</strong><br>
+  Reps are organized into swim lanes by severity. Critical issues float to the top. Designed for instant triage.
+</div>
+
+<div class="header">
+  <h1>ORGCOMMAND <span>Sales Performance Triage</span></h1>
+  <div class="meta">
+    Report: Last 90 Days<br>
+    Generated: Mar 7, 2026
+  </div>
+</div>
+
+<div class="stats-bar">
+  <div class="stat-box critical">
+    <div class="number">36</div>
+    <div class="label">Critical (RED)</div>
+  </div>
+  <div class="stat-box warning">
+    <div class="number">7</div>
+    <div class="label">Watch (YELLOW)</div>
+  </div>
+  <div class="stat-box ok">
+    <div class="number">0</div>
+    <div class="label">Performing (GREEN)</div>
+  </div>
+  <div class="stat-box">
+    <div class="number">45</div>
+    <div class="label">Gaming Flags</div>
+  </div>
+  <div class="stat-box">
+    <div class="number">1</div>
+    <div class="label">Deals in Pipeline</div>
+  </div>
+</div>
+
+<div class="swimlanes">
+
+  <!-- CRITICAL LANE -->
+  <div class="lane critical">
+    <div class="lane-header">
+      Critical - Immediate Action Required
+      <span class="count">36 reps</span>
+    </div>
+    <div class="lane-body">
+      <div class="rep-card">
+        <div class="name">dominic.w</div>
+        <div class="or-score red">3.3</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 1.0 / Resp: 8.6</div>
+        <div class="flag-badge high">GHOST DIALER</div>
+        <div class="flag-badge medium">VOLUME NO OUTCOME</div>
+        <div class="flag-badge medium">VM RAMBLER</div>
+        <div class="flag-badge high">FAKE BUSY</div>
+      </div>
+      <div class="rep-card">
+        <div class="name">robert.ca</div>
+        <div class="or-score red">3.0</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 1.0 / Resp: 7.4</div>
+        <div class="flag-badge high">GHOST DIALER</div>
+        <div class="flag-badge medium">VOLUME NO OUTCOME</div>
+        <div class="flag-badge medium">VM RAMBLER</div>
+        <div class="flag-badge high">FAKE BUSY</div>
+      </div>
+      <div class="rep-card">
+        <div class="name">john.t</div>
+        <div class="or-score red">3.3</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 1.0 / Resp: 8.5</div>
+        <div class="flag-badge medium">VOLUME NO OUTCOME</div>
+        <div class="flag-badge medium">VM RAMBLER</div>
+        <div class="flag-badge high">FAKE BUSY</div>
+      </div>
+      <div class="rep-card">
+        <div class="name">jonah.go</div>
+        <div class="or-score red">3.6</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 1.0 / Resp: 9.7</div>
+        <div class="flag-badge medium">VOLUME NO OUTCOME</div>
+        <div class="flag-badge high">FAKE BUSY</div>
+      </div>
+      <div class="rep-card" style="border: 1px dashed #ccc; background: #fafafa;">
+        <div class="empty-note">+ 32 more RED reps<br>sorted by flag count</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WATCH LANE -->
+  <div class="lane watch">
+    <div class="lane-header">
+      Watch - Monitor Closely
+      <span class="count">7 reps</span>
+    </div>
+    <div class="lane-body">
+      <div class="rep-card">
+        <div class="name">Tracy</div>
+        <div class="or-score yellow">6.8</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 10.0 / Resp: 10.0</div>
+      </div>
+      <div class="rep-card">
+        <div class="name">Andrew Support</div>
+        <div class="or-score yellow">5.8</div>
+        <div class="sub-scores">Vel: 2.0 / Qual: 7.0 / Resp: 10.0</div>
+        <div class="flag-badge high">FAKE BUSY</div>
+      </div>
+      <div class="rep-card" style="border: 1px dashed #ccc; background: #fafafa;">
+        <div class="empty-note">+ 5 more YELLOW reps</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PERFORMING LANE -->
+  <div class="lane performing">
+    <div class="lane-header">
+      Performing - On Track
+      <span class="count">0 reps</span>
+    </div>
+    <div class="lane-body">
+      <div class="empty-note">No reps currently meeting GREEN threshold (8.0+)</div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - Option B: Ranked Leaderboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 32px; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; padding-bottom: 20px; border-bottom: 2px solid #e5e5e5; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { color: #888; font-weight: 400; }
+  .header .meta { font-size: 13px; color: #888; text-align: right; line-height: 1.6; }
+
+  .wireframe-note { background: #f0f4ff; border: 1px dashed #93b4ff; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #3b5998; line-height: 1.6; }
+  .wireframe-note strong { font-weight: 600; }
+
+  .team-avg { display: flex; gap: 20px; margin-bottom: 24px; padding: 16px 20px; background: #f9fafb; border: 1px solid #e5e5e5; border-radius: 8px; align-items: center; }
+  .team-avg .label { font-size: 12px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .team-avg .value { font-size: 20px; font-weight: 700; }
+
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  thead th { background: #f9fafb; padding: 10px 12px; text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: 0.5px; color: #666; border-bottom: 2px solid #e5e5e5; white-space: nowrap; }
+  tbody td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: top; }
+  tbody tr:hover { background: #fafafa; }
+
+  .or-cell { font-weight: 700; font-size: 16px; text-align: center; border-radius: 4px; padding: 6px 10px !important; }
+  .or-green { background: #dcfce7; color: #166534; }
+  .or-yellow { background: #fef9c3; color: #854d0e; }
+  .or-red { background: #fee2e2; color: #991b1b; }
+
+  .sub-score { font-size: 12px; color: #666; }
+  .sub-score .num { font-weight: 600; color: #333; }
+
+  .rank { font-size: 14px; font-weight: 600; color: #aaa; text-align: center; }
+
+  .calls-col .ghost { color: #dc2626; font-weight: 600; }
+  .calls-col .meaningful { color: #16a34a; font-weight: 600; }
+
+  .flag-badge { display: inline-block; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; margin: 1px; white-space: nowrap; }
+  .flag-badge.high { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .flag-badge.medium { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+  .flag-badge.low { background: #f9fafb; color: #6b7280; border: 1px solid #e5e7eb; }
+
+  tr.flagged { border-left: 3px solid #dc2626; }
+  .no-flags { color: #ccc; font-size: 11px; }
+
+  .separator-row td { background: #f0f0f0; padding: 6px 12px; font-size: 11px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.5px; }
+  .ellipsis td { color: #bbb; font-style: italic; text-align: center; padding: 8px; }
+</style>
+</head>
+<body>
+
+<div class="wireframe-note">
+  <strong>WIREFRAME: Option B - Ranked Leaderboard</strong><br>
+  Single sorted table with all reps. Dense, scannable, spreadsheet-like. Color-coded OR cells with inline flag badges.
+</div>
+
+<div class="header">
+  <h1>ORGCOMMAND <span>Sales Leaderboard</span></h1>
+  <div class="meta">
+    Report: Last 90 Days<br>
+    Generated: Mar 7, 2026
+  </div>
+</div>
+
+<div class="team-avg">
+  <div><div class="label">Team Avg OR</div><div class="value" style="color:#dc2626;">3.3</div></div>
+  <div style="border-left:1px solid #ddd; height:36px;"></div>
+  <div><div class="label">Reps</div><div class="value">43</div></div>
+  <div style="border-left:1px solid #ddd; height:36px;"></div>
+  <div><div class="label">GREEN</div><div class="value" style="color:#16a34a;">0</div></div>
+  <div><div class="label">YELLOW</div><div class="value" style="color:#d97706;">7</div></div>
+  <div><div class="label">RED</div><div class="value" style="color:#dc2626;">36</div></div>
+  <div style="border-left:1px solid #ddd; height:36px;"></div>
+  <div><div class="label">Gaming Flags</div><div class="value">45</div></div>
+  <div style="border-left:1px solid #ddd; height:36px;"></div>
+  <div><div class="label">Deals</div><div class="value">1</div></div>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:40px;">#</th>
+      <th>Rep Name</th>
+      <th style="width:70px; text-align:center;">OR</th>
+      <th>Velocity</th>
+      <th>Quality</th>
+      <th>Responsive</th>
+      <th>Calls</th>
+      <th>Ghost%</th>
+      <th>Meaning%</th>
+      <th>Activities</th>
+      <th>Deals</th>
+      <th>Gaming Flags</th>
+    </tr>
+  </thead>
+  <tbody>
+    <!-- YELLOW SECTION -->
+    <tr class="separator-row"><td colspan="12">YELLOW - Monitor (7)</td></tr>
+    <tr>
+      <td class="rank">1</td>
+      <td><strong>Tracy</strong></td>
+      <td class="or-cell or-yellow">6.8</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">10.0</span></td>
+      <td class="sub-score"><span class="num">10.0</span></td>
+      <td>--</td>
+      <td>--</td>
+      <td>--</td>
+      <td>24</td>
+      <td>0</td>
+      <td class="no-flags">None</td>
+    </tr>
+    <tr class="flagged">
+      <td class="rank">2</td>
+      <td><strong>Andrew Support</strong></td>
+      <td class="or-cell or-yellow">5.8</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">7.0</span></td>
+      <td class="sub-score"><span class="num">10.0</span></td>
+      <td>12</td>
+      <td>--</td>
+      <td>--</td>
+      <td>46</td>
+      <td>0</td>
+      <td><span class="flag-badge high">FAKE BUSY</span></td>
+    </tr>
+    <tr class="flagged">
+      <td class="rank">3</td>
+      <td><strong>John Andrews</strong></td>
+      <td class="or-cell or-yellow">5.7</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">7.0</span></td>
+      <td class="sub-score"><span class="num">9.7</span></td>
+      <td>8</td>
+      <td>--</td>
+      <td>--</td>
+      <td>96</td>
+      <td>0</td>
+      <td><span class="flag-badge high">FAKE BUSY</span></td>
+    </tr>
+    <tr class="ellipsis"><td colspan="12">... 4 more YELLOW reps ...</td></tr>
+
+    <!-- RED SECTION -->
+    <tr class="separator-row"><td colspan="12">RED - Critical (36)</td></tr>
+    <tr class="flagged">
+      <td class="rank">8</td>
+      <td><strong>dominic.w</strong></td>
+      <td class="or-cell or-red">3.3</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">1.0</span></td>
+      <td class="sub-score"><span class="num">8.6</span></td>
+      <td>164</td>
+      <td class="calls-col"><span class="ghost">67.1%</span></td>
+      <td class="calls-col"><span class="meaningful">9.8%</span></td>
+      <td>456</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </td>
+    </tr>
+    <tr class="flagged">
+      <td class="rank">9</td>
+      <td><strong>robert.ca</strong></td>
+      <td class="or-cell or-red">3.0</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">1.0</span></td>
+      <td class="sub-score"><span class="num">7.4</span></td>
+      <td>407</td>
+      <td class="calls-col"><span class="ghost">56.8%</span></td>
+      <td class="calls-col"><span class="meaningful">18.7%</span></td>
+      <td>757</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </td>
+    </tr>
+    <tr class="flagged">
+      <td class="rank">10</td>
+      <td><strong>russell.w</strong></td>
+      <td class="or-cell or-red">4.0</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">10.0</span></td>
+      <td>62</td>
+      <td>--</td>
+      <td>--</td>
+      <td>507</td>
+      <td>0</td>
+      <td>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </td>
+    </tr>
+    <tr>
+      <td class="rank">11</td>
+      <td><strong>tommy</strong></td>
+      <td class="or-cell or-red">1.1</td>
+      <td class="sub-score"><span class="num">2.0</span></td>
+      <td class="sub-score"><span class="num">1.0</span></td>
+      <td class="sub-score"><span class="num">0.0</span></td>
+      <td>--</td>
+      <td>--</td>
+      <td>--</td>
+      <td>0</td>
+      <td>0</td>
+      <td class="no-flags">None</td>
+    </tr>
+    <tr class="ellipsis"><td colspan="12">... 32 more RED reps ...</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

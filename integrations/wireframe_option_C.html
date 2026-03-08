@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND - Option C: Executive Briefing</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #fff; color: #1a1a1a; padding: 32px; max-width: 1100px; margin: 0 auto; }
+  .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 32px; padding-bottom: 20px; border-bottom: 2px solid #e5e5e5; }
+  .header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+  .header h1 span { color: #888; font-weight: 400; }
+  .header .meta { font-size: 13px; color: #888; text-align: right; line-height: 1.6; }
+
+  .wireframe-note { background: #f0f4ff; border: 1px dashed #93b4ff; border-radius: 6px; padding: 14px 18px; margin-bottom: 24px; font-size: 13px; color: #3b5998; line-height: 1.6; }
+  .wireframe-note strong { font-weight: 600; }
+
+  /* --- EXECUTIVE SUMMARY --- */
+  .exec-summary { margin-bottom: 36px; }
+  .exec-summary h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+
+  .summary-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .summary-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 20px; text-align: center; }
+  .summary-card .big-number { font-size: 48px; font-weight: 700; line-height: 1; }
+  .summary-card .subtitle { font-size: 12px; color: #888; margin-top: 6px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .summary-card .detail { font-size: 13px; color: #666; margin-top: 10px; line-height: 1.4; }
+  .summary-card.alarm { border-color: #fecaca; background: #fff5f5; }
+  .summary-card.alarm .big-number { color: #dc2626; }
+
+  /* Team health gauge */
+  .health-gauge { margin-bottom: 24px; }
+  .gauge-bar { height: 32px; border-radius: 6px; overflow: hidden; display: flex; margin-bottom: 8px; }
+  .gauge-segment { display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; color: #fff; }
+  .gauge-segment.red { background: #dc2626; }
+  .gauge-segment.yellow { background: #d97706; }
+  .gauge-segment.green { background: #16a34a; }
+  .gauge-legend { display: flex; gap: 20px; font-size: 12px; color: #888; }
+  .gauge-legend span { display: flex; align-items: center; gap: 4px; }
+  .gauge-legend .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .gauge-legend .dot.red { background: #dc2626; }
+  .gauge-legend .dot.yellow { background: #d97706; }
+  .gauge-legend .dot.green { background: #16a34a; }
+
+  /* Insight callout */
+  .insight-box { background: #1a1a1a; color: #fff; border-radius: 8px; padding: 20px 24px; margin-bottom: 24px; }
+  .insight-box .label { font-size: 10px; text-transform: uppercase; letter-spacing: 1px; color: #888; margin-bottom: 8px; }
+  .insight-box .text { font-size: 16px; line-height: 1.5; }
+  .insight-box .text strong { color: #f87171; }
+
+  /* Worst offenders */
+  .worst-offenders { margin-bottom: 16px; }
+  .worst-offenders h3 { font-size: 14px; font-weight: 600; margin-bottom: 12px; color: #991b1b; }
+  .offender-row { display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-bottom: 1px solid #f0f0f0; }
+  .offender-row:last-child { border-bottom: none; }
+  .offender-rank { font-size: 18px; font-weight: 700; color: #ccc; width: 28px; text-align: center; }
+  .offender-name { font-size: 14px; font-weight: 600; flex: 1; }
+  .offender-or { font-size: 18px; font-weight: 700; color: #dc2626; width: 50px; text-align: center; }
+  .offender-flags { display: flex; gap: 4px; flex-wrap: wrap; }
+  .flag-badge { display: inline-block; font-size: 9px; font-weight: 600; padding: 2px 5px; border-radius: 3px; }
+  .flag-badge.high { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+  .flag-badge.medium { background: #fff7ed; color: #9a3412; border: 1px solid #fed7aa; }
+
+  /* --- SECTION DIVIDER --- */
+  .section-divider { border: none; border-top: 2px solid #e5e5e5; margin: 36px 0; }
+
+  /* --- REP CARDS GRID --- */
+  .reps-section h2 { font-size: 16px; font-weight: 700; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; color: #555; }
+  .cards-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+  .rep-card { border: 1px solid #e5e5e5; border-radius: 8px; padding: 16px; }
+  .rep-card.has-flags { border-left: 3px solid #dc2626; }
+  .rep-card .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
+  .rep-card .card-name { font-size: 14px; font-weight: 600; }
+  .rep-card .card-or { font-size: 22px; font-weight: 700; }
+  .rep-card .card-or.red { color: #dc2626; }
+  .rep-card .card-or.yellow { color: #d97706; }
+
+  /* Mini bar chart */
+  .mini-bars { margin-bottom: 10px; }
+  .mini-bar-row { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; }
+  .mini-bar-label { font-size: 10px; color: #888; width: 50px; text-align: right; }
+  .mini-bar-track { flex: 1; height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; }
+  .mini-bar-fill { height: 100%; border-radius: 4px; }
+  .mini-bar-fill.low { background: #fca5a5; }
+  .mini-bar-fill.mid { background: #fcd34d; }
+  .mini-bar-fill.high { background: #86efac; }
+  .mini-bar-val { font-size: 10px; color: #666; width: 24px; }
+
+  .card-flags { margin-top: 8px; }
+
+  .placeholder-card { border: 1px dashed #ddd; border-radius: 8px; padding: 24px; display: flex; align-items: center; justify-content: center; color: #bbb; font-size: 13px; font-style: italic; }
+</style>
+</head>
+<body>
+
+<div class="wireframe-note">
+  <strong>WIREFRAME: Option C - Executive Briefing</strong><br>
+  Narrative-driven layout. Executive summary tells the story at the top, individual rep cards provide drill-down detail below.
+</div>
+
+<div class="header">
+  <h1>ORGCOMMAND <span>Executive Sales Briefing</span></h1>
+  <div class="meta">
+    Report: Last 90 Days<br>
+    Generated: Mar 7, 2026
+  </div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="exec-summary">
+  <h2>Executive Summary</h2>
+
+  <div class="summary-grid">
+    <div class="summary-card alarm">
+      <div class="big-number">3.3</div>
+      <div class="subtitle">Team Avg Output Rating</div>
+      <div class="detail">Target: 8.0+</div>
+    </div>
+    <div class="summary-card alarm">
+      <div class="big-number">1</div>
+      <div class="subtitle">Deals in Pipeline</div>
+      <div class="detail">Across 43 reps, 90 days</div>
+    </div>
+    <div class="summary-card alarm">
+      <div class="big-number">45</div>
+      <div class="subtitle">Gaming Flags Detected</div>
+      <div class="detail">25 Fake Busy, 14 Volume, 3 VM, 2 Ghost</div>
+    </div>
+    <div class="summary-card alarm">
+      <div class="big-number">84%</div>
+      <div class="subtitle">Reps in RED</div>
+      <div class="detail">36 of 43 reps below 5.0</div>
+    </div>
+  </div>
+
+  <!-- GAUGE -->
+  <div class="health-gauge">
+    <div class="gauge-bar">
+      <div class="gauge-segment red" style="width: 83.7%;">36 RED</div>
+      <div class="gauge-segment yellow" style="width: 16.3%;">7</div>
+    </div>
+    <div class="gauge-legend">
+      <span><span class="dot red"></span> RED (1.0-4.9) - 36 reps</span>
+      <span><span class="dot yellow"></span> YELLOW (5.0-7.9) - 7 reps</span>
+      <span><span class="dot green"></span> GREEN (8.0-10.0) - 0 reps</span>
+    </div>
+  </div>
+
+  <!-- INSIGHT -->
+  <div class="insight-box">
+    <div class="label">Key Insight</div>
+    <div class="text">
+      Your team logged <strong>6,000+ activities</strong> in the last 90 days and closed <strong>1 deal</strong>.
+      25 reps are flagged for <strong>FAKE BUSY</strong> -- high activity volume with zero pipeline movement.
+      2 reps are confirmed <strong>ghost dialers</strong> (>50% of calls under 5 seconds).
+    </div>
+  </div>
+
+  <!-- WORST OFFENDERS -->
+  <div class="worst-offenders">
+    <h3>Immediate Action Required - Top 5 Worst Offenders</h3>
+    <div class="offender-row">
+      <div class="offender-rank">1</div>
+      <div class="offender-name">dominic.w</div>
+      <div class="offender-or">3.3</div>
+      <div class="offender-flags">
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+    <div class="offender-row">
+      <div class="offender-rank">2</div>
+      <div class="offender-name">robert.ca</div>
+      <div class="offender-or">3.0</div>
+      <div class="offender-flags">
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+    <div class="offender-row">
+      <div class="offender-rank">3</div>
+      <div class="offender-name">john.t</div>
+      <div class="offender-or">3.3</div>
+      <div class="offender-flags">
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+    <div class="offender-row">
+      <div class="offender-rank">4</div>
+      <div class="offender-name">jonah.go</div>
+      <div class="offender-or">3.6</div>
+      <div class="offender-flags">
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+    <div class="offender-row">
+      <div class="offender-rank">5</div>
+      <div class="offender-name">james.k</div>
+      <div class="offender-or">3.3</div>
+      <div class="offender-flags">
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr class="section-divider">
+
+<!-- INDIVIDUAL REP CARDS -->
+<div class="reps-section">
+  <h2>Individual Rep Breakdown</h2>
+  <div class="cards-grid">
+
+    <div class="rep-card has-flags">
+      <div class="card-header">
+        <div class="card-name">dominic.w</div>
+        <div class="card-or red">3.3</div>
+      </div>
+      <div class="mini-bars">
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Velocity</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill low" style="width:20%;"></div></div>
+          <div class="mini-bar-val">2.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Quality</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill low" style="width:10%;"></div></div>
+          <div class="mini-bar-val">1.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Response</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill high" style="width:86%;"></div></div>
+          <div class="mini-bar-val">8.6</div>
+        </div>
+      </div>
+      <div class="card-flags">
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+
+    <div class="rep-card has-flags">
+      <div class="card-header">
+        <div class="card-name">robert.ca</div>
+        <div class="card-or red">3.0</div>
+      </div>
+      <div class="mini-bars">
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Velocity</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill low" style="width:20%;"></div></div>
+          <div class="mini-bar-val">2.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Quality</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill low" style="width:10%;"></div></div>
+          <div class="mini-bar-val">1.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Response</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill mid" style="width:74%;"></div></div>
+          <div class="mini-bar-val">7.4</div>
+        </div>
+      </div>
+      <div class="card-flags">
+        <span class="flag-badge high">GHOST DIALER</span>
+        <span class="flag-badge medium">VOL NO OUT</span>
+        <span class="flag-badge medium">VM RAMBLER</span>
+        <span class="flag-badge high">FAKE BUSY</span>
+      </div>
+    </div>
+
+    <div class="rep-card">
+      <div class="card-header">
+        <div class="card-name">Tracy</div>
+        <div class="card-or yellow">6.8</div>
+      </div>
+      <div class="mini-bars">
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Velocity</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill low" style="width:20%;"></div></div>
+          <div class="mini-bar-val">2.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Quality</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill high" style="width:100%;"></div></div>
+          <div class="mini-bar-val">10.0</div>
+        </div>
+        <div class="mini-bar-row">
+          <div class="mini-bar-label">Response</div>
+          <div class="mini-bar-track"><div class="mini-bar-fill high" style="width:100%;"></div></div>
+          <div class="mini-bar-val">10.0</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="placeholder-card">+ 40 more rep cards sorted worst-first</div>
+
+  </div>
+</div>
+
+</body>
+</html>

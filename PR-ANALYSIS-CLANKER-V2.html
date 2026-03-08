@@ -1,0 +1,911 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PR Analysis — clanker-v2 Branch</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f8fa;
+    --border: #e2e5ea;
+    --border-light: #eef0f3;
+    --text: #111827;
+    --text2: #6b7280;
+    --text3: #9ca3af;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --yellow: #f59e0b;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #fde68a;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --purple: #8b5cf6;
+    --purple-bg: #f5f3ff;
+    --orange: #f97316;
+    --orange-bg: #fff7ed;
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.7;
+  }
+
+  .page { max-width: 940px; margin: 0 auto; padding: 40px 50px; }
+
+  /* Cover */
+  .cover { text-align: center; padding: 50px 0 36px; border-bottom: 3px solid var(--text); margin-bottom: 40px; }
+  .cover h1 { font-size: 34px; font-weight: 800; letter-spacing: 2px; margin-bottom: 4px; }
+  .cover .sub { font-size: 16px; color: var(--text2); letter-spacing: 1px; margin-bottom: 16px; }
+  .cover .meta { font-size: 13px; color: var(--text3); }
+  .cover .meta strong { color: var(--text2); }
+
+  /* Impact Banner */
+  .impact-banner {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;
+    margin-bottom: 36px;
+  }
+  .impact-box {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 18px; text-align: center;
+  }
+  .impact-val { font-size: 28px; font-weight: 800; line-height: 1.1; }
+  .impact-val.green { color: var(--green); }
+  .impact-val.red { color: var(--red); }
+  .impact-val.blue { color: var(--blue); }
+  .impact-val.purple { color: var(--purple); }
+  .impact-lbl { font-size: 11px; color: var(--text3); text-transform: uppercase; letter-spacing: .5px; margin-top: 4px; }
+
+  /* TOC */
+  .toc {
+    background: var(--bg-subtle); border: 1px solid var(--border);
+    border-radius: var(--radius-lg); padding: 28px 32px; margin-bottom: 44px;
+  }
+  .toc h2 { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--text3); margin-bottom: 14px; }
+  .toc ol { list-style: none; counter-reset: toc; }
+  .toc li { counter-increment: toc; padding: 5px 0; border-bottom: 1px solid var(--border-light); font-size: 14px; }
+  .toc li:last-child { border-bottom: none; }
+  .toc li::before { content: counter(toc, decimal-leading-zero) "."; font-weight: 700; margin-right: 10px; font-size: 13px; }
+
+  /* Sections */
+  .section { margin-bottom: 48px; }
+  .section-num { font-size: 12px; letter-spacing: 3px; text-transform: uppercase; color: var(--text3); margin-bottom: 4px; }
+  h2.section-title { font-size: 22px; font-weight: 700; padding-bottom: 10px; border-bottom: 2px solid var(--text); margin-bottom: 20px; }
+  h3 { font-size: 17px; font-weight: 600; margin: 24px 0 10px; }
+  h4 { font-size: 15px; font-weight: 600; color: #333; margin: 18px 0 8px; }
+  p { margin-bottom: 12px; color: #333; }
+  ul, ol { margin: 8px 0 12px 20px; }
+  li { margin-bottom: 5px; color: #333; }
+
+  /* Callouts */
+  .callout { border-left: 4px solid var(--text); background: var(--bg-subtle); padding: 16px 20px; margin: 18px 0; border-radius: 0 var(--radius) var(--radius) 0; }
+  .callout.critical { border-left-color: var(--red); background: var(--red-bg); }
+  .callout.safe { border-left-color: var(--green); background: var(--green-bg); }
+  .callout.info { border-left-color: var(--blue); background: var(--blue-bg); }
+  .callout.warn { border-left-color: var(--yellow); background: var(--yellow-bg); }
+  .callout-label { font-size: 11px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 4px; }
+  .callout.critical .callout-label { color: var(--red); }
+  .callout.safe .callout-label { color: var(--green); }
+  .callout.info .callout-label { color: var(--blue); }
+  .callout.warn .callout-label { color: var(--yellow); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0; font-size: 14px; }
+  thead th { background: var(--text); color: #fff; padding: 9px 14px; text-align: left; font-weight: 600; font-size: 12px; letter-spacing: .5px; text-transform: uppercase; }
+  tbody td { padding: 10px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; }
+  tbody tr:nth-child(even) { background: var(--bg-subtle); }
+
+  code { background: #f0f2f5; padding: 2px 6px; border-radius: 3px; font-family: 'SF Mono', Consolas, monospace; font-size: 13px; color: #c0392b; }
+  pre { background: #0f172a; color: #e2e8f0; padding: 16px 20px; border-radius: var(--radius); font-family: 'SF Mono', Consolas, monospace; font-size: 13px; line-height: 1.5; overflow-x: auto; margin: 14px 0; }
+
+  /* File change indicators */
+  .file-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 4px; }
+  .file-badge.added { background: var(--green-bg); color: #059669; }
+  .file-badge.modified { background: var(--blue-bg); color: var(--blue); }
+  .file-badge.deleted { background: var(--red-bg); color: var(--red); }
+
+  /* Diff stats */
+  .diff-bar { display: flex; gap: 2px; align-items: center; }
+  .diff-plus { color: var(--green); font-weight: 700; font-size: 13px; }
+  .diff-minus { color: var(--red); font-weight: 700; font-size: 13px; }
+
+  /* Feature cards */
+  .feature-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin: 18px 0; }
+  .feature-card { border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 18px; background: var(--bg); }
+  .feature-card h4 { margin: 0 0 8px; font-size: 14px; }
+  .feature-card p { font-size: 13px; margin-bottom: 0; color: var(--text2); }
+  .feature-card .tag { font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase; letter-spacing: .5px; display: inline-block; margin-bottom: 8px; }
+  .feature-card .tag.new { background: var(--green-bg); color: #059669; }
+  .feature-card .tag.changed { background: var(--blue-bg); color: var(--blue); }
+  .feature-card .tag.breaking { background: var(--red-bg); color: var(--red); }
+
+  /* Risk matrix */
+  .risk-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px solid var(--border-light); }
+  .risk-item:last-child { border-bottom: none; }
+  .risk-level { width: 80px; flex-shrink: 0; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; padding-top: 2px; }
+  .risk-level.high { color: var(--red); }
+  .risk-level.medium { color: var(--orange); }
+  .risk-level.low { color: var(--yellow); }
+  .risk-body h4 { margin: 0 0 4px; font-size: 14px; }
+  .risk-body p { font-size: 13px; color: var(--text2); margin-bottom: 0; }
+
+  /* Commit log */
+  .commit-log { list-style: none; margin: 0; padding: 0; }
+  .commit-log li { display: flex; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--border-light); font-size: 13px; }
+  .commit-log li:last-child { border-bottom: none; }
+  .commit-hash { font-family: 'SF Mono', Consolas, monospace; font-size: 12px; color: var(--blue); font-weight: 600; flex-shrink: 0; min-width: 70px; }
+  .commit-msg { color: var(--text); }
+
+  /* Comparison table */
+  .vs-table td:first-child { font-weight: 600; width: 180px; }
+  .vs-old { color: var(--red); }
+  .vs-new { color: var(--green); }
+
+  hr { border: none; border-top: 1px solid var(--border); margin: 40px 0; }
+  .footer { text-align: center; padding: 28px 0; border-top: 2px solid var(--text); margin-top: 48px; font-size: 12px; color: var(--text3); letter-spacing: 1px; }
+
+  @media (max-width: 768px) {
+    .page { padding: 24px 20px; }
+    .impact-banner { grid-template-columns: 1fr 1fr; }
+    .feature-grid { grid-template-columns: 1fr; }
+    pre { font-size: 11px; padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+<!-- COVER -->
+<div class="cover">
+  <h1>PR ANALYSIS</h1>
+  <div class="sub">clanker-v2 &rarr; main &mdash; visual-qa-functional</div>
+  <p class="meta">
+    <strong>Repository:</strong> visual-qa-functional &nbsp;&middot;&nbsp;
+    <strong>Branch:</strong> clanker-v2 &nbsp;&middot;&nbsp;
+    <strong>Date:</strong> March 3, 2026
+  </p>
+  <p class="meta" style="margin-top:6px">
+    <strong>Commits:</strong> 13 &nbsp;&middot;&nbsp;
+    <strong>Files Changed:</strong> 17 &nbsp;&middot;&nbsp;
+    <strong>Lines:</strong> +3,993 / &minus;1,723
+  </p>
+</div>
+
+<!-- IMPACT BANNER -->
+<div class="impact-banner">
+  <div class="impact-box">
+    <div class="impact-val blue">17</div>
+    <div class="impact-lbl">Files Changed</div>
+  </div>
+  <div class="impact-box">
+    <div class="impact-val green">+3,993</div>
+    <div class="impact-lbl">Lines Added</div>
+  </div>
+  <div class="impact-box">
+    <div class="impact-val red">&minus;1,723</div>
+    <div class="impact-lbl">Lines Removed</div>
+  </div>
+  <div class="impact-box">
+    <div class="impact-val purple">3</div>
+    <div class="impact-lbl">New Files</div>
+  </div>
+</div>
+
+<!-- EXECUTIVE SUMMARY -->
+<div class="callout safe">
+  <div class="callout-label">Executive Summary</div>
+  <p style="margin-bottom:8px">
+    This is a <strong>major architectural upgrade</strong> to the Visual QA platform. The three headline changes are:
+  </p>
+  <ol style="margin-bottom:0">
+    <li><strong>SQLite &rarr; PostgreSQL migration</strong> &mdash; every database operation converted to async, new connection pooling, production-grade persistence</li>
+    <li><strong>Jira Cloud integration</strong> &mdash; full ticketing lifecycle with auto-deduplication, regression detection, and webhook-driven re-verification</li>
+    <li><strong>Navigate &amp; Scan redesign</strong> &mdash; iframe replaced with server-side Playwright browser, screenshot-driven interaction, intelligent element detection</li>
+  </ol>
+</div>
+
+<!-- TOC -->
+<div class="toc">
+  <h2>Contents</h2>
+  <ol>
+    <li>Commit History</li>
+    <li>File-by-File Change Map</li>
+    <li>What's New &mdash; Feature Additions</li>
+    <li>What Changed &mdash; Refactors &amp; Improvements</li>
+    <li>Architecture Impact</li>
+    <li>Jira Integration Deep Dive</li>
+    <li>Navigate &amp; Scan Redesign</li>
+    <li>Database Migration: SQLite &rarr; PostgreSQL</li>
+    <li>Frontend Overhaul</li>
+    <li>Testing Coverage</li>
+    <li>Risk Assessment</li>
+    <li>Recommendations</li>
+  </ol>
+</div>
+
+<!-- ================================================================ -->
+<!-- 01. COMMIT HISTORY -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 01</div>
+  <h2 class="section-title">Commit History</h2>
+
+  <p>13 commits on <code>clanker-v2</code> not present in <code>main</code>, listed newest to oldest:</p>
+
+  <ul class="commit-log">
+    <li><span class="commit-hash">62a031b</span><span class="commit-msg">Add multi-viewport flow scanning, global nav, Jira integration, and deep linking</span></li>
+    <li><span class="commit-hash">9551e0a</span><span class="commit-msg">Add selector-based click + parent-walk for React SPA compatibility</span></li>
+    <li><span class="commit-hash">8762439</span><span class="commit-msg">Redesign Navigate &amp; Scan: replace iframe with screenshot-driven remote browser</span></li>
+    <li><span class="commit-hash">4227760</span><span class="commit-msg">Remove redundant accessibility-validator.js (all checks covered by axe-core)</span></li>
+    <li><span class="commit-hash">6ba322f</span><span class="commit-msg">Merge main into clanker-v2: integrate accessibility validator into TS pipeline</span></li>
+    <li><span class="commit-hash">b5dab85</span><span class="commit-msg">Add multi-step flow testing with full visual QA detection pipeline</span></li>
+    <li><span class="commit-hash">8b473cc</span><span class="commit-msg">Add 7 visual layout checks and fix page_load_error categorization</span></li>
+    <li><span class="commit-hash">b50e413</span><span class="commit-msg">Add 10 new validators, unified Visual category, and client-side score recomputation</span></li>
+    <li><span class="commit-hash">70486fb</span><span class="commit-msg">Add issue deduplication, contrast grouping, severity refinement, and visual evidence</span></li>
+    <li><span class="commit-hash">7d69863</span><span class="commit-msg">Add consensus vision mode for multi-provider false positive elimination</span></li>
+    <li><span class="commit-hash">2239962</span><span class="commit-msg">Add multi-provider vision support, fix npm audit vulnerabilities</span></li>
+    <li><span class="commit-hash">1777054</span><span class="commit-msg">Add test suite and remove deprecated docker-compose version</span></li>
+    <li><span class="commit-hash">6f6320f</span><span class="commit-msg">Restructure detection engine + migrate server to TypeScript</span></li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 02. FILE CHANGE MAP -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 02</div>
+  <h2 class="section-title">File-by-File Change Map</h2>
+
+  <table>
+    <thead><tr><th>File</th><th>Status</th><th>Lines</th><th>Impact</th></tr></thead>
+    <tbody>
+      <tr><td><code>web/public/app.js</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+901</span> / <span class="diff-minus">&minus;300</span></td><td>Screenshot-driven NS UI, global nav, deep linking</td></tr>
+      <tr><td><code>web/public/index.html</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+206</span> / <span class="diff-minus">&minus;205</span></td><td>Global nav bar, Jira UI, NS screenshot layout</td></tr>
+      <tr><td><code>web/server/integrations/jira.ts</code></td><td><span class="file-badge added">New</span></td><td class="diff-bar"><span class="diff-plus">+610</span></td><td>Complete Jira Cloud integration module</td></tr>
+      <tr><td><code>web/server/routes/navigate-scan.ts</code></td><td><span class="file-badge added">New</span></td><td class="diff-bar"><span class="diff-plus">+598</span></td><td>Server-side Playwright browser API</td></tr>
+      <tr><td><code>tests/unit/db.spec.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+420</span> / <span class="diff-minus">&minus;359</span></td><td>PostgreSQL migration, schema isolation</td></tr>
+      <tr><td><code>web/server/db.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+185</span> / <span class="diff-minus">&minus;185</span></td><td>SQLite &rarr; PostgreSQL async conversion</td></tr>
+      <tr><td><code>tests/integration/server-endpoints.spec.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+182</span> / <span class="diff-minus">&minus;182</span></td><td>Async tests with PG schema isolation</td></tr>
+      <tr><td><code>scripts/create-vama-flow.sh</code></td><td><span class="file-badge added">New</span></td><td class="diff-bar"><span class="diff-plus">+356</span></td><td>Vama messaging webapp E2E flow script</td></tr>
+      <tr><td><code>package-lock.json</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+189</span> / <span class="diff-minus">&minus;377</span></td><td>Dependency swap: better-sqlite3 &rarr; pg</td></tr>
+      <tr><td><code>web/server/routes/integrations.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+172</span> / <span class="diff-minus">&minus;50</span></td><td>Jira connect, webhook receiver, async</td></tr>
+      <tr><td><code>web/server/index.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+40</span> / <span class="diff-minus">&minus;31</span></td><td>Async startup, NS router mount</td></tr>
+      <tr><td><code>web/server/playwright-runner.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+38</span> / <span class="diff-minus">&minus;31</span></td><td>Multi-viewport scanning, cost optimization</td></tr>
+      <tr><td><code>web/server/routes/api-v1.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+25</span> / <span class="diff-minus">&minus;25</span></td><td>Async await conversion</td></tr>
+      <tr><td><code>docker-compose.yml</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+17</span> / <span class="diff-minus">&minus;11</span></td><td>PostgreSQL service, healthcheck, volumes</td></tr>
+      <tr><td><code>web/server/ticket-manager.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+6</span> / <span class="diff-minus">&minus;5</span></td><td>Jira dispatch, async DB calls</td></tr>
+      <tr><td><code>web/server/middleware/auth.ts</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+3</span> / <span class="diff-minus">&minus;3</span></td><td>Boolean type alignment</td></tr>
+      <tr><td><code>package.json</code></td><td><span class="file-badge modified">Modified</span></td><td class="diff-bar"><span class="diff-plus">+2</span> / <span class="diff-minus">&minus;2</span></td><td>better-sqlite3 &rarr; pg + @types/pg</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- 03. WHAT'S NEW -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 03</div>
+  <h2 class="section-title">What's New &mdash; Feature Additions</h2>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Jira Cloud Integration</h4>
+      <p>Full ticketing lifecycle &mdash; connect Jira account, auto-create issues from scan findings, deduplicate via SHA-256 fingerprints, auto-reopen regressions, webhook-driven re-verification when tickets are resolved.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Screenshot-Driven Browser</h4>
+      <p>Server-side Playwright browser with 6 API endpoints (start, click, type, navigate, scroll, scan). Replaces broken iframe approach. Supports SPA navigation, HTTP auth, intelligent element detection with 8-level selector priority.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Multi-Viewport Scanning</h4>
+      <p>Automated scanning across 5 viewports (1920&times;1080, 1366&times;768, 768&times;1024, 375&times;812, 360&times;640) with smart cost optimization &mdash; Claude Vision only runs on first viewport.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Global Navigation</h4>
+      <p>Sticky nav bar with mode tabs (Automated, Navigate &amp; Scan, Flow Test, Settings) and context display showing current test URL. Replaces old in-page mode switching.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Deep Linking</h4>
+      <p>URL-based navigation with fragment routing: <code>/test/{id}/category/{cat}</code>, <code>/test/{id}/severity/{sev}</code>, <code>/test/{id}/page/{num}</code>, <code>/test/{id}/step/{num}</code>.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Vama E2E Flow Script</h4>
+      <p>356-line shell script that creates a complete test flow for the Vama messaging webapp: login, OTP, chat navigation, message sending, reaction testing, settings exploration &mdash; with screenshot collection.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Automatic Step Recording</h4>
+      <p>Every Navigate &amp; Scan action (click, type, scroll, navigate) is automatically recorded with timestamp, selector, description. Enables playback and audit trails.</p>
+    </div>
+    <div class="feature-card">
+      <span class="tag new">New</span>
+      <h4>Jira Webhook Receiver</h4>
+      <p>Webhook at <code>/api/integrations/webhooks/jira</code> detects when tickets are marked resolved, automatically re-scans the original URL, and posts verification comments back to Jira.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 04. WHAT CHANGED -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 04</div>
+  <h2 class="section-title">What Changed &mdash; Refactors &amp; Improvements</h2>
+
+  <h3>Database Layer &mdash; Complete Async Migration</h3>
+  <table class="vs-table">
+    <thead><tr><th>Aspect</th><th class="vs-old">Before (SQLite)</th><th class="vs-new">After (PostgreSQL)</th></tr></thead>
+    <tbody>
+      <tr><td>Driver</td><td class="vs-old">better-sqlite3 (sync)</td><td class="vs-new">pg with connection pool (async)</td></tr>
+      <tr><td>Operations</td><td class="vs-old">Synchronous blocking</td><td class="vs-new">async/await throughout</td></tr>
+      <tr><td>Params</td><td class="vs-old"><code>?</code> placeholders</td><td class="vs-new"><code>$1, $2, $3</code> numbered params</td></tr>
+      <tr><td>Booleans</td><td class="vs-old"><code>INTEGER (0/1)</code></td><td class="vs-new"><code>BOOLEAN</code></td></tr>
+      <tr><td>Timestamps</td><td class="vs-old"><code>DATETIME</code></td><td class="vs-new"><code>TIMESTAMPTZ</code></td></tr>
+      <tr><td>Upserts</td><td class="vs-old"><code>INSERT OR REPLACE</code></td><td class="vs-new"><code>ON CONFLICT ... DO UPDATE</code></td></tr>
+      <tr><td>Connection</td><td class="vs-old">Single file handle</td><td class="vs-new">Pool (max 10, 30s idle timeout)</td></tr>
+      <tr><td>Test Isolation</td><td class="vs-old">In-memory databases</td><td class="vs-new">PostgreSQL schemas per test</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Navigate &amp; Scan &mdash; Complete Redesign</h3>
+  <table class="vs-table">
+    <thead><tr><th>Aspect</th><th class="vs-old">Before (iframe)</th><th class="vs-new">After (Playwright)</th></tr></thead>
+    <tbody>
+      <tr><td>Rendering</td><td class="vs-old">Client-side iframe</td><td class="vs-new">Server-side Chromium</td></tr>
+      <tr><td>SPA Support</td><td class="vs-old">Broken</td><td class="vs-new">Full support</td></tr>
+      <tr><td>Interaction</td><td class="vs-old">Limited (iframe sandbox)</td><td class="vs-new">Full automation (click, type, scroll)</td></tr>
+      <tr><td>Feedback</td><td class="vs-old">Live iframe render</td><td class="vs-new">JPEG screenshots (80% quality)</td></tr>
+      <tr><td>Element Detection</td><td class="vs-old">None</td><td class="vs-new">8-level selector priority with DOM traversal</td></tr>
+      <tr><td>Session State</td><td class="vs-old">Stateless</td><td class="vs-new">Stateful with 30-min idle timeout</td></tr>
+      <tr><td>Recording</td><td class="vs-old">Manual toggle</td><td class="vs-new">Automatic step recording</td></tr>
+      <tr><td>Auth</td><td class="vs-old">None</td><td class="vs-new">Built-in HTTP credentials</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Frontend (app.js) &mdash; Major Restructure</h3>
+  <ul>
+    <li><strong>+901 / &minus;300 lines</strong> &mdash; significant expansion</li>
+    <li>Removed: iframe wrapper, recording UI, session bar, old results panel</li>
+    <li>Added: screenshot container with click indicator animation, text input overlay, sidebar with Steps/Results tabs, scroll controls</li>
+    <li>New state management: <code>nsSessionId</code>, <code>nsViewportWidth/Height</code>, <code>nsPendingInput</code>, <code>nsCurrentRecordedSteps</code>, <code>nsClickInFlight</code></li>
+    <li>Coordinate scaling: display-to-viewport translation for accurate click targeting</li>
+    <li>Severity bar segments now clickable for filtering</li>
+    <li>Test cards now have hover/pointer states for completed tests</li>
+  </ul>
+
+  <h3>Server (index.ts) &mdash; Async Bootstrap</h3>
+  <ul>
+    <li>Replaced synchronous <code>getDb()</code> with <code>await initDb()</code></li>
+    <li>New async startup pattern with <code>start().catch()</code> error boundary</li>
+    <li>Navigate-Scan router mounted at <code>/api/ns</code></li>
+    <li>Flow tests now auto-create tickets from aggregated page issues</li>
+  </ul>
+
+  <h3>Docker Compose</h3>
+  <ul>
+    <li>Added PostgreSQL 16 Alpine service with healthcheck</li>
+    <li>visual-qa depends on postgres health</li>
+    <li>New env vars: <code>PGHOST</code>, <code>PGPORT</code>, <code>PGDATABASE</code>, <code>PGUSER</code>, <code>PGPASSWORD</code></li>
+    <li>Replaced <code>./data</code> volume with <code>pgdata</code> named volume</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 05. ARCHITECTURE IMPACT -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 05</div>
+  <h2 class="section-title">Architecture Impact</h2>
+
+  <h3>System Architecture (Before vs After)</h3>
+  <pre>
+BEFORE (main)                          AFTER (clanker-v2)
+
+  Browser                                Browser
+    |                                      |
+  iframe -----> Target Site              Screenshot &lt;---- JPEG responses
+    |                                      |
+  app.js (sync)                          app.js (async, deep links)
+    |                                      |
+  Express                                Express
+    |-- api-v1.ts                          |-- api-v1.ts (async)
+    |-- integrations.ts (GitHub)           |-- integrations.ts (GitHub + Jira)
+    |                                      |-- navigate-scan.ts (NEW - 6 endpoints)
+    |                                      |-- jira.ts (NEW - integration module)
+    |                                      |
+  better-sqlite3 (sync)                 pg Pool (async, max 10 connections)
+    |                                      |
+  SQLite file                            PostgreSQL 16
+</pre>
+
+  <h3>Key Architectural Shifts</h3>
+
+  <div class="callout info">
+    <div class="callout-label">Database: Sync &rarr; Async</div>
+    <p style="margin-bottom:0">Every database caller in the entire codebase was updated. This is not a partial migration &mdash; <strong>all 30+ database functions</strong> are now async. This ripples through routes, middleware, ticket manager, and test suites.</p>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Browser Interaction: Client &rarr; Server</div>
+    <p style="margin-bottom:0">Navigate &amp; Scan moves browser rendering from the client (iframe) to the server (headless Chromium). The client now displays screenshots and sends coordinate-based interaction commands. This eliminates CORS, CSP, and SPA compatibility issues.</p>
+  </div>
+
+  <div class="callout info">
+    <div class="callout-label">Integration Pattern: Single &rarr; Dual</div>
+    <p style="margin-bottom:0">The ticket manager now dispatches to both GitHub and Jira. The integration abstraction handles provider selection, and each provider implements its own deduplication, fingerprinting, and lifecycle management.</p>
+  </div>
+
+  <h3>New API Surface</h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Method</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>/api/ns/start</code></td><td>POST</td><td>Initialize Playwright browser session</td></tr>
+      <tr><td><code>/api/ns/click</code></td><td>POST</td><td>Click element by coordinates or selector</td></tr>
+      <tr><td><code>/api/ns/type</code></td><td>POST</td><td>Fill text into form fields</td></tr>
+      <tr><td><code>/api/ns/navigate</code></td><td>POST</td><td>Navigate to new URL within session</td></tr>
+      <tr><td><code>/api/ns/scroll</code></td><td>POST</td><td>Scroll page up or down</td></tr>
+      <tr><td><code>/api/ns/scan</code></td><td>POST</td><td>Run visual QA detection pipeline</td></tr>
+      <tr><td><code>/api/ns/end</code></td><td>POST</td><td>Terminate session, cleanup resources</td></tr>
+      <tr><td><code>/api/integrations/jira/connect</code></td><td>POST</td><td>Connect Jira Cloud account</td></tr>
+      <tr><td><code>/api/integrations/webhooks/jira</code></td><td>POST</td><td>Receive Jira webhook events</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- 06. JIRA INTEGRATION DEEP DIVE -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 06</div>
+  <h2 class="section-title">Jira Integration Deep Dive</h2>
+
+  <p>The <code>jira.ts</code> module (610 lines) is a <strong>complete Jira Cloud integration</strong> that mirrors the existing GitHub integration pattern. It uses the Jira REST API v3 with zero external dependencies (native <code>fetch</code> + <code>crypto</code> only).</p>
+
+  <h3>Authentication</h3>
+  <p>HTTP Basic Auth using email + API token (Jira Cloud standard). Credentials encoded as <code>Base64(email:apiToken)</code> and sent in every request.</p>
+
+  <h3>Exported Functions</h3>
+  <table>
+    <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>validateConnection(config)</code></td><td>Tests credentials via <code>/myself</code>, verifies project access, returns project name + username</td></tr>
+      <tr><td><code>processTestResults(config, settings, testResult, appBaseUrl)</code></td><td>Core function: creates, updates, or reopens Jira issues from scan findings</td></tr>
+      <tr><td><code>addVerificationComment(config, issueKey, verified, details)</code></td><td>Posts verification results to Jira tickets after re-scan</td></tr>
+      <tr><td><code>issueFingerprint(issueType, testUrl)</code></td><td>SHA-256 deduplication key (16-char hex substring)</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Jira REST API Usage</h3>
+  <table>
+    <thead><tr><th>Endpoint</th><th>Method</th><th>Usage</th></tr></thead>
+    <tbody>
+      <tr><td><code>/rest/api/3/myself</code></td><td>GET</td><td>Authenticate and retrieve user info</td></tr>
+      <tr><td><code>/rest/api/3/project/{key}</code></td><td>GET</td><td>Verify project access</td></tr>
+      <tr><td><code>/rest/api/3/search</code></td><td>GET</td><td>JQL query for deduplication by fingerprint</td></tr>
+      <tr><td><code>/rest/api/3/issue</code></td><td>POST</td><td>Create new issues</td></tr>
+      <tr><td><code>/rest/api/3/issue/{key}/comment</code></td><td>POST</td><td>Add comments (ADF format)</td></tr>
+      <tr><td><code>/rest/api/3/issue/{key}/transitions</code></td><td>GET/POST</td><td>Query and execute status transitions</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Ticket Lifecycle</h3>
+  <pre>
+  Scan detects issue
+        |
+  Generate fingerprint (SHA-256 of issueType + normalized URL)
+        |
+  Search Jira for existing ticket with fingerprint
+        |
+  +-----+------+
+  |             |
+  Not found    Found
+  |             |
+  CREATE       Is it closed?
+  new issue    |        |
+  with ADF     No       Yes
+  description  |        |
+               UPDATE   REOPEN
+               comment  + regression comment
+        |
+  Return TicketResult { action, issueKey, url }
+</pre>
+
+  <h3>Smart Features</h3>
+  <ul>
+    <li><strong>Cross-viewport grouping:</strong> Same issue detected in multiple viewports gets a single ticket listing all affected viewport sizes</li>
+    <li><strong>Severity filtering:</strong> Configurable &mdash; only create tickets for critical/high/medium (default) or include low</li>
+    <li><strong>Priority mapping:</strong> critical &rarr; Highest, high &rarr; High, medium &rarr; Medium, low &rarr; Low</li>
+    <li><strong>Priority fallback:</strong> If Jira rejects the priority field (400), retries without it</li>
+    <li><strong>Regression detection:</strong> Closed tickets auto-reopen if the same fingerprinted issue is re-detected</li>
+    <li><strong>Webhook re-verification:</strong> When a Jira ticket is marked "done", the system re-scans the original URL and posts a verification comment</li>
+    <li><strong>ADF formatting:</strong> Rich Atlassian Document Format descriptions with severity badges, screenshots, reproduction steps, and metadata</li>
+  </ul>
+
+  <h3>Configuration</h3>
+  <table>
+    <thead><tr><th>Config</th><th>Required</th><th>Default</th></tr></thead>
+    <tbody>
+      <tr><td><code>domain</code></td><td>Yes</td><td>&mdash;</td></tr>
+      <tr><td><code>email</code></td><td>Yes</td><td>&mdash;</td></tr>
+      <tr><td><code>apiToken</code></td><td>Yes</td><td>&mdash;</td></tr>
+      <tr><td><code>projectKey</code></td><td>Yes</td><td>&mdash;</td></tr>
+      <tr><td><code>issueType</code></td><td>No</td><td>"Bug"</td></tr>
+      <tr><td><code>createForSeverities</code></td><td>No</td><td>["critical", "high", "medium"]</td></tr>
+      <tr><td><code>deduplicate</code></td><td>No</td><td>true</td></tr>
+      <tr><td><code>priorityMapping</code></td><td>No</td><td>Standard mapping above</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ================================================================ -->
+<!-- 07. NAVIGATE & SCAN REDESIGN -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 07</div>
+  <h2 class="section-title">Navigate &amp; Scan Redesign</h2>
+
+  <h3>Why the Redesign</h3>
+  <div class="callout warn">
+    <div class="callout-label">The Problem</div>
+    <p style="margin-bottom:0">The previous iframe-based approach was fundamentally broken for Single Page Applications. SPAs use client-side routing, which doesn't propagate across iframe boundaries. Additionally, iframes are blocked by CSP headers, X-Frame-Options, and CORS &mdash; making many modern sites untestable.</p>
+  </div>
+
+  <h3>The New Approach: Screenshot-Driven Remote Browser</h3>
+  <p>The solution moves all browser rendering to the server via Playwright. The client displays JPEG screenshots and sends interaction commands (click coordinates, text input, scroll direction). The server manages persistent browser sessions with full state (cookies, auth, local storage).</p>
+
+  <h3>Session Lifecycle</h3>
+  <pre>
+  POST /api/ns/start { url, viewport, auth? }
+    |
+    +---> Launch headless Chromium
+    +---> Create browser context (viewport, HTTP auth)
+    +---> Navigate to URL, wait for networkidle
+    +---> Take screenshot, return JPEG URL
+    |
+  [Interactive loop]
+    |
+    +---> POST /api/ns/click { sessionId, x, y }
+    |       Coordinate scaling (display &rarr; viewport)
+    |       Element identification via document.elementFromPoint()
+    |       Parent walk (6 levels up) for interactive elements
+    |       Selector generation (8-level priority)
+    |       Returns: screenshot, currentUrl, elementInfo
+    |
+    +---> POST /api/ns/type { sessionId, selector, value }
+    |       Multi-fallback: fill() &rarr; child input &rarr; keyboard.type()
+    |
+    +---> POST /api/ns/scroll { sessionId, direction }
+    |
+    +---> POST /api/ns/navigate { sessionId, url }
+    |       Deep linking within same session
+    |
+    +---> POST /api/ns/scan { sessionId }
+    |       Runs full visual QA pipeline on current page state
+    |       Creates test record + auto-generates tickets
+    |
+  POST /api/ns/end { sessionId }
+    +---> Close browser, delete screenshot directory
+</pre>
+
+  <h3>Intelligent Element Detection</h3>
+  <p>When the user clicks a screenshot, coordinates are mapped to the actual page. The system then identifies and generates optimal selectors:</p>
+
+  <table>
+    <thead><tr><th>Priority</th><th>Strategy</th><th>Example</th></tr></thead>
+    <tbody>
+      <tr><td>1</td><td>Unique ID</td><td><code>#submit-btn</code></td></tr>
+      <tr><td>2</td><td>data-testid</td><td><code>[data-testid="login"]</code></td></tr>
+      <tr><td>3</td><td>name attribute</td><td><code>input[name="email"]</code></td></tr>
+      <tr><td>4</td><td>aria-label</td><td><code>[aria-label="Close"]</code></td></tr>
+      <tr><td>5</td><td>placeholder</td><td><code>input[placeholder="Search"]</code></td></tr>
+      <tr><td>6</td><td>role + text</td><td><code>button:has-text("Submit")</code></td></tr>
+      <tr><td>7</td><td>tag + class</td><td><code>button.btn-primary</code></td></tr>
+      <tr><td>8</td><td>nth-child fallback</td><td><code>div > button:nth-child(2)</code></td></tr>
+    </tbody>
+  </table>
+
+  <p>Additionally, the system <strong>walks up 6 parent levels</strong> to find interactive ancestors (button, a, input, select, label, role="button") and <strong>walks down into children</strong> to find inputs wrapped in container divs (common React pattern).</p>
+
+  <h3>Session Management</h3>
+  <ul>
+    <li>Sessions stored in <code>Map&lt;string, NsSession&gt;</code> keyed by session ID</li>
+    <li>Each session tracks: browser, context, page, viewport, screenshot dir, creation time, last activity, recorded steps</li>
+    <li>Auto-cleanup every 60 seconds &mdash; sessions idle &gt;30 minutes are force-closed</li>
+    <li>Screenshot directory cleaned up with session</li>
+    <li>Screenshots stored as <code>/screenshots/ns/{sessionId}/{prefix}-{counter}.jpg</code></li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 08. DATABASE MIGRATION -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 08</div>
+  <h2 class="section-title">Database Migration: SQLite &rarr; PostgreSQL</h2>
+
+  <p>The entire database layer (<code>db.ts</code>, 370 lines changed) was rewritten from synchronous SQLite to async PostgreSQL. This affects every route, the ticket manager, auth middleware, and both test suites.</p>
+
+  <h3>Connection Configuration</h3>
+  <pre>
+const pool = new Pool({
+  max: 10,                    // Max connections in pool
+  idleTimeoutMillis: 30000,   // Close idle connections after 30s
+  // Reads PGHOST, PGPORT, PGDATABASE, PGUSER, PGPASSWORD from env
+});
+
+// Type parser: TIMESTAMP → ISO string (not Date object)
+types.setTypeParser(1114, str => str);    // TIMESTAMP
+types.setTypeParser(1184, str => str);    // TIMESTAMPTZ</pre>
+
+  <h3>Schema Changes</h3>
+  <table>
+    <thead><tr><th>Table</th><th>Changes</th></tr></thead>
+    <tbody>
+      <tr><td><code>api_keys</code></td><td><code>revoked INTEGER</code> &rarr; <code>revoked BOOLEAN</code></td></tr>
+      <tr><td><code>integrations</code></td><td><code>enabled INTEGER</code> &rarr; <code>enabled BOOLEAN</code></td></tr>
+      <tr><td>All tables</td><td><code>DATETIME</code> &rarr; <code>TIMESTAMPTZ</code></td></tr>
+      <tr><td>All tables</td><td><code>CURRENT_TIMESTAMP</code> &rarr; <code>NOW()</code></td></tr>
+    </tbody>
+  </table>
+
+  <h3>New Database Function</h3>
+  <p><code>findTicketByExternalId(externalId)</code> &mdash; looks up tickets by Jira/GitHub issue ID with LEFT JOIN to test URL. Used by the Jira webhook handler to find original test context when a ticket is resolved.</p>
+
+  <h3>Breaking Changes</h3>
+  <ul>
+    <li><code>getDb()</code> removed &mdash; replaced with exported <code>pool</code> + <code>initDb()</code></li>
+    <li>All 30+ database functions now return Promises</li>
+    <li>Return shape: <code>result.changes</code> &rarr; <code>result.rowCount</code></li>
+    <li>Count queries return strings in PostgreSQL (handled with explicit parsing)</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 09. FRONTEND OVERHAUL -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 09</div>
+  <h2 class="section-title">Frontend Overhaul</h2>
+
+  <h3>app.js (+901 / &minus;300 lines)</h3>
+
+  <h4>Removed</h4>
+  <ul>
+    <li>Iframe-based browser rendering</li>
+    <li>Manual recording UI (record button, recording bar)</li>
+    <li>Session bar</li>
+    <li>Old results panel layout</li>
+  </ul>
+
+  <h4>Added</h4>
+  <ul>
+    <li><strong>Screenshot container</strong> with click indicator animation &mdash; renders server-side screenshots with click-to-interact</li>
+    <li><strong>Text input overlay</strong> &mdash; when a form field is detected, shows overlay with label, input field, Cancel/OK buttons</li>
+    <li><strong>Sidebar with tabs</strong> &mdash; Steps (recorded actions timeline) and Results (scan findings)</li>
+    <li><strong>Scroll controls</strong> &mdash; up/down buttons that send scroll commands to server</li>
+    <li><strong>Global navigation context</strong> &mdash; displays current test URL in header</li>
+    <li><strong>Deep linking router</strong> &mdash; hash-based routing with <code>skipHash</code> flag to prevent double-setting</li>
+    <li><strong>Double-click prevention</strong> &mdash; <code>nsClickInFlight</code> guard prevents concurrent actions</li>
+  </ul>
+
+  <h4>New Core Functions</h4>
+  <table>
+    <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+    <tbody>
+      <tr><td><code>nsStartSession()</code></td><td>POST to /api/ns/start, initialize session</td></tr>
+      <tr><td><code>nsNavigate()</code></td><td>POST to /api/ns/navigate, change URL</td></tr>
+      <tr><td><code>nsAttachClickHandler()</code></td><td>Screenshot click &rarr; coordinate mapping &rarr; server command</td></tr>
+      <tr><td><code>nsShowTextInput()</code></td><td>Overlay for form field input</td></tr>
+      <tr><td><code>nsSubmitTextInput()</code></td><td>POST to /api/ns/type</td></tr>
+      <tr><td><code>nsScan()</code></td><td>POST to /api/ns/scan, create test record, show results</td></tr>
+      <tr><td><code>nsScroll()</code></td><td>POST to /api/ns/scroll</td></tr>
+      <tr><td><code>switchMode()</code></td><td>Mode switching with skipHash option</td></tr>
+    </tbody>
+  </table>
+
+  <h3>index.html (+206 / &minus;205 lines)</h3>
+  <ul>
+    <li>New global navigation bar (sticky header with mode tabs)</li>
+    <li>Jira Cloud integration settings card (360+ lines of form UI)</li>
+    <li>Screenshot-based NS layout replacing iframe</li>
+    <li>New CSS for global nav, screenshot container, text overlay, sidebar, step items</li>
+    <li>Removed old NS styles (iframe wrap, session bar, recording controls)</li>
+  </ul>
+</div>
+
+<!-- ================================================================ -->
+<!-- 10. TESTING COVERAGE -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 10</div>
+  <h2 class="section-title">Testing Coverage</h2>
+
+  <h3>Unit Tests (db.spec.ts) &mdash; 30+ Tests</h3>
+  <p>Complete PostgreSQL migration of all database tests, using schema-per-test isolation:</p>
+  <table>
+    <thead><tr><th>Category</th><th>Tests</th><th>Coverage</th></tr></thead>
+    <tbody>
+      <tr><td>API Key CRUD</td><td>6</td><td>Insert, retrieve by hash, revocation, unique constraint, expiration, listing</td></tr>
+      <tr><td>Test Persistence</td><td>5</td><td>Insert/update, JSON serialization, status filtering, pagination</td></tr>
+      <tr><td>Integration CRUD</td><td>5</td><td>Insert/retrieve, enable/disable, status updates, error tracking</td></tr>
+      <tr><td>Ticket CRUD</td><td>4</td><td>Insert with foreign keys, fingerprint dedup, viewport JSON, ordering</td></tr>
+      <tr><td>Encryption</td><td>2+</td><td>Key derivation, config encrypt/decrypt round-trip</td></tr>
+    </tbody>
+  </table>
+
+  <h3>Integration Tests (server-endpoints.spec.ts) &mdash; 37+ Tests</h3>
+  <table>
+    <thead><tr><th>Category</th><th>Tests</th><th>Coverage</th></tr></thead>
+    <tbody>
+      <tr><td>Authentication</td><td>8+</td><td>Valid/revoked/expired keys, scopes, key rotation</td></tr>
+      <tr><td>Test CRUD</td><td>6+</td><td>Create, status, results, cancel, lifecycle</td></tr>
+      <tr><td>API Keys</td><td>5+</td><td>Bootstrap, create, list, revoke, idempotent bootstrap</td></tr>
+      <tr><td>Integrations</td><td>4+</td><td>CRUD, settings, tickets</td></tr>
+      <tr><td>Pagination</td><td>3+</td><td>Limit/offset, filtering</td></tr>
+      <tr><td>Error Cases</td><td>6+</td><td>404, 409, 403, 401 scenarios</td></tr>
+    </tbody>
+  </table>
+
+  <h3>E2E Flow Script (create-vama-flow.sh)</h3>
+  <p>356-line shell script that exercises the full Navigate &amp; Scan pipeline against the Vama messaging webapp:</p>
+  <ol>
+    <li>Login with phone + OTP</li>
+    <li>Navigate to a specific chat</li>
+    <li>Send a message</li>
+    <li>Test reactions</li>
+    <li>Navigate through Settings, Notifications, Privacy, Appearance</li>
+    <li>Scroll exploration</li>
+    <li>Screenshot collection and flow recording</li>
+  </ol>
+
+  <h3>Coverage Gaps</h3>
+  <div class="callout warn">
+    <div class="callout-label">Not Covered</div>
+    <ul style="margin-bottom:0">
+      <li>Navigate &amp; Scan endpoints (no automated tests for /api/ns/* routes)</li>
+      <li>Jira integration (no unit tests for jira.ts)</li>
+      <li>Jira webhook handler (no integration test for /api/integrations/webhooks/jira)</li>
+      <li>Frontend JavaScript (no browser tests for app.js)</li>
+      <li>Concurrent session handling (no load/stress tests)</li>
+      <li>PostgreSQL connection pool behavior under load</li>
+    </ul>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 11. RISK ASSESSMENT -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 11</div>
+  <h2 class="section-title">Risk Assessment</h2>
+
+  <div class="risk-item">
+    <div class="risk-level high">HIGH</div>
+    <div class="risk-body">
+      <h4>No Tests for Navigate &amp; Scan API</h4>
+      <p>The 598-line <code>navigate-scan.ts</code> has zero automated tests. It manages browser sessions, coordinates Playwright lifecycle, handles screenshot storage, and runs the visual QA pipeline. A regression here breaks the primary interactive testing feature. Recommend adding integration tests for session start/click/type/scan/end lifecycle.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level high">HIGH</div>
+    <div class="risk-body">
+      <h4>No Tests for Jira Integration</h4>
+      <p>The 610-line <code>jira.ts</code> module handles external API calls, ticket deduplication, status transitions, and webhook processing &mdash; all untested. A bug in fingerprint generation could cause duplicate tickets at scale. A bug in the reopen logic could close valid tickets. Recommend unit tests with mocked Jira API responses.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level high">HIGH</div>
+    <div class="risk-body">
+      <h4>Database Migration: No Migration Script</h4>
+      <p>The shift from SQLite to PostgreSQL has no migration tooling. Existing deployments on SQLite will need manual data migration. The schema is created via <code>initDb()</code> at startup, but there's no <code>ALTER TABLE</code> support for schema evolution. Consider adding a migration framework (e.g., node-pg-migrate) before this hits production with real data.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level medium">MEDIUM</div>
+    <div class="risk-body">
+      <h4>Browser Session Memory Leaks</h4>
+      <p>Each Navigate &amp; Scan session spawns a headless Chromium instance (typically 200-400 MB RAM). Sessions auto-cleanup after 30 minutes, but a spike in concurrent sessions could exhaust server memory. The cleanup interval (60 seconds) means up to 60 seconds of zombied browsers after errors. Consider adding a max concurrent sessions limit.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level medium">MEDIUM</div>
+    <div class="risk-body">
+      <h4>Jira Webhook Security</h4>
+      <p>The <code>/api/integrations/webhooks/jira</code> endpoint accepts POST requests without signature verification. Jira Cloud supports webhook signatures (X-Hub-Signature), but this implementation doesn't validate them. An attacker could forge webhook payloads to trigger arbitrary re-scans. Recommend adding HMAC signature verification.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level medium">MEDIUM</div>
+    <div class="risk-body">
+      <h4>Screenshot Storage Unbounded</h4>
+      <p>Screenshots are stored on disk in <code>/screenshots/ns/{sessionId}/</code>. Directories are cleaned when sessions end, but if the process crashes mid-session, orphaned directories accumulate. There's no disk space monitoring or cleanup-on-startup. Consider adding a startup sweep for orphaned screenshot directories.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level medium">MEDIUM</div>
+    <div class="risk-body">
+      <h4>Coordinate Mapping Precision</h4>
+      <p>Click coordinates are scaled from display dimensions to viewport dimensions. If the frontend doesn't accurately report its display dimensions, clicks will land in wrong positions. Off-by-one or rounding errors in the coordinate math could cause missed clicks, especially on small UI elements like checkboxes or close buttons.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level low">LOW</div>
+    <div class="risk-body">
+      <h4>PostgreSQL Connection Pool Sizing</h4>
+      <p>Max 10 connections with 30s idle timeout. Under moderate load this is fine, but if many concurrent scans run Jira + GitHub ticket creation (each requiring DB lookups and writes), the pool could become a bottleneck. Pool configuration isn't exposed via env vars. Consider making pool size configurable.</p>
+    </div>
+  </div>
+
+  <div class="risk-item">
+    <div class="risk-level low">LOW</div>
+    <div class="risk-body">
+      <h4>Jira Priority Field Compatibility</h4>
+      <p>The Jira integration attempts to set priority on issues, falling back if the field is rejected (HTTP 400). This fallback is good, but the retry doubles the API call count for projects with non-standard priority schemes. Low risk since it's handled gracefully, but could slow ticket creation.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================================ -->
+<!-- 12. RECOMMENDATIONS -->
+<!-- ================================================================ -->
+<div class="section">
+  <div class="section-num">Section 12</div>
+  <h2 class="section-title">Recommendations</h2>
+
+  <h3>Before Merge</h3>
+  <ol>
+    <li><strong>Add Navigate &amp; Scan integration tests</strong> &mdash; at minimum: session start, click, type, scan, end. This is the highest-value test gap.</li>
+    <li><strong>Add Jira integration unit tests</strong> &mdash; mock the Jira API and test fingerprinting, deduplication, reopen logic, and webhook processing.</li>
+    <li><strong>Add Jira webhook signature verification</strong> &mdash; validate <code>X-Hub-Signature</code> header to prevent forged webhooks.</li>
+  </ol>
+
+  <h3>Before Production</h3>
+  <ol>
+    <li><strong>Add database migration tooling</strong> &mdash; node-pg-migrate or similar, to handle schema evolution without data loss.</li>
+    <li><strong>Add max concurrent sessions limit</strong> &mdash; prevent memory exhaustion from too many simultaneous Playwright browsers.</li>
+    <li><strong>Add startup cleanup</strong> &mdash; sweep orphaned screenshot directories and stale DB records on server boot.</li>
+    <li><strong>Make pool size configurable</strong> &mdash; expose <code>PG_POOL_MAX</code> as environment variable.</li>
+  </ol>
+
+  <h3>Nice to Have</h3>
+  <ol>
+    <li>Frontend browser tests (Playwright or Cypress) for the app.js changes</li>
+    <li>Rate limiting on Navigate &amp; Scan endpoints (session creation is expensive)</li>
+    <li>Disk space monitoring for screenshot storage</li>
+    <li>Jira API rate limit handling (Jira Cloud has rate limits that aren't currently tracked)</li>
+  </ol>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  PR ANALYSIS &mdash; clanker-v2 &rarr; main &nbsp;&middot;&nbsp; visual-qa-functional &nbsp;&middot;&nbsp; Analyzed by Atlas &nbsp;&middot;&nbsp; March 3, 2026
+</div>
+
+</div><!-- .page -->
+</body>
+</html>

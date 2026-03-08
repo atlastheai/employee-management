@@ -1,0 +1,2124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ORGCOMMAND Dashboard</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --bg: #ffffff;
+    --bg-subtle: #f7f8fa;
+    --bg-hover: #f0f2f5;
+    --border: #e2e5ea;
+    --border-light: #eef0f3;
+    --text-primary: #111827;
+    --text-secondary: #6b7280;
+    --text-muted: #9ca3af;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --green-border: #a7f3d0;
+    --yellow: #f59e0b;
+    --yellow-bg: #fffbeb;
+    --yellow-border: #fde68a;
+    --red: #ef4444;
+    --red-bg: #fef2f2;
+    --red-border: #fecaca;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+    --blue-border: #bfdbfe;
+    --purple: #8b5cf6;
+    --sidebar-w: 240px;
+    --header-h: 56px;
+    --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+    --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+    --radius: 8px;
+    --radius-lg: 12px;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-size: 14px;
+    line-height: 1.5;
+    overflow-x: hidden;
+  }
+
+  /* =========== SIDEBAR =========== */
+  .sidebar {
+    position: fixed;
+    top: 0; left: 0; bottom: 0;
+    width: var(--sidebar-w);
+    background: #0f172a;
+    color: #fff;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    transition: transform 0.2s;
+  }
+
+  .sidebar-brand {
+    padding: 20px 22px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .sidebar-brand h1 {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 3px;
+    color: #fff;
+  }
+
+  .sidebar-brand span {
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  }
+
+  .sidebar-nav {
+    flex: 1;
+    padding: 16px 12px;
+  }
+
+  .nav-section-label {
+    font-size: 10px;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.3);
+    padding: 12px 10px 6px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 6px;
+    color: rgba(255,255,255,0.65);
+    cursor: pointer;
+    font-size: 13.5px;
+    transition: all 0.15s;
+    margin-bottom: 2px;
+  }
+
+  .nav-item:hover { background: rgba(255,255,255,0.08); color: #fff; }
+  .nav-item.active { background: rgba(59,130,246,0.2); color: #fff; }
+
+  .nav-item svg { width: 18px; height: 18px; opacity: 0.7; flex-shrink: 0; }
+  .nav-item.active svg { opacity: 1; }
+
+  .nav-badge {
+    margin-left: auto;
+    background: var(--red);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 7px;
+    border-radius: 10px;
+  }
+
+  .sidebar-footer {
+    padding: 16px 22px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .sidebar-footer .avatar {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: #fff;
+  }
+
+  .sidebar-footer .user-info { font-size: 12px; }
+  .sidebar-footer .user-info strong { color: #fff; display: block; font-size: 13px; }
+  .sidebar-footer .user-info span { color: rgba(255,255,255,0.4); }
+
+  /* =========== MAIN CONTENT =========== */
+  .main {
+    margin-left: var(--sidebar-w);
+    min-height: 100vh;
+  }
+
+  /* Header */
+  .top-header {
+    height: var(--header-h);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 28px;
+    background: var(--bg);
+    position: sticky;
+    top: 0;
+    z-index: 50;
+  }
+
+  .breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+  }
+
+  .breadcrumb a { color: var(--text-secondary); text-decoration: none; }
+  .breadcrumb a:hover { color: var(--text-primary); }
+  .breadcrumb .current { color: var(--text-primary); font-weight: 600; }
+
+  .header-actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .search-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: var(--bg-subtle);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 13px;
+    color: var(--text-muted);
+    cursor: text;
+    min-width: 220px;
+  }
+
+  .search-box kbd {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    font-size: 11px;
+    font-family: inherit;
+    margin-left: auto;
+  }
+
+  .header-btn {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--text-secondary);
+    position: relative;
+  }
+
+  .header-btn:hover { background: var(--bg-subtle); }
+
+  .notif-dot {
+    position: absolute;
+    top: 6px; right: 6px;
+    width: 8px; height: 8px;
+    background: var(--red);
+    border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+
+  /* Page Content */
+  .page-content {
+    padding: 28px;
+  }
+
+  .page-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+  }
+
+  .page-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .page-subtitle {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 2px;
+  }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    border-radius: 7px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text-primary);
+    transition: all 0.15s;
+  }
+
+  .btn:hover { background: var(--bg-subtle); }
+  .btn svg { width: 16px; height: 16px; }
+
+  .btn-primary {
+    background: #0f172a;
+    color: #fff;
+    border-color: #0f172a;
+  }
+  .btn-primary:hover { background: #1e293b; }
+
+  .btn-danger {
+    background: var(--red);
+    color: #fff;
+    border-color: var(--red);
+  }
+
+  .btn-sm {
+    padding: 5px 10px;
+    font-size: 12px;
+    border-radius: 6px;
+  }
+
+  /* =========== COMPANY OVERVIEW CARDS =========== */
+  .company-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .company-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .company-card:hover {
+    box-shadow: var(--shadow-md);
+    border-color: #c8ccd2;
+  }
+
+  .company-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .company-name {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .company-flag {
+    font-size: 18px;
+  }
+
+  .company-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 14px;
+  }
+
+  .company-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .company-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-primary);
+  }
+
+  .traffic-bar {
+    display: flex;
+    height: 8px;
+    border-radius: 4px;
+    overflow: hidden;
+    gap: 2px;
+  }
+
+  .traffic-bar .seg-green { background: var(--green); }
+  .traffic-bar .seg-yellow { background: var(--yellow); }
+  .traffic-bar .seg-red { background: var(--red); }
+  .traffic-bar .seg-gray { background: #d1d5db; }
+
+  .traffic-legend {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .traffic-legend span::before {
+    content: '';
+    display: inline-block;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+
+  .legend-green::before { background: var(--green); }
+  .legend-yellow::before { background: var(--yellow); }
+  .legend-red::before { background: var(--red); }
+  .legend-gray::before { background: #d1d5db; }
+
+  /* =========== SUMMARY STATS ROW =========== */
+  .summary-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .summary-stat {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 16px 18px;
+  }
+
+  .summary-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  .summary-stat-value {
+    font-size: 26px;
+    font-weight: 800;
+  }
+
+  .summary-stat-change {
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  .change-up { color: var(--green); }
+  .change-down { color: var(--red); }
+
+  /* =========== FILTERS =========== */
+  .filters-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 12px;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    background: var(--bg);
+    transition: all 0.15s;
+    user-select: none;
+  }
+
+  .filter-chip:hover { border-color: #aaa; }
+  .filter-chip.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+
+  .filter-chip svg { width: 14px; height: 14px; }
+
+  .filter-divider {
+    width: 1px;
+    height: 24px;
+    background: var(--border);
+    margin: 0 4px;
+  }
+
+  /* =========== ACTION REQUIRED =========== */
+  .action-required {
+    background: var(--red-bg);
+    border: 1px solid var(--red-border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 24px;
+  }
+
+  .action-required-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 14px;
+  }
+
+  .action-required-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--red);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .action-required-count {
+    background: var(--red);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 10px;
+  }
+
+  .action-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+
+  .action-card {
+    background: var(--bg);
+    border: 1px solid var(--red-border);
+    border-radius: var(--radius);
+    padding: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .action-card:hover {
+    box-shadow: var(--shadow-md);
+    transform: translateY(-1px);
+  }
+
+  .action-card-top {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 8px;
+  }
+
+  .person-avatar {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .action-card-name {
+    font-weight: 600;
+    font-size: 13.5px;
+  }
+
+  .action-card-role {
+    font-size: 12px;
+    color: var(--text-secondary);
+  }
+
+  .action-card-detail {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 12px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .red-streak {
+    display: flex;
+    gap: 3px;
+  }
+
+  .streak-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .streak-dot.red { background: var(--red); }
+  .streak-dot.gray { background: #e5e7eb; }
+
+  .action-type-badge {
+    font-size: 11px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border-radius: 4px;
+  }
+
+  .badge-terminate { background: var(--red-bg); color: var(--red); }
+  .badge-review { background: var(--yellow-bg); color: #b45309; }
+  .badge-escalate { background: var(--red-bg); color: var(--red); }
+
+  /* =========== PERFORMANCE TABLE =========== */
+  .table-section {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    margin-bottom: 24px;
+  }
+
+  .table-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .table-title {
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  .table-meta {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  thead th {
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-muted);
+    background: var(--bg-subtle);
+    border-bottom: 1px solid var(--border);
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+  }
+
+  thead th:hover { color: var(--text-primary); }
+
+  thead th .sort-icon {
+    display: inline-block;
+    margin-left: 4px;
+    opacity: 0.4;
+    font-size: 10px;
+  }
+
+  tbody td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--border-light);
+    font-size: 13.5px;
+    white-space: nowrap;
+  }
+
+  tbody tr { cursor: pointer; transition: background 0.1s; }
+  tbody tr:hover { background: var(--bg-hover); }
+  tbody tr:last-child td { border-bottom: none; }
+
+  .person-cell {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .person-cell .avatar-sm {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .person-cell .name { font-weight: 600; }
+  .person-cell .email { font-size: 12px; color: var(--text-muted); }
+
+  .status-dot {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+
+  .status-dot.green { background: var(--green); }
+  .status-dot.yellow { background: var(--yellow); }
+  .status-dot.red { background: var(--red); }
+
+  .status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .status-badge.green { background: var(--green-bg); color: #059669; }
+  .status-badge.yellow { background: var(--yellow-bg); color: #b45309; }
+  .status-badge.red { background: var(--red-bg); color: #dc2626; }
+
+  .kpi-bar-cell {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .kpi-bar {
+    width: 80px;
+    height: 6px;
+    background: #e5e7eb;
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .kpi-bar-fill {
+    height: 100%;
+    border-radius: 3px;
+    transition: width 0.3s;
+  }
+
+  .kpi-pct { font-size: 12px; font-weight: 600; min-width: 36px; }
+
+  .table-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 20px;
+    border-top: 1px solid var(--border);
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .pagination {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .page-btn {
+    width: 30px; height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    cursor: pointer;
+    background: var(--bg);
+    color: var(--text-secondary);
+  }
+
+  .page-btn:hover { background: var(--bg-subtle); }
+  .page-btn.active { background: #0f172a; color: #fff; border-color: #0f172a; }
+
+  /* =========== COST BREAKDOWN =========== */
+  .two-col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 24px;
+  }
+
+  .chart-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+
+  .chart-title {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 16px;
+  }
+
+  /* Simple bar chart */
+  .bar-chart {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .bar-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .bar-label {
+    width: 100px;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .bar-track {
+    flex: 1;
+    height: 24px;
+    background: var(--bg-subtle);
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 8px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    min-width: 50px;
+  }
+
+  /* Scatter dot plot */
+  .scatter-area {
+    position: relative;
+    height: 200px;
+    border-left: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+    margin: 10px 0 0 40px;
+  }
+
+  .scatter-dot {
+    position: absolute;
+    width: 10px; height: 10px;
+    border-radius: 50%;
+    transform: translate(-50%, 50%);
+    cursor: pointer;
+    transition: transform 0.15s;
+  }
+
+  .scatter-dot:hover { transform: translate(-50%, 50%) scale(1.6); z-index: 5; }
+
+  .scatter-axis-y {
+    position: absolute;
+    left: -40px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+    text-align: right;
+    width: 36px;
+  }
+
+  .scatter-axis-x {
+    display: flex;
+    justify-content: space-between;
+    font-size: 10px;
+    color: var(--text-muted);
+    margin-left: 40px;
+    margin-top: 6px;
+  }
+
+  .scatter-label {
+    text-align: center;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  /* =========== PERSON DETAIL VIEW =========== */
+  .detail-view { display: none; }
+  .detail-view.active { display: block; }
+  .dashboard-view.active { display: block; }
+  .dashboard-view { display: none; }
+
+  .person-header-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    margin-bottom: 20px;
+  }
+
+  .person-header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+  }
+
+  .person-avatar-lg {
+    width: 64px; height: 64px;
+    border-radius: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .person-header-info { flex: 1; }
+
+  .person-header-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 2px;
+  }
+
+  .person-header-meta {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-top: 6px;
+    flex-wrap: wrap;
+  }
+
+  .meta-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  .meta-item svg { width: 14px; height: 14px; opacity: 0.5; }
+
+  .person-header-actions {
+    display: flex;
+    gap: 8px;
+    flex-shrink: 0;
+  }
+
+  .person-stats-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-light);
+  }
+
+  .person-stat {
+    text-align: center;
+  }
+
+  .person-stat-value {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .person-stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  /* KPI History */
+  .kpi-history-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-bottom: 20px;
+  }
+
+  .kpi-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+  }
+
+  .kpi-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+  }
+
+  .kpi-card-title {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  .kpi-target {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .kpi-timeline {
+    display: flex;
+    gap: 6px;
+    margin-bottom: 12px;
+  }
+
+  .kpi-month {
+    flex: 1;
+    text-align: center;
+  }
+
+  .kpi-month-dot {
+    width: 100%;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 700;
+    margin-bottom: 4px;
+  }
+
+  .kpi-month-dot.green { background: var(--green-bg); color: #059669; border: 1px solid var(--green-border); }
+  .kpi-month-dot.yellow { background: var(--yellow-bg); color: #b45309; border: 1px solid var(--yellow-border); }
+  .kpi-month-dot.red { background: var(--red-bg); color: #dc2626; border: 1px solid var(--red-border); }
+
+  .kpi-month-label {
+    font-size: 10px;
+    color: var(--text-muted);
+  }
+
+  .kpi-current-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-light);
+    font-size: 13px;
+  }
+
+  .kpi-current-label { color: var(--text-secondary); }
+  .kpi-current-value { font-weight: 700; }
+
+  /* Notes / Communication Log */
+  .log-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+
+  .log-entry {
+    display: flex;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-light);
+  }
+
+  .log-entry:last-child { border-bottom: none; }
+
+  .log-icon {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    font-size: 14px;
+  }
+
+  .log-icon.note { background: var(--blue-bg); color: var(--blue); }
+  .log-icon.email { background: var(--green-bg); color: var(--green); }
+  .log-icon.alert { background: var(--red-bg); color: var(--red); }
+  .log-icon.flag { background: var(--yellow-bg); color: var(--yellow); }
+
+  .log-content { flex: 1; }
+  .log-title { font-weight: 600; font-size: 13px; }
+  .log-text { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
+  .log-time { font-size: 11px; color: var(--text-muted); margin-top: 4px; }
+
+  /* =========== VIEWS TOGGLE =========== */
+  .view { display: none; }
+  .view.active { display: block; }
+
+  /* =========== RESPONSIVE =========== */
+  @media (max-width: 1200px) {
+    .company-grid { grid-template-columns: repeat(2, 1fr); }
+    .summary-row { grid-template-columns: repeat(3, 1fr); }
+    .action-cards { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========================================= -->
+<!-- SIDEBAR -->
+<!-- ========================================= -->
+<nav class="sidebar">
+  <div class="sidebar-brand">
+    <h1>ORGCOMMAND</h1>
+    <span>CEO Dashboard</span>
+  </div>
+
+  <div class="sidebar-nav">
+    <div class="nav-section-label">Overview</div>
+    <div class="nav-item active" onclick="showView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </div>
+    <div class="nav-item" onclick="showView('dashboard')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+      All Personnel
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+      Performance
+    </div>
+
+    <div class="nav-section-label">Management</div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+      Contractors
+      <span class="nav-badge">4</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+      Action Required
+      <span class="nav-badge">7</span>
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+      Communications
+    </div>
+
+    <div class="nav-section-label">Analytics</div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="20" x2="12" y2="10"/><line x1="18" y1="20" x2="18" y2="4"/><line x1="6" y1="20" x2="6" y2="16"/></svg>
+      Cost Analysis
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+      Reports
+    </div>
+
+    <div class="nav-section-label">System</div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      CSV Import
+    </div>
+    <div class="nav-item">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+      Settings
+    </div>
+  </div>
+
+  <div class="sidebar-footer">
+    <div class="avatar">CR</div>
+    <div class="user-info">
+      <strong>Carlos Reyes</strong>
+      <span>CEO</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ========================================= -->
+<!-- MAIN CONTENT -->
+<!-- ========================================= -->
+<div class="main">
+
+  <!-- TOP HEADER -->
+  <div class="top-header">
+    <div class="breadcrumb" id="breadcrumb">
+      <a href="#" onclick="showView('dashboard'); return false;">Dashboard</a>
+    </div>
+    <div class="header-actions">
+      <div class="search-box">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        Search personnel...
+        <kbd>/</kbd>
+      </div>
+      <div class="header-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <div class="notif-dot"></div>
+      </div>
+      <div class="header-btn">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- DASHBOARD VIEW -->
+  <!-- ========================================= -->
+  <div class="view active" id="view-dashboard">
+    <div class="page-content">
+
+      <div class="page-title-row">
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-subtitle">February 2026 &middot; All Companies &middot; Last synced 14 minutes ago</div>
+        </div>
+        <div style="display:flex; gap:8px;">
+          <button class="btn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export
+          </button>
+          <button class="btn btn-primary">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Add Person
+          </button>
+        </div>
+      </div>
+
+      <!-- SUMMARY STATS -->
+      <div class="summary-row">
+        <div class="summary-stat">
+          <div class="summary-stat-label">Total Personnel</div>
+          <div class="summary-stat-value">214</div>
+          <div class="summary-stat-change change-up">+3 this month</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-label">Monthly Cost</div>
+          <div class="summary-stat-value">$1.47M</div>
+          <div class="summary-stat-change change-up">+$12K vs Jan</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-label">Avg Performance</div>
+          <div class="summary-stat-value" style="color: var(--green)">78%</div>
+          <div class="summary-stat-change change-down">-2% vs Jan</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-label">Red Flags</div>
+          <div class="summary-stat-value" style="color: var(--red)">18</div>
+          <div class="summary-stat-change change-down">+4 vs Jan</div>
+        </div>
+        <div class="summary-stat">
+          <div class="summary-stat-label">KPI Coverage</div>
+          <div class="summary-stat-value">89%</div>
+          <div class="summary-stat-change change-up">+5% vs Jan</div>
+        </div>
+      </div>
+
+      <!-- COMPANY CARDS -->
+      <div class="company-grid">
+        <div class="company-card">
+          <div class="company-card-header">
+            <div class="company-name">Acme Corp</div>
+            <div class="company-flag">&#127482;&#127480;</div>
+          </div>
+          <div class="company-stats">
+            <div>
+              <div class="company-stat-label">Headcount</div>
+              <div class="company-stat-value">82</div>
+            </div>
+            <div>
+              <div class="company-stat-label">Monthly Cost</div>
+              <div class="company-stat-value">$620K</div>
+            </div>
+          </div>
+          <div class="traffic-bar">
+            <div class="seg-green" style="flex:58"></div>
+            <div class="seg-yellow" style="flex:22"></div>
+            <div class="seg-red" style="flex:12"></div>
+            <div class="seg-gray" style="flex:8"></div>
+          </div>
+          <div class="traffic-legend">
+            <span class="legend-green">47</span>
+            <span class="legend-yellow">18</span>
+            <span class="legend-red">10</span>
+            <span class="legend-gray">7</span>
+          </div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-card-header">
+            <div class="company-name">Beta Inc</div>
+            <div class="company-flag">&#127468;&#127463;</div>
+          </div>
+          <div class="company-stats">
+            <div>
+              <div class="company-stat-label">Headcount</div>
+              <div class="company-stat-value">54</div>
+            </div>
+            <div>
+              <div class="company-stat-label">Monthly Cost</div>
+              <div class="company-stat-value">$385K</div>
+            </div>
+          </div>
+          <div class="traffic-bar">
+            <div class="seg-green" style="flex:65"></div>
+            <div class="seg-yellow" style="flex:19"></div>
+            <div class="seg-red" style="flex:9"></div>
+            <div class="seg-gray" style="flex:7"></div>
+          </div>
+          <div class="traffic-legend">
+            <span class="legend-green">35</span>
+            <span class="legend-yellow">10</span>
+            <span class="legend-red">5</span>
+            <span class="legend-gray">4</span>
+          </div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-card-header">
+            <div class="company-name">Gamma Systems</div>
+            <div class="company-flag">&#127480;&#127468;</div>
+          </div>
+          <div class="company-stats">
+            <div>
+              <div class="company-stat-label">Headcount</div>
+              <div class="company-stat-value">48</div>
+            </div>
+            <div>
+              <div class="company-stat-label">Monthly Cost</div>
+              <div class="company-stat-value">$290K</div>
+            </div>
+          </div>
+          <div class="traffic-bar">
+            <div class="seg-green" style="flex:52"></div>
+            <div class="seg-yellow" style="flex:27"></div>
+            <div class="seg-red" style="flex:13"></div>
+            <div class="seg-gray" style="flex:8"></div>
+          </div>
+          <div class="traffic-legend">
+            <span class="legend-green">25</span>
+            <span class="legend-yellow">13</span>
+            <span class="legend-red">6</span>
+            <span class="legend-gray">4</span>
+          </div>
+        </div>
+
+        <div class="company-card">
+          <div class="company-card-header">
+            <div class="company-name">Delta Digital</div>
+            <div class="company-flag">&#127482;&#127480;</div>
+          </div>
+          <div class="company-stats">
+            <div>
+              <div class="company-stat-label">Headcount</div>
+              <div class="company-stat-value">30</div>
+            </div>
+            <div>
+              <div class="company-stat-label">Monthly Cost</div>
+              <div class="company-stat-value">$175K</div>
+            </div>
+          </div>
+          <div class="traffic-bar">
+            <div class="seg-green" style="flex:47"></div>
+            <div class="seg-yellow" style="flex:23"></div>
+            <div class="seg-red" style="flex:20"></div>
+            <div class="seg-gray" style="flex:10"></div>
+          </div>
+          <div class="traffic-legend">
+            <span class="legend-green">14</span>
+            <span class="legend-yellow">7</span>
+            <span class="legend-red">6</span>
+            <span class="legend-gray">3</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ACTION REQUIRED -->
+      <div class="action-required">
+        <div class="action-required-header">
+          <div class="action-required-title">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Action Required
+            <span class="action-required-count">7</span>
+          </div>
+          <button class="btn btn-sm" style="background:#fff;">View All</button>
+        </div>
+
+        <div class="action-cards">
+          <div class="action-card" onclick="showView('detail')">
+            <div class="action-card-top">
+              <div class="person-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">DM</div>
+              <div>
+                <div class="action-card-name">Derek Morrison</div>
+                <div class="action-card-role">Sales Rep &middot; Acme Corp</div>
+              </div>
+            </div>
+            <div style="font-size:12px; color: var(--text-secondary)">$8,200/mo &middot; 0 deals closed in 3 months</div>
+            <div class="action-card-detail">
+              <div>
+                <div style="font-size:11px; color:var(--text-muted); margin-bottom:3px">Consecutive reds</div>
+                <div class="red-streak">
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot red"></div>
+                </div>
+              </div>
+              <span class="action-type-badge badge-terminate">Termination Review</span>
+            </div>
+          </div>
+
+          <div class="action-card" onclick="showView('detail')">
+            <div class="action-card-top">
+              <div class="person-avatar" style="background: linear-gradient(135deg, #f59e0b, #d97706);">PW</div>
+              <div>
+                <div class="action-card-name">Priya Wickram</div>
+                <div class="action-card-role">Developer &middot; Gamma Systems</div>
+              </div>
+            </div>
+            <div style="font-size:12px; color: var(--text-secondary)">$6,500/mo &middot; 2 PRs merged (target: 12)</div>
+            <div class="action-card-detail">
+              <div>
+                <div style="font-size:11px; color:var(--text-muted); margin-bottom:3px">Consecutive reds</div>
+                <div class="red-streak">
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot gray"></div>
+                </div>
+              </div>
+              <span class="action-type-badge badge-escalate">CEO Escalation</span>
+            </div>
+          </div>
+
+          <div class="action-card" onclick="showView('detail')">
+            <div class="action-card-top">
+              <div class="person-avatar" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">TH</div>
+              <div>
+                <div class="action-card-name">Tom Hartley</div>
+                <div class="action-card-role">Contractor &middot; Beta Inc</div>
+              </div>
+            </div>
+            <div style="font-size:12px; color: var(--text-secondary)">$5,000/mo retainer &middot; 1 of 4 deliverables received</div>
+            <div class="action-card-detail">
+              <div>
+                <div style="font-size:11px; color:var(--text-muted); margin-bottom:3px">Consecutive reds</div>
+                <div class="red-streak">
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot red"></div>
+                  <div class="streak-dot red"></div>
+                </div>
+              </div>
+              <span class="action-type-badge badge-terminate">Termination Review</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILTERS -->
+      <div class="filters-bar">
+        <span style="font-size:12px; color:var(--text-muted); margin-right:4px;">Filter:</span>
+        <div class="filter-chip active">All (214)</div>
+        <div class="filter-chip">Employees (178)</div>
+        <div class="filter-chip">Contractors (36)</div>
+        <div class="filter-divider"></div>
+        <div class="filter-chip">
+          <span class="status-dot green"></span> Green (121)
+        </div>
+        <div class="filter-chip">
+          <span class="status-dot yellow"></span> Yellow (48)
+        </div>
+        <div class="filter-chip">
+          <span class="status-dot red"></span> Red (27)
+        </div>
+        <div class="filter-divider"></div>
+        <div class="filter-chip">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+          More Filters
+        </div>
+      </div>
+
+      <!-- PERFORMANCE TABLE -->
+      <div class="table-section">
+        <div class="table-header">
+          <div class="table-title">Performance Grid</div>
+          <div class="table-meta">Showing 15 of 214 &middot; Period: Feb 2026</div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th>Person <span class="sort-icon">&#9650;</span></th>
+              <th>Company</th>
+              <th>Team</th>
+              <th>Role</th>
+              <th>Type</th>
+              <th>Status <span class="sort-icon">&#9660;</span></th>
+              <th>KPI</th>
+              <th>Cost/mo</th>
+              <th>Streak</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr onclick="showView('detail')">
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">DM</div>
+                  <div>
+                    <div class="name">Derek Morrison</div>
+                    <div class="email">d.morrison@acme.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Acme Corp</td>
+              <td>Sales</td>
+              <td>Sales Rep</td>
+              <td>Employee</td>
+              <td><span class="status-badge red"><span class="status-dot red"></span>Red</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:15%; background:var(--red)"></div></div>
+                  <span class="kpi-pct" style="color:var(--red)">15%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$8,200</td>
+              <td><div class="red-streak"><div class="streak-dot red"></div><div class="streak-dot red"></div><div class="streak-dot red"></div></div></td>
+            </tr>
+            <tr onclick="showView('detail')">
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">PW</div>
+                  <div>
+                    <div class="name">Priya Wickram</div>
+                    <div class="email">p.wickram@gamma.sg</div>
+                  </div>
+                </div>
+              </td>
+              <td>Gamma Systems</td>
+              <td>Engineering</td>
+              <td>Developer</td>
+              <td>Employee</td>
+              <td><span class="status-badge red"><span class="status-dot red"></span>Red</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:17%; background:var(--red)"></div></div>
+                  <span class="kpi-pct" style="color:var(--red)">17%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$6,500</td>
+              <td><div class="red-streak"><div class="streak-dot red"></div><div class="streak-dot red"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706);">KJ</div>
+                  <div>
+                    <div class="name">Karen Johansson</div>
+                    <div class="email">k.johansson@beta.co.uk</div>
+                  </div>
+                </div>
+              </td>
+              <td>Beta Inc</td>
+              <td>Marketing</td>
+              <td>Marketing Lead</td>
+              <td>Employee</td>
+              <td><span class="status-badge red"><span class="status-dot red"></span>Red</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:42%; background:var(--red)"></div></div>
+                  <span class="kpi-pct" style="color:var(--red)">42%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$9,800</td>
+              <td><div class="red-streak"><div class="streak-dot red"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706);">AL</div>
+                  <div>
+                    <div class="name">Andre Liu</div>
+                    <div class="email">a.liu@gamma.sg</div>
+                  </div>
+                </div>
+              </td>
+              <td>Gamma Systems</td>
+              <td>Engineering</td>
+              <td>Senior Developer</td>
+              <td>Employee</td>
+              <td><span class="status-badge yellow"><span class="status-dot yellow"></span>Yellow</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:72%; background:var(--yellow)"></div></div>
+                  <span class="kpi-pct" style="color:var(--yellow)">72%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$7,200</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #f59e0b, #d97706);">NR</div>
+                  <div>
+                    <div class="name">Nina Ramirez</div>
+                    <div class="email">n.ramirez@delta.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Delta Digital</td>
+              <td>Support</td>
+              <td>Support Lead</td>
+              <td>Employee</td>
+              <td><span class="status-badge yellow"><span class="status-dot yellow"></span>Yellow</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:78%; background:var(--yellow)"></div></div>
+                  <span class="kpi-pct" style="color:var(--yellow)">78%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$6,800</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #10b981, #059669);">SC</div>
+                  <div>
+                    <div class="name">Sarah Chen</div>
+                    <div class="email">s.chen@acme.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Acme Corp</td>
+              <td>Engineering</td>
+              <td>VP Engineering</td>
+              <td>Employee</td>
+              <td><span class="status-badge green"><span class="status-dot green"></span>Green</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:95%; background:var(--green)"></div></div>
+                  <span class="kpi-pct" style="color:var(--green)">95%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$18,000</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #10b981, #059669);">RP</div>
+                  <div>
+                    <div class="name">Raj Patel</div>
+                    <div class="email">r.patel@acme.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Acme Corp</td>
+              <td>Engineering</td>
+              <td>Senior Developer</td>
+              <td>Employee</td>
+              <td><span class="status-badge green"><span class="status-dot green"></span>Green</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:112%; background:var(--green)"></div></div>
+                  <span class="kpi-pct" style="color:var(--green)">112%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$8,500</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #10b981, #059669);">MK</div>
+                  <div>
+                    <div class="name">Maria Kowalski</div>
+                    <div class="email">m.kowalski@beta.co.uk</div>
+                  </div>
+                </div>
+              </td>
+              <td>Beta Inc</td>
+              <td>Sales</td>
+              <td>Account Executive</td>
+              <td>Employee</td>
+              <td><span class="status-badge green"><span class="status-dot green"></span>Green</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:100%; background:var(--green)"></div></div>
+                  <span class="kpi-pct" style="color:var(--green)">104%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$7,400</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #10b981, #059669);">JO</div>
+                  <div>
+                    <div class="name">James Okafor</div>
+                    <div class="email">j.okafor@delta.com</div>
+                  </div>
+                </div>
+              </td>
+              <td>Delta Digital</td>
+              <td>Engineering</td>
+              <td>Full-Stack Dev</td>
+              <td>Employee</td>
+              <td><span class="status-badge green"><span class="status-dot green"></span>Green</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:92%; background:var(--green)"></div></div>
+                  <span class="kpi-pct" style="color:var(--green)">92%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$6,200</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+            <tr>
+              <td>
+                <div class="person-cell">
+                  <div class="avatar-sm" style="background: linear-gradient(135deg, #10b981, #059669);">LT</div>
+                  <div>
+                    <div class="name">Lisa Tan</div>
+                    <div class="email">l.tan@gamma.sg</div>
+                  </div>
+                </div>
+              </td>
+              <td>Gamma Systems</td>
+              <td>Sales</td>
+              <td>Account Manager</td>
+              <td>Employee</td>
+              <td><span class="status-badge green"><span class="status-dot green"></span>Green</span></td>
+              <td>
+                <div class="kpi-bar-cell">
+                  <div class="kpi-bar"><div class="kpi-bar-fill" style="width:88%; background:var(--green)"></div></div>
+                  <span class="kpi-pct" style="color:var(--green)">88%</span>
+                </div>
+              </td>
+              <td style="font-weight:600">$5,800</td>
+              <td><div class="red-streak"><div class="streak-dot gray"></div><div class="streak-dot gray"></div><div class="streak-dot gray"></div></div></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="table-footer">
+          <span>Showing 1-10 of 214 personnel</span>
+          <div class="pagination">
+            <div class="page-btn">&lsaquo;</div>
+            <div class="page-btn active">1</div>
+            <div class="page-btn">2</div>
+            <div class="page-btn">3</div>
+            <div class="page-btn">...</div>
+            <div class="page-btn">22</div>
+            <div class="page-btn">&rsaquo;</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TWO COLUMN: COST + SCATTER -->
+      <div class="two-col">
+        <div class="chart-card">
+          <div class="chart-title">Monthly Cost by Company</div>
+          <div class="bar-chart">
+            <div class="bar-row">
+              <div class="bar-label">Acme Corp</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:88%; background: linear-gradient(90deg, #3b82f6, #2563eb);">$620K</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Beta Inc</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:55%; background: linear-gradient(90deg, #8b5cf6, #7c3aed);">$385K</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Gamma Sys</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:41%; background: linear-gradient(90deg, #10b981, #059669);">$290K</div>
+              </div>
+            </div>
+            <div class="bar-row">
+              <div class="bar-label">Delta Digital</div>
+              <div class="bar-track">
+                <div class="bar-fill" style="width:25%; background: linear-gradient(90deg, #f59e0b, #d97706);">$175K</div>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light); display:flex; justify-content:space-between; font-size:13px;">
+            <span style="color:var(--text-muted)">Total monthly burn</span>
+            <span style="font-weight:800; font-size:16px;">$1,470,000</span>
+          </div>
+        </div>
+
+        <div class="chart-card">
+          <div class="chart-title">Cost vs Performance</div>
+          <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+            Each dot is a person. Bottom-right = overpaid underperformer.
+          </p>
+          <div style="position:relative;">
+            <div class="scatter-axis-y">
+              <span>$20K</span>
+              <span>$15K</span>
+              <span>$10K</span>
+              <span>$5K</span>
+              <span>$0</span>
+            </div>
+            <div class="scatter-area">
+              <!-- Green dots (high performance, various costs) -->
+              <div class="scatter-dot" style="background:var(--green); left:82%; bottom:88%;" title="Sarah Chen - 95% - $18K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:88%; bottom:40%;" title="Raj Patel - 112% - $8.5K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:85%; bottom:35%;" title="Maria Kowalski - 104% - $7.4K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:78%; bottom:28%;" title="James Okafor - 92% - $6.2K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:73%; bottom:25%;" title="Lisa Tan - 88% - $5.8K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:91%; bottom:55%;" title="Top Performer - 108% - $11K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:70%; bottom:32%;" title="Green - 85% - $7K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:95%; bottom:45%;" title="Green - 118% - $9.5K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:76%; bottom:60%;" title="Green - 90% - $12.5K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:68%; bottom:20%;" title="Green - 82% - $4.5K"></div>
+              <div class="scatter-dot" style="background:var(--green); left:80%; bottom:38%;" title="Green - 94% - $8K"></div>
+
+              <!-- Yellow dots (medium performance) -->
+              <div class="scatter-dot" style="background:var(--yellow); left:55%; bottom:33%;" title="Andre Liu - 72% - $7.2K"></div>
+              <div class="scatter-dot" style="background:var(--yellow); left:60%; bottom:30%;" title="Nina Ramirez - 78% - $6.8K"></div>
+              <div class="scatter-dot" style="background:var(--yellow); left:52%; bottom:50%;" title="Yellow - 68% - $10.5K"></div>
+              <div class="scatter-dot" style="background:var(--yellow); left:58%; bottom:22%;" title="Yellow - 75% - $5K"></div>
+              <div class="scatter-dot" style="background:var(--yellow); left:48%; bottom:42%;" title="Yellow - 63% - $9K"></div>
+
+              <!-- Red dots (DANGER ZONE - low performance, high cost) -->
+              <div class="scatter-dot" style="background:var(--red); left:8%; bottom:38%; width:13px; height:13px;" title="Derek Morrison - 15% - $8.2K !!!"></div>
+              <div class="scatter-dot" style="background:var(--red); left:12%; bottom:28%;" title="Priya Wickram - 17% - $6.5K"></div>
+              <div class="scatter-dot" style="background:var(--red); left:28%; bottom:47%;" title="Karen Johansson - 42% - $9.8K"></div>
+              <div class="scatter-dot" style="background:var(--red); left:22%; bottom:22%;" title="Red - 35% - $5K"></div>
+              <div class="scatter-dot" style="background:var(--red); left:18%; bottom:55%;" title="Red - 25% - $11.5K"></div>
+
+              <!-- Quadrant label -->
+              <div style="position:absolute; bottom:55%; right:5%; font-size:10px; color:var(--green); font-weight:600; opacity:0.6;">IDEAL</div>
+              <div style="position:absolute; top:5%; left:5%; font-size:10px; color:var(--red); font-weight:600; opacity:0.6;">DANGER ZONE</div>
+            </div>
+            <div class="scatter-axis-x">
+              <span>0%</span>
+              <span>25%</span>
+              <span>50%</span>
+              <span>75%</span>
+              <span>100%+</span>
+            </div>
+            <div class="scatter-label">KPI Performance &rarr;</div>
+          </div>
+          <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light); font-size:12px; color:var(--red); font-weight:600;">
+            $83,400/mo spent on red-flagged personnel
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================= -->
+  <!-- PERSON DETAIL VIEW -->
+  <!-- ========================================= -->
+  <div class="view" id="view-detail">
+    <div class="page-content">
+
+      <div style="margin-bottom: 20px;">
+        <a href="#" onclick="showView('dashboard'); return false;" style="font-size:13px; color:var(--text-secondary); text-decoration:none; display:inline-flex; align-items:center; gap:4px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"/></svg>
+          Back to Dashboard
+        </a>
+      </div>
+
+      <!-- Person Header -->
+      <div class="person-header-card">
+        <div class="person-header-top">
+          <div class="person-avatar-lg" style="background: linear-gradient(135deg, #ef4444, #b91c1c);">DM</div>
+          <div class="person-header-info">
+            <div class="person-header-name">Derek Morrison</div>
+            <div style="display:flex; align-items:center; gap:8px; margin-top:2px;">
+              <span class="status-badge red"><span class="status-dot red"></span> Red &mdash; 3 consecutive periods</span>
+              <span class="action-type-badge badge-terminate" style="font-size:12px;">Termination Review</span>
+            </div>
+            <div class="person-header-meta">
+              <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a4 4 0 0 0-8 0v2"/></svg>
+                Sales Rep
+              </span>
+              <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>
+                Acme Corp
+              </span>
+              <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                Reports to: Mike Stevens (Sales Director)
+              </span>
+              <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                US (New York)
+              </span>
+              <span class="meta-item">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+                d.morrison@acme.com
+              </span>
+            </div>
+          </div>
+          <div class="person-header-actions">
+            <button class="btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              Add Note
+            </button>
+            <button class="btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+              Send Email
+            </button>
+            <button class="btn btn-danger">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+              Flag for Review
+            </button>
+          </div>
+        </div>
+
+        <div class="person-stats-row">
+          <div class="person-stat">
+            <div class="person-stat-value" style="color:var(--red)">15%</div>
+            <div class="person-stat-label">KPI Performance</div>
+          </div>
+          <div class="person-stat">
+            <div class="person-stat-value">$8,200</div>
+            <div class="person-stat-label">Monthly Cost</div>
+          </div>
+          <div class="person-stat">
+            <div class="person-stat-value" style="color:var(--red)">3</div>
+            <div class="person-stat-label">Consecutive Reds</div>
+          </div>
+          <div class="person-stat">
+            <div class="person-stat-value">18 mo</div>
+            <div class="person-stat-label">Tenure</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KPI History -->
+      <div class="kpi-history-grid">
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-card-title">Deals Closed</div>
+            <div class="kpi-target">Target: 5/month</div>
+          </div>
+          <div class="kpi-timeline">
+            <div class="kpi-month">
+              <div class="kpi-month-dot green">6</div>
+              <div class="kpi-month-label">Sep</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot green">5</div>
+              <div class="kpi-month-label">Oct</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot yellow">4</div>
+              <div class="kpi-month-label">Nov</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">1</div>
+              <div class="kpi-month-label">Dec</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">0</div>
+              <div class="kpi-month-label">Jan</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">0</div>
+              <div class="kpi-month-label">Feb</div>
+            </div>
+          </div>
+          <div class="kpi-current-row">
+            <span class="kpi-current-label">Feb 2026 actual</span>
+            <span class="kpi-current-value" style="color:var(--red)">0 of 5 deals</span>
+          </div>
+        </div>
+
+        <div class="kpi-card">
+          <div class="kpi-card-header">
+            <div class="kpi-card-title">Pipeline Value Generated</div>
+            <div class="kpi-target">Target: $50K/month</div>
+          </div>
+          <div class="kpi-timeline">
+            <div class="kpi-month">
+              <div class="kpi-month-dot green">$62K</div>
+              <div class="kpi-month-label">Sep</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot green">$55K</div>
+              <div class="kpi-month-label">Oct</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot yellow">$38K</div>
+              <div class="kpi-month-label">Nov</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">$12K</div>
+              <div class="kpi-month-label">Dec</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">$8K</div>
+              <div class="kpi-month-label">Jan</div>
+            </div>
+            <div class="kpi-month">
+              <div class="kpi-month-dot red">$5K</div>
+              <div class="kpi-month-label">Feb</div>
+            </div>
+          </div>
+          <div class="kpi-current-row">
+            <span class="kpi-current-label">Feb 2026 actual</span>
+            <span class="kpi-current-value" style="color:var(--red)">$5,000 of $50,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cost Impact Card -->
+      <div style="background:var(--red-bg); border:1px solid var(--red-border); border-radius:var(--radius-lg); padding:20px; margin-bottom:20px; display:flex; align-items:center; justify-content:space-between;">
+        <div>
+          <div style="font-size:14px; font-weight:700; color:var(--red); margin-bottom:4px;">Cost Impact Summary</div>
+          <div style="font-size:13px; color:var(--text-secondary);">
+            Derek has cost the company <strong style="color:var(--red)">$24,600</strong> over the last 3 months
+            while delivering <strong style="color:var(--red)">1 deal</strong> (target: 15).
+            Effective cost per deal: <strong style="color:var(--red)">$24,600</strong> vs team average of <strong style="color:var(--green)">$1,640</strong>.
+          </div>
+        </div>
+        <div style="text-align:right; flex-shrink:0; margin-left:24px;">
+          <div style="font-size:32px; font-weight:800; color:var(--red);">15x</div>
+          <div style="font-size:11px; color:var(--text-muted); text-transform:uppercase; letter-spacing:0.5px;">Above avg cost/deal</div>
+        </div>
+      </div>
+
+      <!-- Communication Log -->
+      <div class="log-card">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px;">
+          <div class="chart-title">Activity &amp; Communication Log</div>
+          <button class="btn btn-sm">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>
+            Add Entry
+          </button>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon alert">!</div>
+          <div class="log-content">
+            <div class="log-title">Automated Alert: 3rd Consecutive Red Period</div>
+            <div class="log-text">System generated termination review recommendation. Threshold profile: Standard. Deals closed: 0/5 target. Pipeline generated: $5K/$50K target.</div>
+            <div class="log-time">Feb 28, 2026 &middot; 2:00 AM &middot; System (Automated)</div>
+          </div>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon email">&#9993;</div>
+          <div class="log-content">
+            <div class="log-title">Email Sent to Mike Stevens (Manager)</div>
+            <div class="log-text">"Derek has now been flagged red for 2 consecutive months. Please provide an update on his pipeline activity and any context for the performance decline. &mdash; Carlos"</div>
+            <div class="log-time">Feb 3, 2026 &middot; 9:15 AM &middot; Carlos Reyes (CEO)</div>
+          </div>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon note">&#9998;</div>
+          <div class="log-content">
+            <div class="log-title">Manager Response: Mike Stevens</div>
+            <div class="log-text">"Derek says he's been working large enterprise deals that have longer cycles. I've asked him to also maintain smaller deal flow. Will monitor closely this month."</div>
+            <div class="log-time">Feb 4, 2026 &middot; 11:30 AM &middot; Logged by Carlos Reyes</div>
+          </div>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon alert">!</div>
+          <div class="log-content">
+            <div class="log-title">Automated Alert: 2nd Consecutive Red Period</div>
+            <div class="log-text">CEO escalation triggered. Deals closed: 0/5 target. Pipeline generated: $8K/$50K target.</div>
+            <div class="log-time">Jan 31, 2026 &middot; 2:00 AM &middot; System (Automated)</div>
+          </div>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon flag">&#9873;</div>
+          <div class="log-content">
+            <div class="log-title">Flagged: Performance Review Required</div>
+            <div class="log-text">First red period. Deals closed: 1/5 target. Pipeline dropped significantly from prior months. Appeared in Action Required dashboard.</div>
+            <div class="log-time">Dec 31, 2025 &middot; 2:00 AM &middot; System (Automated)</div>
+          </div>
+        </div>
+
+        <div class="log-entry">
+          <div class="log-icon note">&#9998;</div>
+          <div class="log-content">
+            <div class="log-title">Performance Note</div>
+            <div class="log-text">Strong Q3 performance. Closed 6 deals in September alone. One of the top performers on the sales team at that time.</div>
+            <div class="log-time">Oct 2, 2025 &middot; 3:45 PM &middot; Carlos Reyes (CEO)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<!-- ========================================= -->
+<!-- JAVASCRIPT -->
+<!-- ========================================= -->
+<script>
+function showView(viewName) {
+  // Hide all views
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+
+  // Show target view
+  document.getElementById('view-' + viewName).classList.add('active');
+
+  // Update sidebar active state
+  const navItems = document.querySelectorAll('.nav-item');
+  navItems.forEach(n => n.classList.remove('active'));
+  if (viewName === 'dashboard') {
+    navItems[0].classList.add('active');
+  }
+
+  // Update breadcrumb
+  const bc = document.getElementById('breadcrumb');
+  if (viewName === 'dashboard') {
+    bc.innerHTML = '<span class="current">Dashboard</span>';
+  } else if (viewName === 'detail') {
+    bc.innerHTML = '<a href="#" onclick="showView(\'dashboard\'); return false;">Dashboard</a><span style="margin:0 4px; color:#ccc;">/</span><a href="#" onclick="showView(\'dashboard\'); return false;">All Personnel</a><span style="margin:0 4px; color:#ccc;">/</span><span class="current">Derek Morrison</span>';
+  }
+
+  // Scroll to top
+  window.scrollTo(0, 0);
+}
+
+// Filter chips toggle
+document.querySelectorAll('.filter-chip').forEach(chip => {
+  chip.addEventListener('click', function() {
+    // Only toggle within sibling group for demo
+    if (!this.querySelector('.status-dot') && !this.querySelector('svg')) {
+      document.querySelectorAll('.filter-chip:not(:has(.status-dot)):not(:has(svg))').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+    }
+  });
+});
+
+// Scatter dot tooltips
+document.querySelectorAll('.scatter-dot').forEach(dot => {
+  dot.addEventListener('mouseenter', function(e) {
+    const title = this.getAttribute('title');
+    if (!title) return;
+    let tip = document.createElement('div');
+    tip.className = 'scatter-tooltip';
+    tip.textContent = title;
+    tip.style.cssText = 'position:fixed; background:#0f172a; color:#fff; padding:4px 10px; border-radius:6px; font-size:12px; pointer-events:none; z-index:999; white-space:nowrap;';
+    tip.style.left = (e.clientX + 12) + 'px';
+    tip.style.top = (e.clientY - 30) + 'px';
+    document.body.appendChild(tip);
+    this._tip = tip;
+  });
+  dot.addEventListener('mouseleave', function() {
+    if (this._tip) { this._tip.remove(); this._tip = null; }
+  });
+});
+</script>
+
+</body>
+</html>

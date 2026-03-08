@@ -1,0 +1,2421 @@
+{
+  "generated_at": "2026-03-07T17:16:10.794154",
+  "days_back": 90,
+  "record_counts": {
+    "deals": 1,
+    "calls": 2000,
+    "tasks": 2000,
+    "events": 2000
+  },
+  "ratings": {
+    "5062310000000732005": {
+      "name": "Jack Harris",
+      "output_rating": 2.4,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 5.0,
+      "gaming_flags": []
+    },
+    "5062310000474497001": {
+      "name": "hunain.h",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "112 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "286 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000233468001": {
+      "name": "Adam F",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 9.8,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "68 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "385 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000233464001": {
+      "name": "Brady D",
+      "output_rating": 3.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 9.6,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "106 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "405 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000084545001": {
+      "name": "Shane Simone",
+      "output_rating": 1.1,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000000479001": {
+      "name": "IT IT",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000003485001": {
+      "name": "Jason Evans",
+      "output_rating": 1.1,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 0.0,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "24 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "89 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000355636023": {
+      "name": "Eric G.",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 9.8,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "85 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "223 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000233466001": {
+      "name": "philip.k",
+      "output_rating": 5.0,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "135 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000043502001": {
+      "name": "Aaron Pleasants",
+      "output_rating": 3.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 9.5,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "37 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "80 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000641109001": {
+      "name": "james.k",
+      "output_rating": 3.1,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 8.0,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "236 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "369 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000237699003": {
+      "name": "Andrew W",
+      "output_rating": 4.4,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 3.1,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "60 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000232957001": {
+      "name": "daniel.l",
+      "output_rating": 3.3,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 8.7,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "28 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "129 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000000337001": {
+      "name": "Ted Baker",
+      "output_rating": 2.4,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 5.0,
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "100.0% of 10 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000000922001": {
+      "name": "rachel",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000456097001": {
+      "name": "autumn.m",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000306468001": {
+      "name": "paul.m",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000744997001": {
+      "name": "anthony.s",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000495097001": {
+      "name": "michael.d",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000198508001": {
+      "name": "Tracy",
+      "output_rating": 6.8,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 10,
+      "responsiveness_score": 10.0,
+      "gaming_flags": []
+    },
+    "5062310000456093001": {
+      "name": "landin.m",
+      "output_rating": 5.0,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": []
+    },
+    "5062310000456098001": {
+      "name": "zephaniah.p",
+      "output_rating": 5.2,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 5.3,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "96 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310001313039001": {
+      "name": "Andrew Support",
+      "output_rating": 5.8,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 7.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "46 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000576808001": {
+      "name": "matthew.v",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000000724001": {
+      "name": "Tyler McCormick",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "151 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000598842001": {
+      "name": "Morgan.Q",
+      "output_rating": 3.0,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 2.0,
+      "gaming_flags": []
+    },
+    "5062310000949418001": {
+      "name": "russell.w",
+      "output_rating": 4.0,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 2.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "62 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "507 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000268007001": {
+      "name": "tommy",
+      "output_rating": 1.1,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310000796619001": {
+      "name": "brady.a",
+      "output_rating": 2.5,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": []
+    },
+    "5062310001368402001": {
+      "name": "Cai Cruz",
+      "output_rating": 2.4,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 4.5,
+      "responsiveness_score": 0.0,
+      "gaming_flags": [
+        {
+          "flag": "LOW_FOLLOW_THROUGH",
+          "detail": "Only 0.0% of 11 tasks completed",
+          "severity": "LOW"
+        }
+      ]
+    },
+    "5062310000198509001": {
+      "name": "Enoch B.",
+      "output_rating": 5.0,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 5.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": []
+    },
+    "5062310000544968001": {
+      "name": "george.f",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "90 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "179 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310001345355001": {
+      "name": "Angela C.",
+      "output_rating": 1.5,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 2.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "98 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000000732015": {
+      "name": "David Rose",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "39 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310001258870001": {
+      "name": "john.t",
+      "output_rating": 3.3,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 8.5,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "310 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "99.8min talk time but only 27.4% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "378 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000043498001": {
+      "name": "John Andrews",
+      "output_rating": 5.7,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 7.0,
+      "responsiveness_score": 9.7,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "96 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000777937001": {
+      "name": "dominic.w",
+      "output_rating": 3.3,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 8.6,
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "67.1% of 164 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        },
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "164 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "99.2min talk time but only 9.8% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "456 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000273726003": {
+      "name": "luke",
+      "output_rating": 1.5,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 2.0,
+      "responsiveness_score": 0.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "38 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310001288266001": {
+      "name": "robert.ca",
+      "output_rating": 3.0,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 7.5,
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "56.8% of 407 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        },
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "407 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "112.6min talk time but only 18.7% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "758 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000000720004": {
+      "name": "Luke Russell",
+      "output_rating": 4.0,
+      "color": "GREEN",
+      "velocity_score": 2.0,
+      "quality_score": 2.0,
+      "responsiveness_score": 10.0,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "35 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000030234001": {
+      "name": "Alex Cruz",
+      "output_rating": 3.3,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 8.5,
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "67 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310001331531001": {
+      "name": "jonah.go",
+      "output_rating": 3.6,
+      "color": "YELLOW",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 9.7,
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "178 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "778 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ]
+    },
+    "5062310000181102001": {
+      "name": "gabriella",
+      "output_rating": 2.4,
+      "color": "RED",
+      "velocity_score": 2.0,
+      "quality_score": 1,
+      "responsiveness_score": 5.0,
+      "gaming_flags": []
+    }
+  },
+  "cross_validation": {
+    "5062310000000732005": {
+      "name": "Jack Harris",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 4,
+        "ghost_calls": 4,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 4
+        }
+      },
+      "activity": {},
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Jack (LV)",
+        "rank": 6,
+        "total_sales": 129,
+        "adj_revenue": 1216340.83,
+        "revenue": 2214025.0,
+        "commission": 118094.5
+      }
+    },
+    "5062310000474497001": {
+      "name": "hunain.h",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 112,
+        "ghost_calls": 17,
+        "short_calls": 59,
+        "meaningful_calls": 36,
+        "ghost_call_pct": 15.2,
+        "meaningful_pct": 32.1,
+        "total_talk_minutes": 128.2,
+        "avg_duration_secs": 68.7,
+        "status_breakdown": {
+          "Unknown": 112
+        }
+      },
+      "activity": {
+        "total_tasks": 21,
+        "completed_tasks": 21,
+        "task_completion_pct": 100.0,
+        "total_events": 153
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "112 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "286 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "Hunain.H (Concierge-NY) (NY)",
+        "rank": 37,
+        "total_sales": 24,
+        "adj_revenue": 110495.0,
+        "revenue": 130495.0,
+        "commission": 6249.75
+      }
+    },
+    "5062310000233468001": {
+      "name": "Adam F",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 68,
+        "ghost_calls": 25,
+        "short_calls": 25,
+        "meaningful_calls": 18,
+        "ghost_call_pct": 36.8,
+        "meaningful_pct": 26.5,
+        "total_talk_minutes": 51.7,
+        "avg_duration_secs": 45.6,
+        "status_breakdown": {
+          "Unknown": 68
+        }
+      },
+      "activity": {
+        "total_tasks": 317,
+        "completed_tasks": 312,
+        "task_completion_pct": 98.4,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "68 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "385 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 984,
+        "answered_calls": 658,
+        "missed_calls": 326,
+        "outgoing_calls": 933,
+        "incoming_calls": 51,
+        "total_duration_sec": 61029,
+        "total_duration_min": 1017.1,
+        "ghost_calls": 332,
+        "short_calls": 426,
+        "meaningful_calls": 226,
+        "ghost_pct": 33.7,
+        "meaningful_pct": 23.0,
+        "avg_call_duration_sec": 62.0,
+        "email": "adam.f@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Adam.F (SR-LA T. Adam) (LA)",
+        "rank": 23,
+        "total_sales": 117,
+        "adj_revenue": 263070.0,
+        "revenue": 300015.0,
+        "commission": 20311.38
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 304.89,
+        "calls_per_1k_revenue": 3.28,
+        "efficiency_rating": "MEDIUM",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310000233464001": {
+      "name": "Brady D",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 106,
+        "ghost_calls": 25,
+        "short_calls": 38,
+        "meaningful_calls": 43,
+        "ghost_call_pct": 23.6,
+        "meaningful_pct": 40.6,
+        "total_talk_minutes": 140.6,
+        "avg_duration_secs": 79.6,
+        "status_breakdown": {
+          "Unknown": 106
+        }
+      },
+      "activity": {
+        "total_tasks": 177,
+        "completed_tasks": 170,
+        "task_completion_pct": 96.0,
+        "total_events": 122
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "106 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "405 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 1751,
+        "answered_calls": 1221,
+        "missed_calls": 530,
+        "outgoing_calls": 1680,
+        "incoming_calls": 71,
+        "total_duration_sec": 97625,
+        "total_duration_min": 1627.1,
+        "ghost_calls": 412,
+        "short_calls": 667,
+        "meaningful_calls": 672,
+        "ghost_pct": 23.5,
+        "meaningful_pct": 38.4,
+        "avg_call_duration_sec": 55.8,
+        "email": "brady.d@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Brady (SR-LA T. Brady) (LA)",
+        "rank": 28,
+        "total_sales": 88,
+        "adj_revenue": 196412.5,
+        "revenue": 232895.0,
+        "commission": 12151.78
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 133.01,
+        "calls_per_1k_revenue": 7.52,
+        "efficiency_rating": "MEDIUM",
+        "performance_flag": "AVERAGE"
+      }
+    },
+    "5062310000084545001": {
+      "name": "Shane Simone",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 3,
+        "ghost_calls": 3,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 3
+        }
+      },
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 1
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000000479001": {
+      "name": "IT IT",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 2,
+        "completed_tasks": 0,
+        "task_completion_pct": 0.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000003485001": {
+      "name": "Jason Evans",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 24,
+        "ghost_calls": 7,
+        "short_calls": 7,
+        "meaningful_calls": 10,
+        "ghost_call_pct": 29.2,
+        "meaningful_pct": 41.7,
+        "total_talk_minutes": 9.6,
+        "avg_duration_secs": 24.0,
+        "status_breakdown": {
+          "Unknown": 24
+        }
+      },
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 65
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "24 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "89 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "Jason (SR-LA T. Jason) (LA)",
+        "rank": 14,
+        "total_sales": 241,
+        "adj_revenue": 551789.0,
+        "revenue": 594639.0,
+        "commission": 54587.65
+      }
+    },
+    "5062310000355636023": {
+      "name": "Eric G.",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 85,
+        "ghost_calls": 9,
+        "short_calls": 32,
+        "meaningful_calls": 44,
+        "ghost_call_pct": 10.6,
+        "meaningful_pct": 51.8,
+        "total_talk_minutes": 79.4,
+        "avg_duration_secs": 56.1,
+        "status_breakdown": {
+          "Unknown": 85
+        }
+      },
+      "activity": {
+        "total_tasks": 136,
+        "completed_tasks": 133,
+        "task_completion_pct": 97.8,
+        "total_events": 2
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "85 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "223 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "Eric.G (SR-LV) (LV)",
+        "rank": 19,
+        "total_sales": 140,
+        "adj_revenue": 354385.0,
+        "revenue": 415290.0,
+        "commission": 27717.19
+      }
+    },
+    "5062310000233466001": {
+      "name": "philip.k",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 10,
+        "ghost_calls": 1,
+        "short_calls": 1,
+        "meaningful_calls": 8,
+        "ghost_call_pct": 10.0,
+        "meaningful_pct": 80.0,
+        "total_talk_minutes": 74.2,
+        "avg_duration_secs": 445.1,
+        "status_breakdown": {
+          "Unknown": 10
+        }
+      },
+      "activity": {
+        "total_tasks": 7,
+        "completed_tasks": 7,
+        "task_completion_pct": 100.0,
+        "total_events": 118
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "135 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 254,
+        "answered_calls": 204,
+        "missed_calls": 50,
+        "outgoing_calls": 231,
+        "incoming_calls": 23,
+        "total_duration_sec": 65402,
+        "total_duration_min": 1090.0,
+        "ghost_calls": 24,
+        "short_calls": 92,
+        "meaningful_calls": 138,
+        "ghost_pct": 9.4,
+        "meaningful_pct": 54.3,
+        "avg_call_duration_sec": 257.5,
+        "email": "philip.k@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Philip K. (NY) (NY)",
+        "rank": 15,
+        "total_sales": 32,
+        "adj_revenue": 528732.5,
+        "revenue": 824980.0,
+        "commission": 86685.5
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 3247.95,
+        "calls_per_1k_revenue": 0.31,
+        "efficiency_rating": "HIGH",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310000043502001": {
+      "name": "Aaron Pleasants",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 37,
+        "ghost_calls": 7,
+        "short_calls": 15,
+        "meaningful_calls": 15,
+        "ghost_call_pct": 18.9,
+        "meaningful_pct": 40.5,
+        "total_talk_minutes": 63.0,
+        "avg_duration_secs": 102.1,
+        "status_breakdown": {
+          "Unknown": 37
+        }
+      },
+      "activity": {
+        "total_tasks": 43,
+        "completed_tasks": 41,
+        "task_completion_pct": 95.3,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "37 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "80 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 601,
+        "answered_calls": 515,
+        "missed_calls": 86,
+        "outgoing_calls": 570,
+        "incoming_calls": 31,
+        "total_duration_sec": 65372,
+        "total_duration_min": 1089.5,
+        "ghost_calls": 24,
+        "short_calls": 250,
+        "meaningful_calls": 327,
+        "ghost_pct": 4.0,
+        "meaningful_pct": 54.4,
+        "avg_call_duration_sec": 108.8,
+        "email": "aaronpleasants@tradealliance.io"
+      }
+    },
+    "5062310000641109001": {
+      "name": "james.k",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 236,
+        "ghost_calls": 34,
+        "short_calls": 111,
+        "meaningful_calls": 91,
+        "ghost_call_pct": 14.4,
+        "meaningful_pct": 38.6,
+        "total_talk_minutes": 127.6,
+        "avg_duration_secs": 32.4,
+        "status_breakdown": {
+          "Unknown": 236
+        }
+      },
+      "activity": {
+        "total_tasks": 15,
+        "completed_tasks": 12,
+        "task_completion_pct": 80.0,
+        "total_events": 118
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "236 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "369 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 3139,
+        "answered_calls": 2592,
+        "missed_calls": 547,
+        "outgoing_calls": 2989,
+        "incoming_calls": 150,
+        "total_duration_sec": 98552,
+        "total_duration_min": 1642.5,
+        "ghost_calls": 202,
+        "short_calls": 1781,
+        "meaningful_calls": 1156,
+        "ghost_pct": 6.4,
+        "meaningful_pct": 36.8,
+        "avg_call_duration_sec": 31.4,
+        "email": "james.k@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "James.K (JR-NY) (NY)",
+        "rank": 30,
+        "total_sales": 56,
+        "adj_revenue": 170060.0,
+        "revenue": 202725.01,
+        "commission": 9675.02
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 64.58,
+        "calls_per_1k_revenue": 15.48,
+        "efficiency_rating": "LOW",
+        "performance_flag": "AVERAGE"
+      }
+    },
+    "5062310000237699003": {
+      "name": "Andrew W",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 18,
+        "ghost_calls": 1,
+        "short_calls": 6,
+        "meaningful_calls": 11,
+        "ghost_call_pct": 5.6,
+        "meaningful_pct": 61.1,
+        "total_talk_minutes": 155.8,
+        "avg_duration_secs": 519.5,
+        "status_breakdown": {
+          "Unknown": 18
+        }
+      },
+      "activity": {
+        "total_tasks": 41,
+        "completed_tasks": 41,
+        "task_completion_pct": 100.0,
+        "total_events": 1
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "60 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 177,
+        "answered_calls": 127,
+        "missed_calls": 50,
+        "outgoing_calls": 123,
+        "incoming_calls": 54,
+        "total_duration_sec": 85402,
+        "total_duration_min": 1423.4,
+        "ghost_calls": 13,
+        "short_calls": 46,
+        "meaningful_calls": 118,
+        "ghost_pct": 7.3,
+        "meaningful_pct": 66.7,
+        "avg_call_duration_sec": 482.5,
+        "email": "andrew.w@tradealliance.io"
+      }
+    },
+    "5062310000232957001": {
+      "name": "daniel.l",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 28,
+        "ghost_calls": 3,
+        "short_calls": 10,
+        "meaningful_calls": 15,
+        "ghost_call_pct": 10.7,
+        "meaningful_pct": 53.6,
+        "total_talk_minutes": 105.0,
+        "avg_duration_secs": 225.0,
+        "status_breakdown": {
+          "Unknown": 28
+        }
+      },
+      "activity": {
+        "total_tasks": 46,
+        "completed_tasks": 40,
+        "task_completion_pct": 87.0,
+        "total_events": 55
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "28 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "129 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 176,
+        "answered_calls": 143,
+        "missed_calls": 33,
+        "outgoing_calls": 166,
+        "incoming_calls": 10,
+        "total_duration_sec": 15804,
+        "total_duration_min": 263.4,
+        "ghost_calls": 12,
+        "short_calls": 99,
+        "meaningful_calls": 65,
+        "ghost_pct": 6.8,
+        "meaningful_pct": 36.9,
+        "avg_call_duration_sec": 89.8,
+        "email": "daniel.l@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Daniel (SR-LV T.Daniel) (LV)",
+        "rank": 10,
+        "total_sales": 197,
+        "adj_revenue": 730519.0,
+        "revenue": 823714.0,
+        "commission": 53941.47
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 4680.19,
+        "calls_per_1k_revenue": 0.21,
+        "efficiency_rating": "HIGH",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310000000337001": {
+      "name": "Ted Baker",
+      "deal_metrics": {
+        "total_deals": 1,
+        "won": 0,
+        "lost": 0,
+        "open": 1,
+        "win_rate_pct": 0.0,
+        "total_revenue": 0,
+        "avg_deal_size": 0.0,
+        "avg_velocity_days": null
+      },
+      "call_quality": {
+        "total_calls": 10,
+        "ghost_calls": 10,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 10
+        }
+      },
+      "activity": {},
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "100.0% of 10 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310000000922001": {
+      "name": "rachel",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 5,
+        "completed_tasks": 0,
+        "task_completion_pct": 0.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000456097001": {
+      "name": "autumn.m",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 4
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000306468001": {
+      "name": "paul.m",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 1,
+        "completed_tasks": 0,
+        "task_completion_pct": 0.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Paul.M (SR) (NY)",
+        "rank": 44,
+        "total_sales": 18,
+        "adj_revenue": 54102.5,
+        "revenue": 73725.0,
+        "commission": 4516.63
+      }
+    },
+    "5062310000744997001": {
+      "name": "anthony.s",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 7,
+        "completed_tasks": 0,
+        "task_completion_pct": 0.0,
+        "total_events": 2
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000495097001": {
+      "name": "michael.d",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 1
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Michael.Daley (Concierge-NY) (NY)",
+        "rank": 36,
+        "total_sales": 4,
+        "adj_revenue": 112500.0,
+        "revenue": 125000.0,
+        "commission": 5625.0
+      }
+    },
+    "5062310000198508001": {
+      "name": "Tracy",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 1,
+        "ghost_calls": 0,
+        "short_calls": 0,
+        "meaningful_calls": 1,
+        "ghost_call_pct": 0.0,
+        "meaningful_pct": 100.0,
+        "total_talk_minutes": 12.4,
+        "avg_duration_secs": 744.0,
+        "status_breakdown": {
+          "Unknown": 1
+        }
+      },
+      "activity": {
+        "total_tasks": 19,
+        "completed_tasks": 19,
+        "task_completion_pct": 100.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "kixie_data": {
+        "total_calls": 9,
+        "answered_calls": 8,
+        "missed_calls": 1,
+        "outgoing_calls": 7,
+        "incoming_calls": 2,
+        "total_duration_sec": 7012,
+        "total_duration_min": 116.9,
+        "ghost_calls": 1,
+        "short_calls": 0,
+        "meaningful_calls": 8,
+        "ghost_pct": 11.1,
+        "meaningful_pct": 88.9,
+        "avg_call_duration_sec": 779.1,
+        "email": "tracy@tradealliance.io"
+      }
+    },
+    "5062310000456093001": {
+      "name": "landin.m",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 7,
+        "completed_tasks": 7,
+        "task_completion_pct": 100.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310000456098001": {
+      "name": "zephaniah.p",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 12,
+        "ghost_calls": 1,
+        "short_calls": 1,
+        "meaningful_calls": 10,
+        "ghost_call_pct": 8.3,
+        "meaningful_pct": 83.3,
+        "total_talk_minutes": 88.8,
+        "avg_duration_secs": 443.8,
+        "status_breakdown": {
+          "Unknown": 12
+        }
+      },
+      "activity": {
+        "total_tasks": 14,
+        "completed_tasks": 14,
+        "task_completion_pct": 100.0,
+        "total_events": 70
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "96 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310001313039001": {
+      "name": "Andrew Support",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 13,
+        "ghost_calls": 0,
+        "short_calls": 0,
+        "meaningful_calls": 13,
+        "ghost_call_pct": 0.0,
+        "meaningful_pct": 100.0,
+        "total_talk_minutes": 110.1,
+        "avg_duration_secs": 508.2,
+        "status_breakdown": {
+          "Unknown": 13
+        }
+      },
+      "activity": {
+        "total_tasks": 33,
+        "completed_tasks": 33,
+        "task_completion_pct": 100.0,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "46 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310000576808001": {
+      "name": "matthew.v",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 4
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Matthew.V (JR EXEC-LA) (LA)",
+        "rank": 22,
+        "total_sales": 68,
+        "adj_revenue": 276413.33,
+        "revenue": 307825.01,
+        "commission": 15804.01
+      }
+    },
+    "5062310000000724001": {
+      "name": "Tyler McCormick",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 5,
+        "ghost_calls": 2,
+        "short_calls": 1,
+        "meaningful_calls": 2,
+        "ghost_call_pct": 40.0,
+        "meaningful_pct": 40.0,
+        "total_talk_minutes": 22.0,
+        "avg_duration_secs": 263.6,
+        "status_breakdown": {
+          "Unknown": 5
+        }
+      },
+      "activity": {
+        "total_tasks": 13,
+        "completed_tasks": 13,
+        "task_completion_pct": 100.0,
+        "total_events": 133
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "151 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "Tyler (NY) (NY)",
+        "rank": 3,
+        "total_sales": 93,
+        "adj_revenue": 1544074.0,
+        "revenue": 1948324.0,
+        "commission": 250769.9
+      }
+    },
+    "5062310000598842001": {
+      "name": "Morgan.Q",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 15,
+        "completed_tasks": 3,
+        "task_completion_pct": 20.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "kixie_data": {
+        "total_calls": 107,
+        "answered_calls": 82,
+        "missed_calls": 25,
+        "outgoing_calls": 85,
+        "incoming_calls": 22,
+        "total_duration_sec": 19172,
+        "total_duration_min": 319.5,
+        "ghost_calls": 2,
+        "short_calls": 42,
+        "meaningful_calls": 63,
+        "ghost_pct": 1.9,
+        "meaningful_pct": 58.9,
+        "avg_call_duration_sec": 179.2,
+        "email": "morgan.q@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Morgan.Q (SR-UK) (UK)",
+        "rank": 2,
+        "total_sales": 25,
+        "adj_revenue": 2369995.0,
+        "revenue": 3059995.0,
+        "commission": 178374.75
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 28598.08,
+        "calls_per_1k_revenue": 0.03,
+        "efficiency_rating": "HIGH",
+        "performance_flag": "TOP_PERFORMER"
+      }
+    },
+    "5062310000949418001": {
+      "name": "russell.w",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 62,
+        "ghost_calls": 10,
+        "short_calls": 12,
+        "meaningful_calls": 40,
+        "ghost_call_pct": 16.1,
+        "meaningful_pct": 64.5,
+        "total_talk_minutes": 186.8,
+        "avg_duration_secs": 180.8,
+        "status_breakdown": {
+          "Unknown": 62
+        }
+      },
+      "activity": {
+        "total_tasks": 212,
+        "completed_tasks": 212,
+        "task_completion_pct": 100.0,
+        "total_events": 233
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "62 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "507 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 726,
+        "answered_calls": 631,
+        "missed_calls": 95,
+        "outgoing_calls": 669,
+        "incoming_calls": 57,
+        "total_duration_sec": 87245,
+        "total_duration_min": 1454.1,
+        "ghost_calls": 43,
+        "short_calls": 256,
+        "meaningful_calls": 427,
+        "ghost_pct": 5.9,
+        "meaningful_pct": 58.8,
+        "avg_call_duration_sec": 120.2,
+        "email": "russell.w@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Russell.W (WS-LV) (LV)",
+        "rank": 8,
+        "total_sales": 118,
+        "adj_revenue": 1098782.5,
+        "revenue": 1478070.0,
+        "commission": 55989.15
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 2035.91,
+        "calls_per_1k_revenue": 0.49,
+        "efficiency_rating": "HIGH",
+        "performance_flag": "TOP_PERFORMER"
+      }
+    },
+    "5062310000268007001": {
+      "name": "tommy",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 2,
+        "ghost_calls": 2,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 2
+        }
+      },
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 2
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Tommy (Fund.) (LV)",
+        "rank": 17,
+        "total_sales": 17,
+        "adj_revenue": 419166.67,
+        "revenue": 575000.0,
+        "commission": 47125.0
+      }
+    },
+    "5062310000796619001": {
+      "name": "brady.a",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 9
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false
+    },
+    "5062310001368402001": {
+      "name": "Cai Cruz",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 11,
+        "completed_tasks": 0,
+        "task_completion_pct": 0.0,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "LOW_FOLLOW_THROUGH",
+          "detail": "Only 0.0% of 11 tasks completed",
+          "severity": "LOW"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": false
+    },
+    "5062310000198509001": {
+      "name": "Enoch B.",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 2,
+        "ghost_calls": 0,
+        "short_calls": 1,
+        "meaningful_calls": 1,
+        "ghost_call_pct": 0.0,
+        "meaningful_pct": 50.0,
+        "total_talk_minutes": 6.0,
+        "avg_duration_secs": 181.5,
+        "status_breakdown": {
+          "Unknown": 2
+        }
+      },
+      "activity": {
+        "total_tasks": 4,
+        "completed_tasks": 4,
+        "task_completion_pct": 100.0,
+        "total_events": 0
+      },
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "revenue_data": {
+        "original_name": "Enoch (Support-LV)",
+        "rank": 70,
+        "total_sales": 1,
+        "adj_revenue": 20000.0,
+        "revenue": 20000.0,
+        "commission": 1000.0
+      }
+    },
+    "5062310000544968001": {
+      "name": "george.f",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 90,
+        "ghost_calls": 17,
+        "short_calls": 26,
+        "meaningful_calls": 47,
+        "ghost_call_pct": 18.9,
+        "meaningful_pct": 52.2,
+        "total_talk_minutes": 74.2,
+        "avg_duration_secs": 49.5,
+        "status_breakdown": {
+          "Unknown": 90
+        }
+      },
+      "activity": {
+        "total_tasks": 85,
+        "completed_tasks": 85,
+        "task_completion_pct": 100.0,
+        "total_events": 4
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "90 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "179 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 791,
+        "answered_calls": 691,
+        "missed_calls": 100,
+        "outgoing_calls": 747,
+        "incoming_calls": 44,
+        "total_duration_sec": 57637,
+        "total_duration_min": 960.6,
+        "ghost_calls": 52,
+        "short_calls": 333,
+        "meaningful_calls": 406,
+        "ghost_pct": 6.6,
+        "meaningful_pct": 51.3,
+        "avg_call_duration_sec": 72.9,
+        "email": "george.f@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "George.F (JR- EXEC -LV) (LV)",
+        "rank": 18,
+        "total_sales": 152,
+        "adj_revenue": 358469.17,
+        "revenue": 430195.0,
+        "commission": 30174.14
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 543.86,
+        "calls_per_1k_revenue": 1.84,
+        "efficiency_rating": "MEDIUM",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310001345355001": {
+      "name": "Angela C.",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 98
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "98 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310000000732015": {
+      "name": "David Rose",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 1,
+        "ghost_calls": 1,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 1
+        }
+      },
+      "activity": {
+        "total_tasks": 20,
+        "completed_tasks": 20,
+        "task_completion_pct": 100.0,
+        "total_events": 18
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "39 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "David (LEAD SR-LA) (LA)",
+        "rank": 5,
+        "total_sales": 120,
+        "adj_revenue": 1256135.0,
+        "revenue": 1843885.0,
+        "commission": 152121.0
+      }
+    },
+    "5062310001258870001": {
+      "name": "john.t",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 310,
+        "ghost_calls": 65,
+        "short_calls": 160,
+        "meaningful_calls": 85,
+        "ghost_call_pct": 21.0,
+        "meaningful_pct": 27.4,
+        "total_talk_minutes": 99.8,
+        "avg_duration_secs": 19.3,
+        "status_breakdown": {
+          "Unknown": 310
+        }
+      },
+      "activity": {
+        "total_tasks": 13,
+        "completed_tasks": 11,
+        "task_completion_pct": 84.6,
+        "total_events": 55
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "310 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "99.8min talk time but only 27.4% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "378 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 3,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 4258,
+        "answered_calls": 3501,
+        "missed_calls": 757,
+        "outgoing_calls": 4067,
+        "incoming_calls": 191,
+        "total_duration_sec": 117914,
+        "total_duration_min": 1965.2,
+        "ghost_calls": 291,
+        "short_calls": 2459,
+        "meaningful_calls": 1508,
+        "ghost_pct": 6.8,
+        "meaningful_pct": 35.4,
+        "avg_call_duration_sec": 27.7,
+        "email": "john.t@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "John.T (JR-NY) (NY)",
+        "rank": 43,
+        "total_sales": 28,
+        "adj_revenue": 60162.0,
+        "revenue": 64534.5,
+        "commission": 3008.11
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 15.16,
+        "calls_per_1k_revenue": 65.98,
+        "efficiency_rating": "LOW",
+        "performance_flag": "AVERAGE"
+      }
+    },
+    "5062310000043498001": {
+      "name": "John Andrews",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 3,
+        "ghost_calls": 0,
+        "short_calls": 0,
+        "meaningful_calls": 3,
+        "ghost_call_pct": 0.0,
+        "meaningful_pct": 100.0,
+        "total_talk_minutes": 80.7,
+        "avg_duration_secs": 1613.3,
+        "status_breakdown": {
+          "Unknown": 3
+        }
+      },
+      "activity": {
+        "total_tasks": 35,
+        "completed_tasks": 34,
+        "task_completion_pct": 97.1,
+        "total_events": 58
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "96 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310000777937001": {
+      "name": "dominic.w",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 164,
+        "ghost_calls": 110,
+        "short_calls": 38,
+        "meaningful_calls": 16,
+        "ghost_call_pct": 67.1,
+        "meaningful_pct": 9.8,
+        "total_talk_minutes": 99.2,
+        "avg_duration_secs": 36.3,
+        "status_breakdown": {
+          "Unknown": 164
+        }
+      },
+      "activity": {
+        "total_tasks": 76,
+        "completed_tasks": 65,
+        "task_completion_pct": 85.5,
+        "total_events": 216
+      },
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "67.1% of 164 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        },
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "164 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "99.2min talk time but only 9.8% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "456 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 4,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 592,
+        "answered_calls": 515,
+        "missed_calls": 77,
+        "outgoing_calls": 563,
+        "incoming_calls": 29,
+        "total_duration_sec": 89148,
+        "total_duration_min": 1485.8,
+        "ghost_calls": 134,
+        "short_calls": 177,
+        "meaningful_calls": 281,
+        "ghost_pct": 22.6,
+        "meaningful_pct": 47.5,
+        "avg_call_duration_sec": 150.6,
+        "email": "dominic.w@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Dominic.W (JR EXEC-LV) (LV)",
+        "rank": 13,
+        "total_sales": 198,
+        "adj_revenue": 579161.51,
+        "revenue": 660039.0,
+        "commission": 47123.75
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 1114.93,
+        "calls_per_1k_revenue": 0.9,
+        "efficiency_rating": "HIGH",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310000273726003": {
+      "name": "luke",
+      "deal_metrics": {},
+      "call_quality": {},
+      "activity": {
+        "total_tasks": 0,
+        "completed_tasks": 0,
+        "task_completion_pct": 0,
+        "total_events": 38
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "38 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "revenue_data": {
+        "original_name": "Luke (NY)",
+        "rank": 4,
+        "total_sales": 68,
+        "adj_revenue": 1456787.5,
+        "revenue": 1976785.0,
+        "commission": 192816.25
+      }
+    },
+    "5062310001288266001": {
+      "name": "robert.ca",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 407,
+        "ghost_calls": 231,
+        "short_calls": 100,
+        "meaningful_calls": 76,
+        "ghost_call_pct": 56.8,
+        "meaningful_pct": 18.7,
+        "total_talk_minutes": 112.6,
+        "avg_duration_secs": 16.6,
+        "status_breakdown": {
+          "Unknown": 407
+        }
+      },
+      "activity": {
+        "total_tasks": 28,
+        "completed_tasks": 21,
+        "task_completion_pct": 75.0,
+        "total_events": 323
+      },
+      "gaming_flags": [
+        {
+          "flag": "GHOST_DIALER",
+          "detail": "56.8% of 407 calls are <=5s (call-and-hang-up)",
+          "severity": "HIGH"
+        },
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "407 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "VM_RAMBLER",
+          "detail": "112.6min talk time but only 18.7% meaningful calls",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "758 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 4,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 4200,
+        "answered_calls": 2565,
+        "missed_calls": 1635,
+        "outgoing_calls": 3996,
+        "incoming_calls": 204,
+        "total_duration_sec": 138287,
+        "total_duration_min": 2304.8,
+        "ghost_calls": 817,
+        "short_calls": 2037,
+        "meaningful_calls": 1346,
+        "ghost_pct": 19.5,
+        "meaningful_pct": 32.0,
+        "avg_call_duration_sec": 32.9,
+        "email": "robert.ca@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Robert.Ca (JR-NY) (NY)",
+        "rank": 59,
+        "total_sales": 11,
+        "adj_revenue": 32122.5,
+        "revenue": 35245.0,
+        "commission": 1606.13
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 8.39,
+        "calls_per_1k_revenue": 119.17,
+        "efficiency_rating": "LOW",
+        "performance_flag": "HIGH_ACTIVITY_LOW_REVENUE"
+      }
+    },
+    "5062310000000720004": {
+      "name": "Luke Russell",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 2,
+        "ghost_calls": 1,
+        "short_calls": 0,
+        "meaningful_calls": 1,
+        "ghost_call_pct": 50.0,
+        "meaningful_pct": 50.0,
+        "total_talk_minutes": 17.8,
+        "avg_duration_secs": 532.5,
+        "status_breakdown": {
+          "Unknown": 2
+        }
+      },
+      "activity": {
+        "total_tasks": 33,
+        "completed_tasks": 33,
+        "task_completion_pct": 100.0,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "35 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true
+    },
+    "5062310000030234001": {
+      "name": "Alex Cruz",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 6,
+        "ghost_calls": 1,
+        "short_calls": 3,
+        "meaningful_calls": 2,
+        "ghost_call_pct": 16.7,
+        "meaningful_pct": 33.3,
+        "total_talk_minutes": 2.0,
+        "avg_duration_secs": 20.5,
+        "status_breakdown": {
+          "Unknown": 6
+        }
+      },
+      "activity": {
+        "total_tasks": 61,
+        "completed_tasks": 52,
+        "task_completion_pct": 85.2,
+        "total_events": 0
+      },
+      "gaming_flags": [
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "67 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 1,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 346,
+        "answered_calls": 298,
+        "missed_calls": 48,
+        "outgoing_calls": 327,
+        "incoming_calls": 19,
+        "total_duration_sec": 22867,
+        "total_duration_min": 381.1,
+        "ghost_calls": 19,
+        "short_calls": 197,
+        "meaningful_calls": 130,
+        "ghost_pct": 5.5,
+        "meaningful_pct": 37.6,
+        "avg_call_duration_sec": 66.1,
+        "email": "alexcruz@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Alex Cruz (SR-NY T.Cruz) (NY)",
+        "rank": 24,
+        "total_sales": 95,
+        "adj_revenue": 256917.5,
+        "revenue": 291135.0,
+        "commission": 21582.89
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 841.43,
+        "calls_per_1k_revenue": 1.19,
+        "efficiency_rating": "MEDIUM",
+        "performance_flag": "EFFICIENT_CLOSER"
+      }
+    },
+    "5062310001331531001": {
+      "name": "jonah.go",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 178,
+        "ghost_calls": 32,
+        "short_calls": 89,
+        "meaningful_calls": 57,
+        "ghost_call_pct": 18.0,
+        "meaningful_pct": 32.0,
+        "total_talk_minutes": 138.0,
+        "avg_duration_secs": 46.5,
+        "status_breakdown": {
+          "Unknown": 178
+        }
+      },
+      "activity": {
+        "total_tasks": 503,
+        "completed_tasks": 490,
+        "task_completion_pct": 97.4,
+        "total_events": 97
+      },
+      "gaming_flags": [
+        {
+          "flag": "VOLUME_NO_OUTCOME",
+          "detail": "178 calls but 0 deals won",
+          "severity": "MEDIUM"
+        },
+        {
+          "flag": "FAKE_BUSY",
+          "detail": "778 activities logged but 0 deals in pipeline",
+          "severity": "HIGH"
+        }
+      ],
+      "flag_count": 2,
+      "has_red_flags": true,
+      "kixie_data": {
+        "total_calls": 3007,
+        "answered_calls": 2205,
+        "missed_calls": 802,
+        "outgoing_calls": 2909,
+        "incoming_calls": 98,
+        "total_duration_sec": 129680,
+        "total_duration_min": 2161.3,
+        "ghost_calls": 887,
+        "short_calls": 1315,
+        "meaningful_calls": 805,
+        "ghost_pct": 29.5,
+        "meaningful_pct": 26.8,
+        "avg_call_duration_sec": 43.1,
+        "email": "jonah.go@tradealliance.io"
+      },
+      "revenue_data": {
+        "original_name": "Jonah.G (JR-LA) (LA)",
+        "rank": 73,
+        "total_sales": 9,
+        "adj_revenue": 17387.5,
+        "revenue": 21880.0,
+        "commission": 869.39
+      },
+      "intelligence_metrics": {
+        "revenue_per_call": 7.28,
+        "calls_per_1k_revenue": 137.43,
+        "efficiency_rating": "LOW",
+        "performance_flag": "HIGH_ACTIVITY_LOW_REVENUE"
+      }
+    },
+    "5062310000181102001": {
+      "name": "gabriella",
+      "deal_metrics": {},
+      "call_quality": {
+        "total_calls": 1,
+        "ghost_calls": 1,
+        "short_calls": 0,
+        "meaningful_calls": 0,
+        "ghost_call_pct": 100.0,
+        "meaningful_pct": 0.0,
+        "total_talk_minutes": 0.0,
+        "avg_duration_secs": 0.0,
+        "status_breakdown": {
+          "Unknown": 1
+        }
+      },
+      "activity": {},
+      "gaming_flags": [],
+      "flag_count": 0,
+      "has_red_flags": false,
+      "kixie_data": {
+        "total_calls": 3,
+        "answered_calls": 0,
+        "missed_calls": 3,
+        "outgoing_calls": 0,
+        "incoming_calls": 3,
+        "total_duration_sec": 54,
+        "total_duration_min": 0.9,
+        "ghost_calls": 0,
+        "short_calls": 2,
+        "meaningful_calls": 1,
+        "ghost_pct": 0.0,
+        "meaningful_pct": 33.3,
+        "avg_call_duration_sec": 18.0,
+        "email": "gabriella@tradealliance.io"
+      }
+    }
+  }
+}

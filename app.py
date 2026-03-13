@@ -80,6 +80,113 @@ def data_inventory():
     """Data inventory view"""
     return send_file('DATA_INVENTORY.html')
 
+@app.route('/workforce')
+@login_required
+def workforce_dashboard():
+    """Workforce analysis dashboard - 3 company portfolio"""
+    return send_file('integrations/workforce_dashboard.html')
+
+@app.route('/api/workforce-data')
+@login_required
+def workforce_data():
+    """API endpoint for workforce analysis data"""
+    data = {
+        'companies': {
+            'attix': {
+                'name': 'Attix Inc.',
+                'headcount': 89,
+                'recommendation': 'Reorganize',
+                'mainIssue': '17% unassigned',
+                'engineering': 18,
+                'sales': 23,
+                'status': 'warning'
+            },
+            'js': {
+                'name': 'JS Trading',
+                'headcount': 50,
+                'recommendation': 'CUT 18 (36%)',
+                'mainIssue': 'Sales bloat',
+                'annualPayroll': 4420000,
+                'savings': 1144000,
+                'engineering': 2,
+                'sales': 23,
+                'status': 'critical'
+            },
+            'vama': {
+                'name': 'ATTIX VAMA',
+                'headcount': 51,
+                'recommendation': 'Minor trim (3-7)',
+                'mainIssue': 'Well-structured',
+                'technical': 28,
+                'technicalPercent': 55,
+                'resigning': 3,
+                'status': 'good'
+            }
+        },
+        'portfolio': {
+            'totalHeadcount': 190,
+            'totalPayroll': 4420000,
+            'recommendedCuts': {
+                'conservative': 25,
+                'moderate': 33,
+                'aggressive': 43
+            },
+            'confirmedSavings': 1144000,
+            'potentialSavings': 1500000
+        },
+        'jsTradingCuts': {
+            'tier1': {
+                'name': 'HIGH PRIORITY - Cut Immediately',
+                'count': 6,
+                'savings': 69043,
+                'employees': [
+                    {'name': 'Hunter, Athena', 'dept': 'Administrative', 'salary': 19000},
+                    {'name': 'Bedingfield, Victoria B', 'dept': 'Administrative', 'salary': 10523},
+                    {'name': 'Bocanegra, Santiago', 'dept': 'Analysts', 'salary': 3120},
+                    {'name': 'Fournier, Cameron', 'dept': 'Sales', 'salary': 13000},
+                    {'name': 'Stone, Jonathan', 'dept': 'Support / Hourly', 'salary': 13000},
+                    {'name': 'Cruz Gomez, Jorge', 'dept': 'Support / Hourly', 'salary': 10400}
+                ]
+            },
+            'tier2': {
+                'name': 'MEDIUM PRIORITY - Sales Bottom Performers',
+                'count': 6,
+                'savings': 303208,
+                'employees': [
+                    {'name': 'Koerick Jr., James', 'dept': 'Sales', 'salary': 43996},
+                    {'name': 'Tobin, John', 'dept': 'Sales', 'salary': 44013},
+                    {'name': 'Caetta, Robert', 'dept': 'Sales', 'salary': 48641},
+                    {'name': 'Gozlan, Jonah', 'dept': 'Sales', 'salary': 50062},
+                    {'name': 'LLC, AMC Group', 'dept': 'Sales', 'salary': 55000},
+                    {'name': 'Espinoza Garcia, Jose', 'dept': 'Sales', 'salary': 61496}
+                ]
+            },
+            'tier3': {
+                'name': 'LOW PRIORITY - Contractor Review',
+                'count': 6,
+                'savings': 772174,
+                'note': 'High-cost contractors to evaluate'
+            }
+        },
+        'vamaCuts': {
+            'natural': {
+                'name': 'Natural Attrition (Already Resigning)',
+                'count': 3,
+                'employees': [
+                    {'name': 'Chan Fan Sheng', 'role': 'Senior Finance Executive', 'dept': 'Finance'},
+                    {'name': 'Muhammad Azri bin Masran', 'role': 'UI UX Designer', 'dept': 'Design'},
+                    {'name': 'Song Shi Eun', 'role': 'Head of Legal', 'dept': 'Ops Team', 'critical': True}
+                ]
+            },
+            'optional': {
+                'name': 'Optional Consolidation',
+                'count': 4,
+                'areas': ['Finance (1)', 'Executive Assistant (1)', 'Marketing (0-1)', 'Product Management (0-1)']
+            }
+        }
+    }
+    return jsonify(data)
+
 @app.route('/api/health')
 def health():
     """Health check endpoint"""

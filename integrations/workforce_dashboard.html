@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workforce Analysis Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            color: rgba(255,255,255,0.9);
+            text-align: center;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat {
+            text-align: center;
+            padding: 20px;
+            background: #f5f5f5;
+            border-radius: 12px;
+        }
+        
+        .stat-value {
+            font-size: 2.5em;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .stat-value.green { color: #4caf50; }
+        .stat-value.red { color: #f44336; }
+        .stat-value.blue { color: #2196f3; }
+        .stat-value.orange { color: #ff9800; }
+        
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .companies-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .company-card {
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: transform 0.3s;
+        }
+        
+        .company-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        
+        .company-header {
+            padding: 25px;
+            color: white;
+            font-size: 1.5em;
+            font-weight: 700;
+        }
+        
+        .company-header.critical {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+        
+        .company-header.warning {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+        
+        .company-header.good {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+        }
+        
+        .company-body {
+            padding: 25px;
+        }
+        
+        .company-stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .company-stat:last-child {
+            border-bottom: none;
+        }
+        
+        .company-stat-label {
+            color: #666;
+        }
+        
+        .company-stat-value {
+            font-weight: 700;
+        }
+        
+        .cuts-section {
+            background: white;
+            border-radius: 16px;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        
+        .cuts-section h2 {
+            margin-bottom: 25px;
+            color: #333;
+        }
+        
+        .tier {
+            margin-bottom: 25px;
+            padding: 20px;
+            border-radius: 12px;
+        }
+        
+        .tier.high {
+            background: #ffebee;
+            border-left: 5px solid #f44336;
+        }
+        
+        .tier.medium {
+            background: #fff8e1;
+            border-left: 5px solid #ff9800;
+        }
+        
+        .tier.low {
+            background: #e8f5e9;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .tier-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .tier-name {
+            font-weight: 700;
+            font-size: 1.2em;
+        }
+        
+        .tier-savings {
+            font-size: 1.3em;
+            font-weight: 700;
+        }
+        
+        .tier.high .tier-name,
+        .tier.high .tier-savings {
+            color: #c62828;
+        }
+        
+        .tier.medium .tier-name,
+        .tier.medium .tier-savings {
+            color: #f57c00;
+        }
+        
+        .tier.low .tier-name,
+        .tier.low .tier-savings {
+            color: #2e7d32;
+        }
+        
+        .employee-list {
+            margin-top: 10px;
+        }
+        
+        .employee-item {
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .employee-item:last-child {
+            border-bottom: none;
+        }
+        
+        .employee-name {
+            font-weight: 500;
+        }
+        
+        .employee-dept {
+            color: #666;
+            font-size: 0.9em;
+        }
+        
+        .employee-salary {
+            font-weight: 700;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-left: 10px;
+        }
+        
+        .badge.critical {
+            background: #ffebee;
+            color: #c62828;
+        }
+        
+        .footer {
+            text-align: center;
+            color: rgba(255,255,255,0.8);
+            margin-top: 40px;
+            padding: 20px;
+        }
+        
+        .loading {
+            text-align: center;
+            color: white;
+            font-size: 1.5em;
+            padding: 60px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📊 Workforce Analysis Dashboard</h1>
+        <div class="subtitle">Portfolio Overview - 3 Company Analysis</div>
+        
+        <div id="loading" class="loading">Loading data...</div>
+        <div id="dashboard" style="display: none;"></div>
+    </div>
+    
+    <script>
+        async function loadDashboard() {
+            try {
+                const response = await fetch('/api/workforce-data');
+                const data = await response.json();
+                
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('dashboard').style.display = 'block';
+                
+                const dashboard = document.getElementById('dashboard');
+                
+                // Portfolio Summary
+                dashboard.innerHTML += `
+                    <div class="summary-card">
+                        <h2 style="margin-bottom: 20px;">💼 Portfolio Summary</h2>
+                        <div class="stats-grid">
+                            <div class="stat">
+                                <div class="stat-value blue">${data.portfolio.totalHeadcount}</div>
+                                <div class="stat-label">Total Employees</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value red">${data.portfolio.recommendedCuts.conservative}-${data.portfolio.recommendedCuts.aggressive}</div>
+                                <div class="stat-label">Recommended Cuts</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value green">$${(data.portfolio.confirmedSavings / 1000000).toFixed(2)}M+</div>
+                                <div class="stat-label">Confirmed Savings</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value orange">${Math.round((data.portfolio.recommendedCuts.conservative / data.portfolio.totalHeadcount) * 100)}-${Math.round((data.portfolio.recommendedCuts.aggressive / data.portfolio.totalHeadcount) * 100)}%</div>
+                                <div class="stat-label">Reduction Range</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                
+                // Companies
+                dashboard.innerHTML += `<div class="companies-grid"></div>`;
+                const grid = dashboard.querySelector('.companies-grid');
+                
+                Object.values(data.companies).forEach(company => {
+                    const statusClass = company.status;
+                    const card = document.createElement('div');
+                    card.className = 'company-card';
+                    card.innerHTML = `
+                        <div class="company-header ${statusClass}">
+                            ${company.name}
+                        </div>
+                        <div class="company-body">
+                            <div class="company-stat">
+                                <span class="company-stat-label">Headcount</span>
+                                <span class="company-stat-value">${company.headcount}</span>
+                            </div>
+                            <div class="company-stat">
+                                <span class="company-stat-label">Recommendation</span>
+                                <span class="company-stat-value">${company.recommendation}</span>
+                            </div>
+                            <div class="company-stat">
+                                <span class="company-stat-label">Main Issue</span>
+                                <span class="company-stat-value">${company.mainIssue}</span>
+                            </div>
+                            ${company.engineering ? `
+                            <div class="company-stat">
+                                <span class="company-stat-label">Engineering</span>
+                                <span class="company-stat-value">${company.engineering} (${Math.round((company.engineering/company.headcount)*100)}%)</span>
+                            </div>
+                            ` : ''}
+                            ${company.sales ? `
+                            <div class="company-stat">
+                                <span class="company-stat-label">Sales</span>
+                                <span class="company-stat-value">${company.sales} (${Math.round((company.sales/company.headcount)*100)}%)</span>
+                            </div>
+                            ` : ''}
+                            ${company.technical ? `
+                            <div class="company-stat">
+                                <span class="company-stat-label">Technical</span>
+                                <span class="company-stat-value">${company.technical} (${company.technicalPercent}%)</span>
+                            </div>
+                            ` : ''}
+                            ${company.annualPayroll ? `
+                            <div class="company-stat">
+                                <span class="company-stat-label">Annual Payroll</span>
+                                <span class="company-stat-value">$${(company.annualPayroll / 1000000).toFixed(2)}M</span>
+                            </div>
+                            ` : ''}
+                            ${company.savings ? `
+                            <div class="company-stat">
+                                <span class="company-stat-label">Potential Savings</span>
+                                <span class="company-stat-value" style="color: #4caf50;">$${(company.savings / 1000000).toFixed(2)}M</span>
+                            </div>
+                            ` : ''}
+                        </div>
+                    `;
+                    grid.appendChild(card);
+                });
+                
+                // JS Trading Cuts
+                dashboard.innerHTML += `
+                    <div class="cuts-section">
+                        <h2>🔴 JS Trading - Cut Recommendations</h2>
+                        
+                        <div class="tier high">
+                            <div class="tier-header">
+                                <div class="tier-name">${data.jsTradingCuts.tier1.name}</div>
+                                <div class="tier-savings">$${data.jsTradingCuts.tier1.savings.toLocaleString()}</div>
+                            </div>
+                            <p style="margin-bottom: 15px; color: #666;">${data.jsTradingCuts.tier1.count} people earning <$20K/year</p>
+                            <div class="employee-list">
+                                ${data.jsTradingCuts.tier1.employees.map(emp => `
+                                    <div class="employee-item">
+                                        <div>
+                                            <span class="employee-name">${emp.name}</span>
+                                            <span class="employee-dept">(${emp.dept})</span>
+                                        </div>
+                                        <span class="employee-salary">$${emp.salary.toLocaleString()}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="tier medium">
+                            <div class="tier-header">
+                                <div class="tier-name">${data.jsTradingCuts.tier2.name}</div>
+                                <div class="tier-savings">$${data.jsTradingCuts.tier2.savings.toLocaleString()}</div>
+                            </div>
+                            <p style="margin-bottom: 15px; color: #666;">Bottom 30% of 23-person sales team</p>
+                            <div class="employee-list">
+                                ${data.jsTradingCuts.tier2.employees.map(emp => `
+                                    <div class="employee-item">
+                                        <div>
+                                            <span class="employee-name">${emp.name}</span>
+                                            <span class="employee-dept">(${emp.dept})</span>
+                                        </div>
+                                        <span class="employee-salary">$${emp.salary.toLocaleString()}</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="tier low">
+                            <div class="tier-header">
+                                <div class="tier-name">${data.jsTradingCuts.tier3.name}</div>
+                                <div class="tier-savings">$${data.jsTradingCuts.tier3.savings.toLocaleString()}</div>
+                            </div>
+                            <p style="color: #666;">${data.jsTradingCuts.tier3.note}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // VAMA Cuts
+                dashboard.innerHTML += `
+                    <div class="cuts-section">
+                        <h2>🟢 ATTIX VAMA - Recommendations</h2>
+                        
+                        <div class="tier low">
+                            <div class="tier-header">
+                                <div class="tier-name">${data.vamaCuts.natural.name}</div>
+                                <div class="tier-savings">${data.vamaCuts.natural.count} people</div>
+                            </div>
+                            <p style="margin-bottom: 15px; color: #666;">Don't replace these positions</p>
+                            <div class="employee-list">
+                                ${data.vamaCuts.natural.employees.map(emp => `
+                                    <div class="employee-item">
+                                        <div>
+                                            <span class="employee-name">${emp.name}</span>
+                                            ${emp.critical ? '<span class="badge critical">CRITICAL</span>' : ''}
+                                        </div>
+                                        <span class="employee-dept">${emp.role} (${emp.dept})</span>
+                                    </div>
+                                `).join('')}
+                            </div>
+                        </div>
+                        
+                        <div class="tier medium">
+                            <div class="tier-header">
+                                <div class="tier-name">${data.vamaCuts.optional.name}</div>
+                                <div class="tier-savings">${data.vamaCuts.optional.count} positions</div>
+                            </div>
+                            <p style="color: #666;">Areas to review: ${data.vamaCuts.optional.areas.join(', ')}</p>
+                        </div>
+                    </div>
+                `;
+                
+                // Footer
+                dashboard.innerHTML += `
+                    <div class="footer">
+                        Generated by Atlas 📐 - March 13, 2026<br>
+                        Analysis based on Attix Inc (89), JS Trading (50), ATTIX VAMA (51)
+                    </div>
+                `;
+                
+            } catch (error) {
+                document.getElementById('loading').innerHTML = 'Error loading data: ' + error.message;
+                console.error(error);
+            }
+        }
+        
+        loadDashboard();
+    </script>
+</body>
+</html>

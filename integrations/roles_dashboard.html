@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ORGCOMMAND - Consolidated Role View</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #fff; color: #1a1a1a; padding: 32px 40px;
+            max-width: 1500px; margin: 0 auto;
+        }
+
+        .header {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-bottom: 24px; padding-bottom: 16px; border-bottom: 2px solid #e5e5e5;
+        }
+        .header h1 { font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .header h1 span { color: #888; font-weight: 400; font-size: 18px; }
+        .header .meta { font-size: 13px; color: #888; text-align: right; line-height: 1.6; }
+        .nav-links { font-size: 13px; margin-bottom: 20px; }
+        .nav-links a { color: #2563eb; text-decoration: none; margin-right: 16px; }
+        .nav-links a:hover { text-decoration: underline; }
+
+        .stats-bar { display: flex; gap: 14px; margin-bottom: 24px; }
+        .stat-box {
+            flex: 1; background: #fafafa; border: 1px solid #e5e5e5;
+            border-radius: 8px; padding: 16px; text-align: center;
+        }
+        .stat-box .number { font-size: 30px; font-weight: 700; line-height: 1.1; }
+        .stat-box .label { font-size: 11px; color: #888; text-transform: uppercase; letter-spacing: 0.5px; margin-top: 4px; }
+        .stat-box.blue .number { color: #2563eb; }
+        .stat-box.orange .number { color: #d97706; }
+        .stat-box.green .number { color: #16a34a; }
+        .stat-box.red .number { color: #dc2626; }
+
+        .controls {
+            display: flex; gap: 12px; margin-bottom: 20px; align-items: center; flex-wrap: wrap;
+        }
+        .controls input, .controls select {
+            padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;
+            font-size: 13px; outline: none;
+        }
+        .controls input:focus, .controls select:focus { border-color: #2563eb; }
+        .controls input { width: 260px; }
+        .controls label { font-size: 12px; color: #666; display: flex; align-items: center; gap: 4px; cursor: pointer; }
+
+        .role-group {
+            margin-bottom: 24px; border: 1px solid #e5e5e5; border-radius: 8px; overflow: hidden;
+        }
+        .role-group-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 12px 20px; background: #f8f9fa; border-bottom: 1px solid #e5e5e5;
+            cursor: pointer; user-select: none;
+        }
+        .role-group-header:hover { background: #f0f1f3; }
+        .role-group-header .role-name {
+            font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 10px;
+        }
+        .role-group-header .role-meta { font-size: 12px; color: #888; display: flex; gap: 16px; align-items: center; }
+        .company-pills { display: flex; gap: 4px; }
+        .company-pill {
+            font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 10px;
+            text-transform: uppercase; letter-spacing: 0.3px;
+        }
+        .company-pill.attix { background: #dbeafe; color: #1e40af; }
+        .company-pill.js { background: #fef3c7; color: #92400e; }
+        .company-pill.vama { background: #d1fae5; color: #065f46; }
+        .cross-company-badge {
+            font-size: 9px; font-weight: 700; padding: 2px 6px; border-radius: 3px;
+            background: #fef2f2; color: #991b1b; border: 1px solid #fecaca;
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+
+        .role-group-body { display: none; }
+        .role-group.open .role-group-body { display: block; }
+        .role-group .arrow { transition: transform 0.2s; font-size: 12px; color: #888; }
+        .role-group.open .arrow { transform: rotate(90deg); }
+
+        table { width: 100%; border-collapse: collapse; }
+        thead th {
+            text-align: left; padding: 10px 16px; font-size: 11px; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.5px; color: #888;
+            border-bottom: 1px solid #e5e5e5; background: #fcfcfc; cursor: pointer;
+            user-select: none; white-space: nowrap;
+        }
+        thead th:hover { color: #333; }
+        thead th .sort-arrow { margin-left: 4px; font-size: 10px; }
+        tbody tr { border-bottom: 1px solid #f0f0f0; }
+        tbody tr:hover { background: #f8f9ff; }
+        tbody tr:last-child { border-bottom: none; }
+        tbody td { padding: 10px 16px; font-size: 13px; }
+
+        .company-tag {
+            font-size: 11px; font-weight: 600; padding: 2px 8px; border-radius: 4px;
+        }
+        .company-tag.attix { background: #dbeafe; color: #1e40af; }
+        .company-tag.js { background: #fef3c7; color: #92400e; }
+        .company-tag.vama { background: #d1fae5; color: #065f46; }
+
+        .status-badge {
+            font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 4px;
+        }
+        .status-badge.top { background: #dcfce7; color: #166534; }
+        .status-badge.efficient { background: #dbeafe; color: #1e40af; }
+        .status-badge.average { background: #fef9c3; color: #854d0e; }
+        .status-badge.poor { background: #fee2e2; color: #991b1b; }
+        .status-badge.flagged { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
+        .status-badge.resigning { background: #f3e8ff; color: #6b21a8; }
+
+        .salary { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 12px; }
+        .no-data { color: #ccc; font-style: italic; font-size: 12px; }
+
+        .dept-summary {
+            padding: 10px 16px; background: #fafafa; border-top: 1px solid #f0f0f0;
+            font-size: 12px; color: #888; font-style: italic;
+        }
+
+        .footer {
+            margin-top: 36px; padding-top: 16px; border-top: 1px solid #e5e5e5;
+            font-size: 11px; color: #bbb; display: flex; justify-content: space-between;
+        }
+
+        .loading { text-align: center; padding: 60px; color: #888; font-size: 16px; }
+
+        @media (max-width: 900px) {
+            body { padding: 16px; }
+            .stats-bar { flex-wrap: wrap; }
+            .stat-box { min-width: 140px; }
+            .controls { flex-direction: column; }
+            .controls input { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>ORGCOMMAND <span>Consolidated Role View</span></h1>
+        <div class="meta">
+            Cross-Company Workforce Analysis<br>
+            <span id="generated-at"></span>
+        </div>
+    </div>
+
+    <div class="nav-links">
+        <a href="/dashboard">Q1 Performance</a>
+        <a href="/detailed">Sales Detail</a>
+        <a href="/workforce">Company View</a>
+        <a href="/roles"><strong>Role View</strong></a>
+    </div>
+
+    <div id="loading" class="loading">Loading consolidated workforce data...</div>
+    <div id="app" style="display:none;">
+        <div class="stats-bar" id="stats-bar"></div>
+
+        <div class="controls">
+            <input type="text" id="search" placeholder="Search by name, role, or company...">
+            <select id="company-filter">
+                <option value="">All Companies</option>
+            </select>
+            <select id="status-filter">
+                <option value="">All Statuses</option>
+            </select>
+            <label><input type="checkbox" id="cross-only"> Cross-company roles only</label>
+            <label><input type="checkbox" id="expand-all"> Expand all</label>
+        </div>
+
+        <div id="role-groups"></div>
+
+        <div class="footer">
+            <span>ORGCOMMAND Consolidated Role View</span>
+            <span id="footer-meta"></span>
+        </div>
+    </div>
+
+<script>
+let DATA = null;
+let sortState = {}; // { roleCategory: { col: 'name', dir: 1 } }
+
+async function init() {
+    try {
+        const res = await fetch('/api/workforce-by-role');
+        DATA = await res.json();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('app').style.display = 'block';
+        document.getElementById('generated-at').textContent = 'Generated: ' + new Date(DATA.generated_at).toLocaleString();
+        document.getElementById('footer-meta').textContent = DATA.total_known_employees + ' named employees / ' + DATA.total_portfolio_headcount + ' total headcount';
+        buildStats();
+        buildFilters();
+        render();
+    } catch (e) {
+        document.getElementById('loading').textContent = 'Error loading data: ' + e.message;
+    }
+}
+
+function buildStats() {
+    const cats = DATA.role_categories;
+    const crossCount = Object.values(cats).filter(c => c.cross_company).length;
+    const totalNamed = DATA.total_known_employees;
+    const totalRoles = Object.keys(cats).length;
+
+    document.getElementById('stats-bar').innerHTML = `
+        <div class="stat-box blue"><div class="number">${DATA.total_portfolio_headcount}</div><div class="label">Total Headcount</div></div>
+        <div class="stat-box green"><div class="number">${totalNamed}</div><div class="label">Named Employees</div></div>
+        <div class="stat-box orange"><div class="number">${totalRoles}</div><div class="label">Role Categories</div></div>
+        <div class="stat-box red"><div class="number">${crossCount}</div><div class="label">Cross-Company Roles</div></div>
+    `;
+}
+
+function buildFilters() {
+    const companies = new Set();
+    const statuses = new Set();
+    for (const cat of Object.values(DATA.role_categories)) {
+        cat.companies.forEach(c => companies.add(c));
+        cat.employees.forEach(e => statuses.add(e.status));
+    }
+
+    const cf = document.getElementById('company-filter');
+    [...companies].sort().forEach(c => {
+        const o = document.createElement('option');
+        o.value = c; o.textContent = c;
+        cf.appendChild(o);
+    });
+
+    const sf = document.getElementById('status-filter');
+    [...statuses].sort().forEach(s => {
+        const o = document.createElement('option');
+        o.value = s; o.textContent = s;
+        sf.appendChild(o);
+    });
+}
+
+function getCompanyClass(company) {
+    if (company.includes('VAMA')) return 'vama';
+    if (company.includes('JS')) return 'js';
+    return 'attix';
+}
+
+function getStatusClass(status) {
+    const s = (status || '').toLowerCase();
+    if (s === 'top') return 'top';
+    if (s === 'efficient') return 'efficient';
+    if (s === 'average') return 'average';
+    if (s === 'poor') return 'poor';
+    if (s.includes('resign')) return 'resigning';
+    if (s.includes('flag') || s.includes('review')) return 'flagged';
+    return '';
+}
+
+function formatSalary(val) {
+    if (!val) return '<span class="no-data">-</span>';
+    return '<span class="salary">$' + val.toLocaleString() + '</span>';
+}
+
+function sortEmployees(employees, roleCategory) {
+    const state = sortState[roleCategory];
+    if (!state) return employees;
+    const col = state.col;
+    const dir = state.dir;
+    return [...employees].sort((a, b) => {
+        let va, vb;
+        switch (col) {
+            case 'name': va = a.name; vb = b.name; break;
+            case 'company': va = a.company; vb = b.company; break;
+            case 'role_raw': va = a.role_raw || ''; vb = b.role_raw || ''; break;
+            case 'status': va = a.status || ''; vb = b.status || ''; break;
+            case 'salary': va = a.salary || 0; vb = b.salary || 0; break;
+            default: va = a.name; vb = b.name;
+        }
+        if (typeof va === 'string') return dir * va.localeCompare(vb);
+        return dir * (va - vb);
+    });
+}
+
+function render() {
+    const searchVal = document.getElementById('search').value.toLowerCase();
+    const companyVal = document.getElementById('company-filter').value;
+    const statusVal = document.getElementById('status-filter').value;
+    const crossOnly = document.getElementById('cross-only').checked;
+    const expandAll = document.getElementById('expand-all').checked;
+
+    const container = document.getElementById('role-groups');
+    container.innerHTML = '';
+
+    // Sort categories by estimated_total descending
+    const sorted = Object.entries(DATA.role_categories)
+        .sort((a, b) => b[1].estimated_total - a[1].estimated_total);
+
+    for (const [category, catData] of sorted) {
+        if (crossOnly && !catData.cross_company) continue;
+
+        let employees = catData.employees;
+
+        // Apply filters
+        if (companyVal) employees = employees.filter(e => e.company === companyVal);
+        if (statusVal) employees = employees.filter(e => e.status === statusVal);
+        if (searchVal) {
+            employees = employees.filter(e =>
+                e.name.toLowerCase().includes(searchVal) ||
+                (e.role_raw || '').toLowerCase().includes(searchVal) ||
+                e.company.toLowerCase().includes(searchVal) ||
+                (e.status || '').toLowerCase().includes(searchVal)
+            );
+        }
+
+        // Get dept summaries for this category
+        const deptSummaries = DATA.department_summaries.filter(d => d.role_category === category);
+        const deptTotal = deptSummaries.reduce((s, d) => s + d.count, 0);
+
+        // Skip if no matches
+        if (employees.length === 0 && (searchVal || companyVal || statusVal)) continue;
+
+        employees = sortEmployees(employees, category);
+        const state = sortState[category] || {};
+
+        const companyPills = catData.companies.map(c =>
+            `<span class="company-pill ${getCompanyClass(c)}">${c}</span>`
+        ).join('');
+
+        const crossBadge = catData.cross_company
+            ? '<span class="cross-company-badge">Consolidation Opportunity</span>'
+            : '';
+
+        const isOpen = expandAll || employees.length > 0 && (searchVal || companyVal || statusVal);
+
+        const sortArrow = (col) => {
+            if (state.col !== col) return '<span class="sort-arrow"></span>';
+            return `<span class="sort-arrow">${state.dir === 1 ? '&#9650;' : '&#9660;'}</span>`;
+        };
+
+        let tableRows = '';
+        for (const emp of employees) {
+            const cc = getCompanyClass(emp.company);
+            const sc = getStatusClass(emp.status);
+            tableRows += `<tr>
+                <td><strong>${emp.name}</strong></td>
+                <td><span class="company-tag ${cc}">${emp.company}</span></td>
+                <td>${emp.role_raw || '<span class="no-data">-</span>'}</td>
+                <td><span class="status-badge ${sc}">${emp.status || '-'}</span></td>
+                <td>${formatSalary(emp.salary)}</td>
+            </tr>`;
+        }
+
+        let deptNote = '';
+        if (deptTotal > 0) {
+            const parts = deptSummaries.map(d => `${d.company}: ~${d.count}`).join(', ');
+            deptNote = `<div class="dept-summary">+ ~${deptTotal} additional unnamed employees in this category (${parts})</div>`;
+        }
+
+        const html = `
+            <div class="role-group ${isOpen ? 'open' : ''}" data-category="${category}">
+                <div class="role-group-header" onclick="toggleGroup(this)">
+                    <div class="role-name">
+                        <span class="arrow">&#9654;</span>
+                        ${category}
+                        ${crossBadge}
+                    </div>
+                    <div class="role-meta">
+                        <span>${employees.length} named${deptTotal ? ' + ~' + deptTotal + ' est.' : ''}</span>
+                        <div class="company-pills">${companyPills}</div>
+                    </div>
+                </div>
+                <div class="role-group-body">
+                    ${employees.length > 0 ? `
+                    <table>
+                        <thead>
+                            <tr>
+                                <th onclick="sortBy('${category}','name')" style="width:25%">Name ${sortArrow('name')}</th>
+                                <th onclick="sortBy('${category}','company')" style="width:18%">Company ${sortArrow('company')}</th>
+                                <th onclick="sortBy('${category}','role_raw')" style="width:20%">Title/Dept ${sortArrow('role_raw')}</th>
+                                <th onclick="sortBy('${category}','status')" style="width:18%">Status ${sortArrow('status')}</th>
+                                <th onclick="sortBy('${category}','salary')" style="width:12%">Salary ${sortArrow('salary')}</th>
+                            </tr>
+                        </thead>
+                        <tbody>${tableRows}</tbody>
+                    </table>` : '<div class="dept-summary">No individually named employees in this category yet.</div>'}
+                    ${deptNote}
+                </div>
+            </div>`;
+
+        container.innerHTML += html;
+    }
+}
+
+function toggleGroup(el) {
+    el.closest('.role-group').classList.toggle('open');
+}
+
+function sortBy(category, col) {
+    const cur = sortState[category];
+    if (cur && cur.col === col) {
+        sortState[category] = { col, dir: cur.dir * -1 };
+    } else {
+        sortState[category] = { col, dir: 1 };
+    }
+    render();
+}
+
+// Bind controls
+document.addEventListener('DOMContentLoaded', () => {
+    init();
+    document.getElementById('search').addEventListener('input', render);
+    document.getElementById('company-filter').addEventListener('change', render);
+    document.getElementById('status-filter').addEventListener('change', render);
+    document.getElementById('cross-only').addEventListener('change', render);
+    document.getElementById('expand-all').addEventListener('change', render);
+});
+</script>
+</body>
+</html>
